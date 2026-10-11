@@ -1,0 +1,1098 @@
+{
+  "schema_version": 1,
+  "built_at": "2026-10-11T19:36:51.802317+00:00",
+  "source_fingerprint": "52bd98302229edf279a2f9d95eeb3c88e5c0fc9377d81eeb8097a7eb05a5381d",
+  "inputs": {
+    "profile": {
+      "path": "profile.json",
+      "sha256": "6e8d3bcce6f8a0d14eb79bf5b5f77ca04fc803823c12f1301e58498457dd59a9"
+    },
+    "template": {
+      "path": "build_cv.py",
+      "sha256": "278e56dda722f976d6856987553e5a66c22672005f31d889d20e959ed290016f"
+    },
+    "variants": {
+      "path": "cv-variants.json",
+      "sha256": "a7c93a37ce223c647169ae49cf20ad612f2822b54f5c0d0051005e2eab687c86"
+    }
+  },
+  "fonts": {
+    "CVSans": {
+      "filename": "NotoSans-Regular.ttf",
+      "source": "bundled runtime",
+      "subfont_index": 0,
+      "sha256": "f5f552c8c5edb61fe6efb824baf4d4de47b1a8689ab4925ff43f7bd6a4ebece5"
+    },
+    "CVSansBold": {
+      "filename": "NotoSans-Bold.ttf",
+      "source": "bundled runtime",
+      "subfont_index": 0,
+      "sha256": "3a08a47daa00cade516425c15c57615aef2fd418ec9811a7b9f465088f92cc05"
+    },
+    "CVSansItalic": {
+      "filename": "NotoSans-Italic.ttf",
+      "source": "bundled runtime",
+      "subfont_index": 0,
+      "sha256": "126522ae1bb9cd92120287fc47dfc74ef981e73931d93e52c565fb7e09b2d74a"
+    },
+    "CVSerif": {
+      "filename": "NotoSerif-Regular.ttf",
+      "source": "bundled runtime",
+      "subfont_index": 0,
+      "sha256": "19e72cd8d595fae5bd74a5206f5d938512e1183d4fed7abb1ec1be1d7efa5f88"
+    },
+    "CVSerifBold": {
+      "filename": "NotoSerif-Bold.ttf",
+      "source": "bundled runtime",
+      "subfont_index": 0,
+      "sha256": "96656aa5cec8f1d6fd0e804c1fad397e1a1cfa082e6642124e0bda68cd8363ce"
+    },
+    "CVSerifItalic": {
+      "filename": "NotoSerif-Italic.ttf",
+      "source": "bundled runtime",
+      "subfont_index": 0,
+      "sha256": "749e80e313ef711f9373c6cce17c72297ef05490b3dcda7967d1d5d90bf1183f"
+    },
+    "CVChinese": {
+      "filename": "STHeiti Light.ttc",
+      "source": "system font",
+      "subfont_index": 0,
+      "sha256": "a57b0316cc0544f682b8fb9855e14ade79ae77340ef6a01ba9210e25b4c5a5b7"
+    },
+    "CVChineseBold": {
+      "filename": "STHeiti Medium.ttc",
+      "source": "system font",
+      "subfont_index": 0,
+      "sha256": "f8fa4a63e2cf500e98e64d4c73260daaba049306cf85dec9e3729bc285b7d645"
+    }
+  },
+  "outputs": [
+    {
+      "variant": "academic",
+      "language": "en",
+      "destination": "public",
+      "authored_pdf_sha256": "037c79e214b5eb6d2fb9c24b16ee13a60348898dbef81732c6640c95a493fba7",
+      "provenance": {
+        "layer": "pdf metadata",
+        "residue": [],
+        "objects_cleaned": 0,
+        "content": "2 pages render identically",
+        "exit_code": 0,
+        "verified": true
+      },
+      "pdf": {
+        "path": "Yuyuan_Han_Academic_CV.pdf",
+        "sha256": "b6b4c7dc5a6c6cd68c821dbaec57beaa7d2510abca943b604230691d4465e6b4",
+        "bytes": 47624
+      },
+      "html": {
+        "path": "Yuyuan_Han_Academic_CV.html",
+        "sha256": "c3f396de1a067e55db6277133b9875766cb06d51c010643c5acffe69d0607041",
+        "bytes": 13880
+      },
+      "checks": {
+        "page_count": 2,
+        "extracted_characters": 4857,
+        "embedded_fonts": [
+          "/AAAAAA+NotoSans-Bold",
+          "/AAAAAA+NotoSans-Italic",
+          "/AAAAAA+NotoSans-Regular"
+        ],
+        "link_annotation_count": 41,
+        "hyperlink_coverage": {
+          "verified_link_labels": 34,
+          "publication_title_links": 9,
+          "project_paper_links": 3,
+          "project_code_links": 3,
+          "visible_labels_match_annotations": true,
+          "links": [
+            {
+              "page": 1,
+              "source": "projects.lift",
+              "label": "The Lift Spectrum · Robust image-free perception",
+              "uri": "https://arxiv.org/abs/2607.22077",
+              "annotation_count": 1
+            },
+            {
+              "page": 1,
+              "source": "projects.lift.role",
+              "label": "Paper",
+              "uri": "https://arxiv.org/abs/2607.22077",
+              "annotation_count": 1
+            },
+            {
+              "page": 1,
+              "source": "projects.lift.role",
+              "label": "Code",
+              "uri": "https://github.com/Hanyuyuan6/STSF-TPLS",
+              "annotation_count": 1
+            },
+            {
+              "page": 1,
+              "source": "projects.shsi",
+              "label": "Sparse Hadamard single-pixel imaging",
+              "uri": "https://doi.org/10.1364/OE.576533",
+              "annotation_count": 1
+            },
+            {
+              "page": 1,
+              "source": "projects.shsi.role",
+              "label": "Paper",
+              "uri": "https://doi.org/10.1364/OE.576533",
+              "annotation_count": 1
+            },
+            {
+              "page": 1,
+              "source": "projects.shsi.role",
+              "label": "Code",
+              "uri": "https://github.com/Hanyuyuan6/SHSI",
+              "annotation_count": 1
+            },
+            {
+              "page": 1,
+              "source": "projects.loop",
+              "label": "LDGI · Optical phased-array imaging",
+              "uri": "https://doi.org/10.1016/j.optcom.2025.131589",
+              "annotation_count": 1
+            },
+            {
+              "page": 1,
+              "source": "projects.loop.role",
+              "label": "Paper",
+              "uri": "https://doi.org/10.1016/j.optcom.2025.131589",
+              "annotation_count": 1
+            },
+            {
+              "page": 1,
+              "source": "projects.loop.role",
+              "label": "Code",
+              "uri": "https://github.com/Hanyuyuan6/LDGI",
+              "annotation_count": 1
+            },
+            {
+              "page": 1,
+              "source": "header",
+              "label": "hanyuyuan6@gmail.com",
+              "uri": "mailto:hanyuyuan6@gmail.com",
+              "annotation_count": 1
+            },
+            {
+              "page": 1,
+              "source": "header",
+              "label": "yuyuan.han@mail.polimi.it",
+              "uri": "mailto:yuyuan.han@mail.polimi.it",
+              "annotation_count": 1
+            },
+            {
+              "page": 1,
+              "source": "header",
+              "label": "GitHub / Hanyuyuan6",
+              "uri": "https://github.com/Hanyuyuan6",
+              "annotation_count": 1
+            },
+            {
+              "page": 1,
+              "source": "header",
+              "label": "Google Scholar",
+              "uri": "https://scholar.google.com/citations?user=-cRrxLRR3vgC&hl=en",
+              "annotation_count": 1
+            },
+            {
+              "page": 1,
+              "source": "header",
+              "label": "ORCID / 0009-0005-7643-6331",
+              "uri": "https://orcid.org/0009-0005-7643-6331",
+              "annotation_count": 1
+            },
+            {
+              "page": 2,
+              "source": "publications.graph",
+              "label": "Graph-Regularized Estimation for Inverse Problems in Computational Optical Imaging",
+              "uri": "https://doi.org/10.1109/TIP.2026.3726365",
+              "annotation_count": 3
+            },
+            {
+              "page": 2,
+              "source": "publications.graph",
+              "label": "doi:10.1109/TIP.2026.3726365",
+              "uri": "https://doi.org/10.1109/TIP.2026.3726365",
+              "annotation_count": 3
+            },
+            {
+              "page": 2,
+              "source": "publications.opa_review",
+              "label": "Optical Phased Arrays on Photonic Integrated Circuit Platforms: Challenges, Opportunities, and Future Applications",
+              "uri": "https://doi.org/10.1002/nap2.70182",
+              "annotation_count": 3
+            },
+            {
+              "page": 2,
+              "source": "publications.opa_review",
+              "label": "doi:10.1002/nap2.70182",
+              "uri": "https://doi.org/10.1002/nap2.70182",
+              "annotation_count": 3
+            },
+            {
+              "page": 2,
+              "source": "publications.shsi",
+              "label": "Generalized sparse Hadamard single-pixel Imaging",
+              "uri": "https://doi.org/10.1364/OE.576533",
+              "annotation_count": 3
+            },
+            {
+              "page": 2,
+              "source": "publications.shsi",
+              "label": "doi:10.1364/OE.576533",
+              "uri": "https://doi.org/10.1364/OE.576533",
+              "annotation_count": 3
+            },
+            {
+              "page": 2,
+              "source": "publications.loop",
+              "label": "Loop differential ghost imaging based on line pattern",
+              "uri": "https://doi.org/10.1016/j.optcom.2025.131589",
+              "annotation_count": 2
+            },
+            {
+              "page": 2,
+              "source": "publications.loop",
+              "label": "doi:10.1016/j.optcom.2025.131589",
+              "uri": "https://doi.org/10.1016/j.optcom.2025.131589",
+              "annotation_count": 2
+            },
+            {
+              "page": 2,
+              "source": "publications.opa",
+              "label": "Design and analysis of single-electrode integrated lithium niobate optical phased array for two-dimensional beam steering",
+              "uri": "https://doi.org/10.1016/j.optlaseng.2024.108617",
+              "annotation_count": 3
+            },
+            {
+              "page": 2,
+              "source": "publications.opa",
+              "label": "doi:10.1016/j.optlaseng.2024.108617",
+              "uri": "https://doi.org/10.1016/j.optlaseng.2024.108617",
+              "annotation_count": 3
+            },
+            {
+              "page": 2,
+              "source": "publications.fusion",
+              "label": "Fusion of near-infrared single-photon LiDAR with visible light camera",
+              "uri": "https://doi.org/10.1088/1361-6501/addddf",
+              "annotation_count": 3
+            },
+            {
+              "page": 2,
+              "source": "publications.fusion",
+              "label": "doi:10.1088/1361-6501/addddf",
+              "uri": "https://doi.org/10.1088/1361-6501/addddf",
+              "annotation_count": 3
+            },
+            {
+              "page": 2,
+              "source": "publications.lidar",
+              "label": "Long-Range Imaging LiDAR with Multiple Denoising Technologies",
+              "uri": "https://doi.org/10.3390/app14083414",
+              "annotation_count": 2
+            },
+            {
+              "page": 2,
+              "source": "publications.lidar",
+              "label": "doi:10.3390/app14083414",
+              "uri": "https://doi.org/10.3390/app14083414",
+              "annotation_count": 2
+            },
+            {
+              "page": 2,
+              "source": "publications.ghost_timing",
+              "label": "Sequence-Controlled Pseudothermal Optical Ghost Imaging System",
+              "uri": "https://doi.org/10.3788/AOS221781",
+              "annotation_count": 3
+            },
+            {
+              "page": 2,
+              "source": "publications.ghost_timing",
+              "label": "doi:10.3788/AOS221781",
+              "uri": "https://doi.org/10.3788/AOS221781",
+              "annotation_count": 3
+            },
+            {
+              "page": 2,
+              "source": "publications.lift",
+              "label": "The Lift Spectrum: How Measurement-to-Space Adaptivity Shapes Robustness in Image-Free Single-Pixel Sensing",
+              "uri": "https://arxiv.org/abs/2607.22077",
+              "annotation_count": 2
+            },
+            {
+              "page": 2,
+              "source": "publications.lift",
+              "label": "doi:10.48550/arXiv.2607.22077",
+              "uri": "https://doi.org/10.48550/arXiv.2607.22077",
+              "annotation_count": 1
+            },
+            {
+              "page": 2,
+              "source": "software[2]",
+              "label": "Comparison-of-SPI-DLs",
+              "uri": "https://github.com/Hanyuyuan6/Comparison-of-SPI-DLs",
+              "annotation_count": 1
+            },
+            {
+              "page": 2,
+              "source": "software[3]",
+              "label": "remote-gpu-trainer",
+              "uri": "https://github.com/Hanyuyuan6/remote-gpu-trainer",
+              "annotation_count": 1
+            }
+          ]
+        },
+        "text_extractable": true,
+        "replacement_characters": 0,
+        "name_subtitle_gap_pt": 9.0
+      },
+      "layout": {
+        "page_count": 2,
+        "lowest_content_y": 89.69,
+        "positions": [
+          {
+            "page": 1,
+            "kind": "body",
+            "source": "narrative.resume_summary",
+            "top": 691.47,
+            "bottom": 660.47,
+            "text": "I work on optical measurement design and learning for imaging and perception. Current research explores acquisition-aware learning and pretrained models for optical signals."
+          },
+          {
+            "page": 1,
+            "kind": "section",
+            "source": "",
+            "top": 660.47,
+            "bottom": 627.47,
+            "text": "EDUCATION & RESEARCH APPOINTMENTS"
+          },
+          {
+            "page": 1,
+            "kind": "entry",
+            "source": "education[0]",
+            "top": 627.47,
+            "bottom": 612.37,
+            "text": "Xi'an Jiaotong University · PhD student"
+          },
+          {
+            "page": 1,
+            "kind": "detail",
+            "source": "education[0].field",
+            "top": 612.37,
+            "bottom": 596.37,
+            "text": "Electronic Science and Technology"
+          },
+          {
+            "page": 1,
+            "kind": "entry",
+            "source": "education[1]",
+            "top": 596.37,
+            "bottom": 581.27,
+            "text": "Northwest University · B.Eng."
+          },
+          {
+            "page": 1,
+            "kind": "detail",
+            "source": "education[1].field",
+            "top": 581.27,
+            "bottom": 565.27,
+            "text": "Electronic Information Science and Technology"
+          },
+          {
+            "page": 1,
+            "kind": "entry",
+            "source": "appointments[0]",
+            "top": 565.27,
+            "bottom": 550.17,
+            "text": "Politecnico di Milano · Visiting PhD student"
+          },
+          {
+            "page": 1,
+            "kind": "detail",
+            "source": "appointments[0].host",
+            "top": 550.17,
+            "bottom": 533.17,
+            "text": "Department of Physics · Host: Antonio Pifferi"
+          },
+          {
+            "page": 1,
+            "kind": "section",
+            "source": "",
+            "top": 533.17,
+            "bottom": 500.17,
+            "text": "SELECTED RESEARCH"
+          },
+          {
+            "page": 1,
+            "kind": "project",
+            "source": "projects.lift",
+            "top": 500.17,
+            "bottom": 485.07,
+            "text": "The Lift Spectrum · Robust image-free perception"
+          },
+          {
+            "page": 1,
+            "kind": "detail",
+            "source": "projects.lift.role",
+            "top": 485.07,
+            "bottom": 470.07,
+            "text": "arXiv · 2026 · Paper · Code"
+          },
+          {
+            "page": 1,
+            "kind": "bullet",
+            "source": "projects.lift.bullets[0]",
+            "top": 470.07,
+            "bottom": 442.07,
+            "text": "Demonstrated greater robustness to measurement noise than the tested reconstruct-then-segment baselines, with all models trained on clean data."
+          },
+          {
+            "page": 1,
+            "kind": "bullet",
+            "source": "projects.lift.bullets[1]",
+            "top": 442.07,
+            "bottom": 414.07,
+            "text": "Learned spatial task representations directly from single-pixel measurements, using reconstruction only as auxiliary supervision."
+          },
+          {
+            "page": 1,
+            "kind": "project",
+            "source": "projects.shsi",
+            "top": 406.07,
+            "bottom": 390.97,
+            "text": "Sparse Hadamard single-pixel imaging"
+          },
+          {
+            "page": 1,
+            "kind": "detail",
+            "source": "projects.shsi.role",
+            "top": 390.97,
+            "bottom": 375.97,
+            "text": "Optics Express · 2025 · Paper · Code"
+          },
+          {
+            "page": 1,
+            "kind": "bullet",
+            "source": "projects.shsi.bullets[0]",
+            "top": 375.97,
+            "bottom": 347.97,
+            "text": "Designed tunable-sparsity Hadamard illumination for noise-resilient single-pixel imaging; developed a noise model and validated the approach in optical experiments."
+          },
+          {
+            "page": 1,
+            "kind": "project",
+            "source": "projects.loop",
+            "top": 339.97,
+            "bottom": 324.87,
+            "text": "LDGI · Optical phased-array imaging"
+          },
+          {
+            "page": 1,
+            "kind": "detail",
+            "source": "projects.loop.role",
+            "top": 324.87,
+            "bottom": 309.87,
+            "text": "Optics Communications · 2025 · Paper · Code"
+          },
+          {
+            "page": 1,
+            "kind": "bullet",
+            "source": "projects.loop.bullets[0]",
+            "top": 309.87,
+            "bottom": 281.87,
+            "text": "Developed loop differential ghost imaging for line patterns from one-dimensional optical phased arrays; validated the algorithm in simulations and optical experiments."
+          },
+          {
+            "page": 1,
+            "kind": "section",
+            "source": "",
+            "top": 273.87,
+            "bottom": 240.87,
+            "text": "CURRENT RESEARCH"
+          },
+          {
+            "page": 1,
+            "kind": "body",
+            "source": "narrative.current_summary",
+            "top": 240.87,
+            "bottom": 207.87,
+            "text": "Developing acquisition-aware models and adapting pretrained multimodal models to bucket-detector signals. Planned visiting research: time-domain diffuse optics and 3D reconstruction."
+          },
+          {
+            "page": 2,
+            "kind": "section",
+            "source": "",
+            "top": 765.89,
+            "bottom": 732.89,
+            "text": "PUBLICATIONS"
+          },
+          {
+            "page": 2,
+            "kind": "subsection",
+            "source": "",
+            "top": 732.89,
+            "bottom": 711.89,
+            "text": "Peer-reviewed journal articles"
+          },
+          {
+            "page": 2,
+            "kind": "publication",
+            "source": "publications.graph",
+            "top": 711.89,
+            "bottom": 665.79,
+            "text": "Chong Wang, Hao Lu, Yuyuan Han, Huaibin Zheng, Yuchen He. Graph-Regularized Estimation for Inverse Problems in Computational Optical Imaging. IEEE Transactions on Image Processing 35, 9314-9326 (2026). doi:10.1109/TIP.2026.3726365"
+          },
+          {
+            "page": 2,
+            "kind": "publication",
+            "source": "publications.opa_review",
+            "top": 665.79,
+            "bottom": 619.69,
+            "text": "Jingwei Li, Yuyuan Han, Aoxiang Chen, Pengpeng Li, Xinglin Zhu, Guanbao Zhao, Luohan Peng, Huaibin Zheng. Optical Phased Arrays on Photonic Integrated Circuit Platforms: Challenges, Opportunities, and Future Applications. Nanophotonics 15(14), e70182 (2026). doi:10.1002/nap2.70182"
+          },
+          {
+            "page": 2,
+            "kind": "publication",
+            "source": "publications.shsi",
+            "top": 619.69,
+            "bottom": 586.29,
+            "text": "Yuyuan Han, Peng Wu, Hanxiong Xu, Bin Li, Yuchen He, Jianbin Liu, Hui Chen, Huaibin Zheng. Generalized sparse Hadamard single-pixel Imaging. Optics Express 33(20), 43324-43341 (2025). doi:10.1364/OE.576533"
+          },
+          {
+            "page": 2,
+            "kind": "publication",
+            "source": "publications.loop",
+            "top": 586.29,
+            "bottom": 540.19,
+            "text": "Yuyuan Han, Huaibin Zheng, Bin Li, Jingwei Li, Long Qiu, Wenxuan Hao, Zheng Dang, Hui Chen, Jianbin Liu, Yuchen He, Yanyan Liu, Zhuo Xu. Loop differential ghost imaging based on line pattern. Optics Communications 580, 131589 (2025). doi:10.1016/j.optcom.2025.131589"
+          },
+          {
+            "page": 2,
+            "kind": "publication",
+            "source": "publications.opa",
+            "top": 540.19,
+            "bottom": 481.39,
+            "text": "Jingwei Li, Huaibin Zheng, Yuyuan Han, Bin Li, Wenxuan Hao, Long Qiu, Yanyan Liu, Yuchen He, Xiaoyong Wei, Zhuo Xu. Design and analysis of single-electrode integrated lithium niobate optical phased array for two-dimensional beam steering. Optics and Lasers in Engineering 184, 108617 (2025). doi:10.1016/j.optlaseng.2024.108617"
+          },
+          {
+            "page": 2,
+            "kind": "publication",
+            "source": "publications.fusion",
+            "top": 481.39,
+            "bottom": 435.29,
+            "text": "Long Qiu, Huaibin Zheng, Yuyuan Han, Bin Li, Wenxuan Hao, Zheng Dang, Yuanlin Yu, Jiawei Li, Hanxiong Xu, Hui Chen, Jianbin Liu, Yuchen He, Yanyan Liu, Zhuo Xu. Fusion of near-infrared single-photon LiDAR with visible light camera. Measurement Science and Technology 36(6), 065409 (2025). doi:10.1088/1361-6501/addddf"
+          },
+          {
+            "page": 2,
+            "kind": "publication",
+            "source": "publications.lidar",
+            "top": 435.29,
+            "bottom": 389.19,
+            "text": "Huaibin Zheng, Yuyuan Han, Long Qiu, Yanfeng Zong, Jingwei Li, Yu Zhou, Yuchen He, Jianbin Liu, Gao Wang, Hui Chen, Zhuo Xu. Long-Range Imaging LiDAR with Multiple Denoising Technologies. Applied Sciences 14(8), 3414 (2024). doi:10.3390/app14083414"
+          },
+          {
+            "page": 2,
+            "kind": "publication",
+            "source": "publications.ghost_timing",
+            "top": 389.19,
+            "bottom": 355.79,
+            "text": "Yanfeng Zong, Huaibin Zheng, Xinwei Wu, Jingwei Li, Long Qiu, Yuyuan Han. Sequence-Controlled Pseudothermal Optical Ghost Imaging System. Acta Optica Sinica 43(7), 0711001 (2023). doi:10.3788/AOS221781"
+          },
+          {
+            "page": 2,
+            "kind": "subsection",
+            "source": "",
+            "top": 355.79,
+            "bottom": 334.79,
+            "text": "Preprints"
+          },
+          {
+            "page": 2,
+            "kind": "publication",
+            "source": "publications.lift",
+            "top": 334.79,
+            "bottom": 288.69,
+            "text": "Yuyuan Han, Jingwei Li, Xiaoxia Zhang, Long Qiu, Chong Wang, Wenxuan Hao, Jiangyu Han, Xinyu Yao, Yuchen He, Hui Chen, Jianbin Liu, Huaibin Zheng. The Lift Spectrum: How Measurement-to-Space Adaptivity Shapes Robustness in Image-Free Single-Pixel Sensing. arXiv (2026). doi:10.48550/arXiv.2607.22077"
+          },
+          {
+            "page": 2,
+            "kind": "section",
+            "source": "",
+            "top": 288.69,
+            "bottom": 255.69,
+            "text": "RESEARCH CODE"
+          },
+          {
+            "page": 2,
+            "kind": "body",
+            "source": "software[2]",
+            "top": 255.69,
+            "bottom": 237.69,
+            "text": "Comparison-of-SPI-DLs · Comparative evaluation of learning-based single-pixel reconstruction."
+          },
+          {
+            "page": 2,
+            "kind": "body",
+            "source": "software[3]",
+            "top": 237.69,
+            "bottom": 219.69,
+            "text": "remote-gpu-trainer · Agent skill for remote GPU experiment workflows."
+          },
+          {
+            "page": 2,
+            "kind": "section",
+            "source": "",
+            "top": 219.69,
+            "bottom": 186.69,
+            "text": "ADDITIONAL EXPERIENCE"
+          },
+          {
+            "page": 2,
+            "kind": "body",
+            "source": "research_background.electro_optic",
+            "top": 186.69,
+            "bottom": 168.69,
+            "text": "Photonic device modeling · Modeled and optimized electro-optic phased-array geometries for beam steering."
+          },
+          {
+            "page": 2,
+            "kind": "body",
+            "source": "research_background.optical_systems",
+            "top": 168.69,
+            "bottom": 137.69,
+            "text": "Optical system integration · Led mechanical design, optical alignment and system integration; participated in underwater field tests."
+          },
+          {
+            "page": 2,
+            "kind": "section",
+            "source": "",
+            "top": 137.69,
+            "bottom": 104.69,
+            "text": "AWARD"
+          },
+          {
+            "page": 2,
+            "kind": "body",
+            "source": "awards[0]",
+            "top": 104.69,
+            "bottom": 89.69,
+            "text": "2024 · Second Prize, National Post-Graduate Mathematical Contest in Modeling"
+          }
+        ]
+      },
+      "sources": [
+        "appointments[0]",
+        "appointments[0].host",
+        "awards[0]",
+        "education[0]",
+        "education[0].field",
+        "education[1]",
+        "education[1].field",
+        "narrative.current_summary",
+        "narrative.resume_summary",
+        "projects.lift",
+        "projects.lift.bullets[0]",
+        "projects.lift.bullets[1]",
+        "projects.lift.role",
+        "projects.loop",
+        "projects.loop.bullets[0]",
+        "projects.loop.role",
+        "projects.shsi",
+        "projects.shsi.bullets[0]",
+        "projects.shsi.role",
+        "publications.fusion",
+        "publications.ghost_timing",
+        "publications.graph",
+        "publications.lidar",
+        "publications.lift",
+        "publications.loop",
+        "publications.opa",
+        "publications.opa_review",
+        "publications.shsi",
+        "research_background.electro_optic",
+        "research_background.optical_systems",
+        "software[2]",
+        "software[3]"
+      ]
+    },
+    {
+      "variant": "internship",
+      "language": "en",
+      "destination": "public",
+      "authored_pdf_sha256": "feb86883e9a26ba33292bfb06511f501a00990a69a82bb160fc28e9456b37321",
+      "provenance": {
+        "layer": "pdf metadata",
+        "residue": [],
+        "objects_cleaned": 0,
+        "content": "1 pages render identically",
+        "exit_code": 0,
+        "verified": true
+      },
+      "pdf": {
+        "path": "Yuyuan_Han_Internship_Resume.pdf",
+        "sha256": "c9c699dc8234646d4f460ac7f6a45740b158a33482cc60cc91004aeca357c92b",
+        "bytes": 30622
+      },
+      "html": {
+        "path": "Yuyuan_Han_Internship_Resume.html",
+        "sha256": "6d1bb1896c2b76a4bfe887cbd885b1b21282b5322255de7509b143664bce93ae",
+        "bytes": 8421
+      },
+      "checks": {
+        "page_count": 1,
+        "extracted_characters": 2049,
+        "embedded_fonts": [
+          "/AAAAAA+NotoSans-Bold",
+          "/AAAAAA+NotoSans-Regular"
+        ],
+        "link_annotation_count": 14,
+        "hyperlink_coverage": {
+          "verified_link_labels": 14,
+          "publication_title_links": 0,
+          "project_paper_links": 3,
+          "project_code_links": 3,
+          "visible_labels_match_annotations": true,
+          "links": [
+            {
+              "page": 1,
+              "source": "projects.lift",
+              "label": "The Lift Spectrum · Robust image-free perception",
+              "uri": "https://arxiv.org/abs/2607.22077",
+              "annotation_count": 1
+            },
+            {
+              "page": 1,
+              "source": "projects.lift.role",
+              "label": "Paper",
+              "uri": "https://arxiv.org/abs/2607.22077",
+              "annotation_count": 1
+            },
+            {
+              "page": 1,
+              "source": "projects.lift.role",
+              "label": "Code",
+              "uri": "https://github.com/Hanyuyuan6/STSF-TPLS",
+              "annotation_count": 1
+            },
+            {
+              "page": 1,
+              "source": "projects.shsi",
+              "label": "Sparse Hadamard single-pixel imaging",
+              "uri": "https://doi.org/10.1364/OE.576533",
+              "annotation_count": 1
+            },
+            {
+              "page": 1,
+              "source": "projects.shsi.role",
+              "label": "Paper",
+              "uri": "https://doi.org/10.1364/OE.576533",
+              "annotation_count": 1
+            },
+            {
+              "page": 1,
+              "source": "projects.shsi.role",
+              "label": "Code",
+              "uri": "https://github.com/Hanyuyuan6/SHSI",
+              "annotation_count": 1
+            },
+            {
+              "page": 1,
+              "source": "projects.loop",
+              "label": "LDGI · Optical phased-array imaging",
+              "uri": "https://doi.org/10.1016/j.optcom.2025.131589",
+              "annotation_count": 1
+            },
+            {
+              "page": 1,
+              "source": "projects.loop.role",
+              "label": "Paper",
+              "uri": "https://doi.org/10.1016/j.optcom.2025.131589",
+              "annotation_count": 1
+            },
+            {
+              "page": 1,
+              "source": "projects.loop.role",
+              "label": "Code",
+              "uri": "https://github.com/Hanyuyuan6/LDGI",
+              "annotation_count": 1
+            },
+            {
+              "page": 1,
+              "source": "header",
+              "label": "hanyuyuan6@gmail.com",
+              "uri": "mailto:hanyuyuan6@gmail.com",
+              "annotation_count": 1
+            },
+            {
+              "page": 1,
+              "source": "header",
+              "label": "yuyuan.han@mail.polimi.it",
+              "uri": "mailto:yuyuan.han@mail.polimi.it",
+              "annotation_count": 1
+            },
+            {
+              "page": 1,
+              "source": "header",
+              "label": "GitHub / Hanyuyuan6",
+              "uri": "https://github.com/Hanyuyuan6",
+              "annotation_count": 1
+            },
+            {
+              "page": 1,
+              "source": "header",
+              "label": "Google Scholar",
+              "uri": "https://scholar.google.com/citations?user=-cRrxLRR3vgC&hl=en",
+              "annotation_count": 1
+            },
+            {
+              "page": 1,
+              "source": "header",
+              "label": "ORCID / 0009-0005-7643-6331",
+              "uri": "https://orcid.org/0009-0005-7643-6331",
+              "annotation_count": 1
+            }
+          ]
+        },
+        "text_extractable": true,
+        "replacement_characters": 0,
+        "name_subtitle_gap_pt": 9.0
+      },
+      "layout": {
+        "page_count": 1,
+        "lowest_content_y": 108.37,
+        "positions": [
+          {
+            "page": 1,
+            "kind": "body",
+            "source": "narrative.internship_summary",
+            "top": 693.47,
+            "bottom": 661.47,
+            "text": "PhD student working on computational imaging and learning from optical measurements. Research experience spans measurement design, image reconstruction, and image-free perception."
+          },
+          {
+            "page": 1,
+            "kind": "section",
+            "source": "",
+            "top": 661.47,
+            "bottom": 631.47,
+            "text": "EDUCATION & RESEARCH APPOINTMENTS"
+          },
+          {
+            "page": 1,
+            "kind": "entry",
+            "source": "education[0]",
+            "top": 631.47,
+            "bottom": 615.87,
+            "text": "Xi'an Jiaotong University · PhD student"
+          },
+          {
+            "page": 1,
+            "kind": "detail",
+            "source": "education[0].field",
+            "top": 615.87,
+            "bottom": 599.37,
+            "text": "Electronic Science and Technology"
+          },
+          {
+            "page": 1,
+            "kind": "entry",
+            "source": "education[1]",
+            "top": 599.37,
+            "bottom": 583.77,
+            "text": "Northwest University · B.Eng."
+          },
+          {
+            "page": 1,
+            "kind": "detail",
+            "source": "education[1].field",
+            "top": 583.77,
+            "bottom": 567.27,
+            "text": "Electronic Information Science and Technology"
+          },
+          {
+            "page": 1,
+            "kind": "entry",
+            "source": "appointments[0]",
+            "top": 567.27,
+            "bottom": 551.67,
+            "text": "Politecnico di Milano · Visiting PhD student"
+          },
+          {
+            "page": 1,
+            "kind": "detail",
+            "source": "appointments[0].host",
+            "top": 551.67,
+            "bottom": 534.17,
+            "text": "Department of Physics · Host: Antonio Pifferi"
+          },
+          {
+            "page": 1,
+            "kind": "section",
+            "source": "",
+            "top": 534.17,
+            "bottom": 504.17,
+            "text": "SELECTED RESEARCH"
+          },
+          {
+            "page": 1,
+            "kind": "project",
+            "source": "projects.lift",
+            "top": 504.17,
+            "bottom": 488.57,
+            "text": "The Lift Spectrum · Robust image-free perception"
+          },
+          {
+            "page": 1,
+            "kind": "detail",
+            "source": "projects.lift.role",
+            "top": 488.57,
+            "bottom": 473.07,
+            "text": "arXiv · 2026 · Paper · Code"
+          },
+          {
+            "page": 1,
+            "kind": "bullet",
+            "source": "projects.lift.bullets[0]",
+            "top": 473.07,
+            "bottom": 444.07,
+            "text": "Demonstrated greater robustness to measurement noise than the tested reconstruct-then-segment baselines, with all models trained on clean data."
+          },
+          {
+            "page": 1,
+            "kind": "bullet",
+            "source": "projects.lift.bullets[1]",
+            "top": 444.07,
+            "bottom": 415.07,
+            "text": "Learned spatial task representations directly from single-pixel measurements, using reconstruction only as auxiliary supervision."
+          },
+          {
+            "page": 1,
+            "kind": "project",
+            "source": "projects.shsi",
+            "top": 410.07,
+            "bottom": 394.47,
+            "text": "Sparse Hadamard single-pixel imaging"
+          },
+          {
+            "page": 1,
+            "kind": "detail",
+            "source": "projects.shsi.role",
+            "top": 394.47,
+            "bottom": 378.97,
+            "text": "Optics Express · 2025 · Paper · Code"
+          },
+          {
+            "page": 1,
+            "kind": "bullet",
+            "source": "projects.shsi.bullets[0]",
+            "top": 378.97,
+            "bottom": 349.97,
+            "text": "Designed tunable-sparsity Hadamard illumination for noise-resilient single-pixel imaging; developed a noise model and validated the approach in optical experiments."
+          },
+          {
+            "page": 1,
+            "kind": "project",
+            "source": "projects.loop",
+            "top": 344.97,
+            "bottom": 329.37,
+            "text": "LDGI · Optical phased-array imaging"
+          },
+          {
+            "page": 1,
+            "kind": "detail",
+            "source": "projects.loop.role",
+            "top": 329.37,
+            "bottom": 313.87,
+            "text": "Optics Communications · 2025 · Paper · Code"
+          },
+          {
+            "page": 1,
+            "kind": "bullet",
+            "source": "projects.loop.bullets[0]",
+            "top": 313.87,
+            "bottom": 284.87,
+            "text": "Developed loop differential ghost imaging for line patterns from one-dimensional optical phased arrays; validated the algorithm in simulations and optical experiments."
+          },
+          {
+            "page": 1,
+            "kind": "section",
+            "source": "",
+            "top": 279.87,
+            "bottom": 249.87,
+            "text": "CURRENT RESEARCH"
+          },
+          {
+            "page": 1,
+            "kind": "body",
+            "source": "narrative.current_summary",
+            "top": 249.87,
+            "bottom": 215.87,
+            "text": "Developing acquisition-aware models and adapting pretrained multimodal models to bucket-detector signals. Planned visiting research: time-domain diffuse optics and 3D reconstruction."
+          },
+          {
+            "page": 1,
+            "kind": "section",
+            "source": "",
+            "top": 215.87,
+            "bottom": 185.87,
+            "text": "AWARD"
+          },
+          {
+            "page": 1,
+            "kind": "body",
+            "source": "awards[0]",
+            "top": 185.87,
+            "bottom": 170.37,
+            "text": "2024 · Second Prize, National Post-Graduate Mathematical Contest in Modeling"
+          },
+          {
+            "page": 1,
+            "kind": "section",
+            "source": "",
+            "top": 170.37,
+            "bottom": 140.37,
+            "text": "ADDITIONAL EXPERIENCE"
+          },
+          {
+            "page": 1,
+            "kind": "body",
+            "source": "research_background.electro_optic",
+            "top": 140.37,
+            "bottom": 108.37,
+            "text": "Photonic device modeling · Modeled and optimized electro-optic phased-array geometries for beam steering."
+          }
+        ]
+      },
+      "sources": [
+        "appointments[0]",
+        "appointments[0].host",
+        "awards[0]",
+        "education[0]",
+        "education[0].field",
+        "education[1]",
+        "education[1].field",
+        "narrative.current_summary",
+        "narrative.internship_summary",
+        "projects.lift",
+        "projects.lift.bullets[0]",
+        "projects.lift.bullets[1]",
+        "projects.lift.role",
+        "projects.loop",
+        "projects.loop.bullets[0]",
+        "projects.loop.role",
+        "projects.shsi",
+        "projects.shsi.bullets[0]",
+        "projects.shsi.role",
+        "research_background.electro_optic"
+      ]
+    }
+  ],
+  "visual_qa": {
+    "status": "pending",
+    "method": "pdftoppm and view_image on every latest PDF page"
+  }
+}

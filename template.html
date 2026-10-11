@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="@@DESCRIPTION@@">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="@@TITLE@@">
+  <meta property="og:description" content="@@DESCRIPTION@@">
+  <link rel="canonical" href="https://hanyuyuan6.github.io/">
+  <meta property="og:url" content="https://hanyuyuan6.github.io/">
+  <title>@@TITLE@@</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="application/ld+json">
+@@STRUCTURED_DATA@@
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="page-shell" id="top">
+    <header class="site-header">
+      <nav aria-label="Main navigation">
+        <a href="#research">Research</a>
+        <a href="#publications">Publications</a>
+        <a href="#background">Background</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+    <main id="main">
+      <section class="intro" aria-labelledby="name-heading">
+        <div class="intro-heading">
+          <h1 id="name-heading">@@NAME@@ @@CHINESE_NAME@@</h1>
+          <p class="field">@@FIELD@@</p>
+        </div>
+        @@PORTRAIT@@
+        <div class="intro-copy">
+          <div class="affiliations">
+            <div class="institutional-identity">@@IDENTITY@@</div>
+            @@VISITING_IDENTITY@@
+          </div>
+          <div class="intro-links">
+            <div class="cv-links" aria-label="Download curricula vitae">@@CV_LINKS@@</div>
+            <ul class="primary-profiles" aria-label="Primary academic profiles">@@PRIMARY_PROFILES@@</ul>
+            <p class="hero-email">@@EMAIL@@</p>
+          </div>
+        </div>
+        <div class="intro-statement">
+          <p class="research-question">@@HERO@@</p>
+          <p class="bio">@@BIO@@</p>
+          @@WELCOME@@
+        </div>
+      </section>
+
+      <section class="section research-section" id="research" aria-labelledby="research-heading">
+        <div class="section-heading">
+          <h2 id="research-heading">Selected research</h2>
+          <a class="section-link" href="#publications">More publications</a>
+        </div>
+        <div class="research-list">@@SELECTED_RESEARCH@@</div>
+      </section>
+
+      <section class="section directions-section" id="directions" aria-labelledby="directions-heading">
+        <div class="section-heading"><h2 id="directions-heading">Current directions</h2></div>
+        <ol class="directions-list">@@DIRECTIONS@@</ol>
+        @@DIRECTION_PARAGRAPH@@
+      </section>
+
+      <section class="section publications-section" id="publications" aria-labelledby="publications-heading">
+        <div class="section-heading">
+          <h2 id="publications-heading">More publications</h2>
+          <p class="section-note">@@SELECTED_COUNT@@ featured above</p>
+        </div>
+        <ol class="publications-list">@@PUBLICATIONS@@</ol>
+      </section>
+
+      <section class="section background-section" id="background" aria-labelledby="background-heading">
+        <div class="section-heading"><h2 id="background-heading">Background</h2></div>
+        <div class="background-grid">
+          <div class="background-column"><h3>Education</h3><ul class="background-list">@@EDUCATION@@</ul></div>
+          <div class="background-column"><h3>Research appointments</h3><ul class="background-list">@@APPOINTMENTS@@</ul></div>
+        </div>
+        <div class="research-background"><h3>Additional experience</h3>@@RESEARCH_BACKGROUND@@</div>
+        @@AWARDS@@
+        @@OTHER_CVS@@
+      </section>
+
+      <section class="section software-section" id="software" aria-labelledby="software-heading">
+        <div class="section-heading"><h2 id="software-heading">Research code</h2></div>
+        <ul class="software-list">@@SOFTWARE@@</ul>
+      </section>
+
+      <section class="section contact-section" id="contact" aria-labelledby="contact-heading">
+        <div class="section-heading"><h2 id="contact-heading">Contact</h2></div>
+        <p class="contact-email">@@EMAIL@@</p>
+        <div class="academic-profiles"><ul>@@PROFILES@@</ul></div>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <p>@@NAME@@ · Updated @@UPDATED@@</p>
+      <details class="figure-credits"><summary>Figure credits</summary>
+        <p>The Lift Spectrum, Fig. 1: <a href="https://arxiv.org/abs/2607.22077v2">Han et al., 2026</a>.</p>
+        <p>Sparse Hadamard imaging, Fig. 9: <a href="https://doi.org/10.1364/OE.576533">Han et al., Optics Express, 2025</a>. © 2025 Optica Publishing Group.</p>
+        <p>LDGI, Fig. 2: <a href="https://doi.org/10.1016/j.optcom.2025.131589">Han et al., Optics Communications, 2025</a>. © 2025 Elsevier B.V.</p>
+        <p>Figures are reproduced from the author’s publications. Rights remain with their respective holders.</p>
+      </details>
+      <a href="#top">Back to top</a>
+    </footer>
+  </div>
+</body>
+</html>
