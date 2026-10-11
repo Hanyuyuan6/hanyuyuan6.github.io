@@ -119,7 +119,7 @@ def validate(root):
     for project in profile['projects']:
         require(project['publication_id'] is None or project['publication_id'] in ids, f"Project publication reference: {project['id']}")
     start = profile['education'][0]['start']
-    require(start is None or bool(re.fullmatch(r'\d{4}-\d{2}', start)), 'PhD start is either omitted or an explicit year-month')
+    require(start is None or bool(re.fullmatch(r'\d{4}(?:-(?:0[1-9]|1[0-2]))?', start)), 'PhD start is omitted or a confirmed year with an optional valid month')
     require(len(profile['profiles']) == 7 and len({x['url'] for x in profile['profiles']}) == 7, 'Seven distinct academic profile links')
     require(len(profile['platform_copy']['github_bio']) <= 160, 'GitHub bio within 160 characters')
     require(len(profile['platform_copy']['researchgate_bio']) <= 500, 'ResearchGate bio within observed 500-character limit')

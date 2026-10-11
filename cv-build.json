@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "built_at": "2026-10-11T19:36:51.802317+00:00",
-  "source_fingerprint": "52bd98302229edf279a2f9d95eeb3c88e5c0fc9377d81eeb8097a7eb05a5381d",
+  "built_at": "2026-10-11T20:17:11.441312+00:00",
+  "source_fingerprint": "e173ab19c4a751748a5e8cb23d0d8cb5ec0fb2b61c2f59a34572a554f5166aee",
   "inputs": {
     "profile": {
       "path": "profile.json",
-      "sha256": "6e8d3bcce6f8a0d14eb79bf5b5f77ca04fc803823c12f1301e58498457dd59a9"
+      "sha256": "934fbcb1dc6ad356442d8eb8505600e5baf9acf761ff2a655c7b0d8eaa9759b6"
     },
     "template": {
       "path": "build_cv.py",
@@ -13,7 +13,7 @@
     },
     "variants": {
       "path": "cv-variants.json",
-      "sha256": "a7c93a37ce223c647169ae49cf20ad612f2822b54f5c0d0051005e2eab687c86"
+      "sha256": "9b2071758649fa121901d88d52f972b0053585b201da4c8f995b2cfa6cca2117"
     }
   },
   "fonts": {
@@ -71,7 +71,7 @@
       "variant": "academic",
       "language": "en",
       "destination": "public",
-      "authored_pdf_sha256": "037c79e214b5eb6d2fb9c24b16ee13a60348898dbef81732c6640c95a493fba7",
+      "authored_pdf_sha256": "bc588d835dc75b396b408ff2bab6c21530a9fc41af5513c7d6d78ebde279b2f6",
       "provenance": {
         "layer": "pdf metadata",
         "residue": [],
@@ -82,17 +82,17 @@
       },
       "pdf": {
         "path": "Yuyuan_Han_Academic_CV.pdf",
-        "sha256": "b6b4c7dc5a6c6cd68c821dbaec57beaa7d2510abca943b604230691d4465e6b4",
-        "bytes": 47624
+        "sha256": "31c09845a408eb7580fba33c8849740c2ddb9348e40551657adefbf8ae8f857c",
+        "bytes": 47686
       },
       "html": {
         "path": "Yuyuan_Han_Academic_CV.html",
-        "sha256": "c3f396de1a067e55db6277133b9875766cb06d51c010643c5acffe69d0607041",
-        "bytes": 13880
+        "sha256": "6873165aef6293d1c1ed62a008d53f56aa88199895b35f07207f5812af6711c0",
+        "bytes": 13888
       },
       "checks": {
         "page_count": 2,
-        "extracted_characters": 4857,
+        "extracted_characters": 4862,
         "embedded_fonts": [
           "/AAAAAA+NotoSans-Bold",
           "/AAAAAA+NotoSans-Italic",
@@ -384,7 +384,7 @@
             "source": "education[0].field",
             "top": 612.37,
             "bottom": 596.37,
-            "text": "Electronic Science and Technology"
+            "text": "Electronic Science and Technology · Master’s-to-PhD track"
           },
           {
             "page": 1,
@@ -723,7 +723,7 @@
       "variant": "internship",
       "language": "en",
       "destination": "public",
-      "authored_pdf_sha256": "feb86883e9a26ba33292bfb06511f501a00990a69a82bb160fc28e9456b37321",
+      "authored_pdf_sha256": "94fa332135045a9cfd0c78b89129da14969c42fede8eb667cb33ecd354b3083f",
       "provenance": {
         "layer": "pdf metadata",
         "residue": [],
@@ -734,17 +734,17 @@
       },
       "pdf": {
         "path": "Yuyuan_Han_Internship_Resume.pdf",
-        "sha256": "c9c699dc8234646d4f460ac7f6a45740b158a33482cc60cc91004aeca357c92b",
-        "bytes": 30622
+        "sha256": "2813e2deacbc4b79f9aeacd71f5cdf17cf5f2039918eab098df797b1ad99bd0e",
+        "bytes": 30685
       },
       "html": {
         "path": "Yuyuan_Han_Internship_Resume.html",
-        "sha256": "6d1bb1896c2b76a4bfe887cbd885b1b21282b5322255de7509b143664bce93ae",
-        "bytes": 8421
+        "sha256": "d53b81d3e228783a3e891ff91bd192431e067662ede689a680c3bf688b6b2b29",
+        "bytes": 8429
       },
       "checks": {
         "page_count": 1,
-        "extracted_characters": 2049,
+        "extracted_characters": 2054,
         "embedded_fonts": [
           "/AAAAAA+NotoSans-Bold",
           "/AAAAAA+NotoSans-Regular"
@@ -895,7 +895,7 @@
             "source": "education[0].field",
             "top": 615.87,
             "bottom": 599.37,
-            "text": "Electronic Science and Technology"
+            "text": "Electronic Science and Technology · Master’s-to-PhD track"
           },
           {
             "page": 1,
@@ -1092,7 +1092,37 @@
     }
   ],
   "visual_qa": {
-    "status": "pending",
-    "method": "pdftoppm and view_image on every latest PDF page"
+    "status": "passed",
+    "method": "Native pdftoppm 144 dpi; all six current PDF pages freshly rasterized and individually viewed at original full-page detail. Verified latest education display: Xi'an Jiaotong University 2022-present, PhD student; Electronic Science and Technology · Master’s-to-PhD track. Chinese equivalent states 博士研究生（硕博连读）. The longer English field line fits on one line with clear spacing in both English CVs. No visible clipping, overlap, missing glyphs, blank pages or abnormal pagination; Paper/Code and publication link markers are legible. HTML was not browser-rendered.",
+    "reviewed_at": "2026-10-11T20:21:22.644354+00:00",
+    "reviewed_source_fingerprint": "e173ab19c4a751748a5e8cb23d0d8cb5ec0fb2b61c2f59a34572a554f5166aee",
+    "reviewed_pdf_sha256": {
+      "academic": "31c09845a408eb7580fba33c8849740c2ddb9348e40551657adefbf8ae8f857c",
+      "internship": "2813e2deacbc4b79f9aeacd71f5cdf17cf5f2039918eab098df797b1ad99bd0e"
+    },
+    "reviewed_pages": [
+      {
+        "id": "academic-en-page-1",
+        "page": 1,
+        "sha256": "b47d303351594f648fccdb19fe1cdf7393508aff2a405bab0c8cc38fb12f2d8a",
+        "pdf_sha256": "31c09845a408eb7580fba33c8849740c2ddb9348e40551657adefbf8ae8f857c",
+        "observation": "Education shows 2022-present, PhD student and Master’s-to-PhD track; the longer field line fits on one line with clear spacing before the next entry. All three selected works and current research fit."
+      },
+      {
+        "id": "academic-en-page-2",
+        "page": 2,
+        "sha256": "9eb939e881ffef2b06c3d15dafe5d88bb3b5fd5603bbd30f82c0400e12cb7fad",
+        "pdf_sha256": "31c09845a408eb7580fba33c8849740c2ddb9348e40551657adefbf8ae8f857c",
+        "observation": "All nine publications, research code, both additional experiences and award fit; links and footer remain clear."
+      },
+      {
+        "id": "internship-en-page-1",
+        "page": 1,
+        "sha256": "7b5b7a4f57aa0539d2d74b89ece7c90658e7e042a1ae960c7c7aed51f84923bb",
+        "pdf_sha256": "2813e2deacbc4b79f9aeacd71f5cdf17cf5f2039918eab098df797b1ad99bd0e",
+        "observation": "The longer Master’s-to-PhD track field line fits on one line without collision. Education, selected works, current research, award and device modeling fit on one page."
+      }
+    ],
+    "browser_pixels": "unverified"
   }
 }

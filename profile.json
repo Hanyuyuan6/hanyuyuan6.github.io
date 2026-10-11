@@ -58,11 +58,12 @@
     {
       "institution": "Xi'an Jiaotong University",
       "degree": "PhD student",
-      "field": "Electronic Science and Technology",
-      "start": null,
+      "field": "Electronic Science and Technology · Master’s-to-PhD track",
+      "start": "2022-09",
       "end": null,
-      "display_dates": "Graduate research: 2022 - present",
-      "note": ""
+      "display_dates": "2022 - present",
+      "note": "Continuous graduate study from 2022; transferred to the PhD program in 2024.",
+      "phd_start_year": 2024
     },
     {
       "institution": "Northwest University",
