@@ -1,0 +1,28 @@
+{
+  "reviewed_on": "2026-10-11",
+  "method": "Native pdftoppm 144 dpi; every page of the four current PDFs (six total) was freshly rasterized and individually viewed at original full-page detail after the education/research-order and wording refinements. No visible clipping, overlap, missing glyphs or abnormal pagination; legible Paper/Code and publication link markers. Exact reviewed PDF hashes below. HTML was not browser-rendered.",
+  "source_fingerprint": "c97d4c2919297117afa99c43102bcdde8265a8bcc96fa7bf2576d76e0997b6a9",
+  "pdf_sha256": {
+    "Yuyuan_Han_Academic_CV.pdf": "b6b4c7dc5a6c6cd68c821dbaec57beaa7d2510abca943b604230691d4465e6b4",
+    "Yuyuan_Han_Internship_Resume.pdf": "c9c699dc8234646d4f460ac7f6a45740b158a33482cc60cc91004aeca357c92b"
+  },
+  "html_visual_qa": "not browser-rendered",
+  "reviewed_at": "2026-10-11T19:19:08.728781+00:00",
+  "reviewed_pages": [
+    {
+      "id": "academic-en-page-1",
+      "sha256": "4015ac3cea359f543211bf1e017eed1cce8a86af0bf108195352442d5e89db46",
+      "pdf_sha256": "b6b4c7dc5a6c6cd68c821dbaec57beaa7d2510abca943b604230691d4465e6b4"
+    },
+    {
+      "id": "academic-en-page-2",
+      "sha256": "944cd2cce135807f3d718ecd907b73162b36f0dccbaac3c1fb89a3ad35b1a962",
+      "pdf_sha256": "b6b4c7dc5a6c6cd68c821dbaec57beaa7d2510abca943b604230691d4465e6b4"
+    },
+    {
+      "id": "internship-en-page-1",
+      "sha256": "7e635c29479197592f3d37797db82408e869c57aa6486ef1a65167c8fbd40a93",
+      "pdf_sha256": "c9c699dc8234646d4f460ac7f6a45740b158a33482cc60cc91004aeca357c92b"
+    }
+  ]
+}

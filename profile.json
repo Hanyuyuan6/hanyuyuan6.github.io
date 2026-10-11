@@ -1,0 +1,533 @@
+{
+  "schema_version": 1,
+  "updated": "2026-10-11",
+  "publication_verification_date": "2026-10-11",
+  "person": {
+    "name": "Yuyuan Han",
+    "name_zh": "韩聿源",
+    "email": "hanyuyuan6@gmail.com",
+    "institutional_email": "yuyuan.han@mail.polimi.it",
+    "location": "Milan, Italy",
+    "position": "PhD student",
+    "institution": "Xi'an Jiaotong University",
+    "visiting_role": "Visiting PhD student",
+    "visiting_institution": "Politecnico di Milano"
+  },
+  "narrative": {
+    "hero": "Learning to sense the physical world",
+    "field": "Computational imaging & physics-aware learning",
+    "bio": "I study how measurement physics can help learning systems perceive the physical world. My research connects optical measurement design with learned representations for image reconstruction and image-free perception. I am now exploring acquisition-aware learning and interfaces between optical signals and pretrained multimodal models. My long-term goal is to build sensing systems that learn what to measure next.",
+    "direction": "During my current visit at Politecnico di Milano, I plan to extend this work to time-domain diffuse optics and three-dimensional reconstruction, investigating how physical modeling can support transfer from simulation to optical experiments.",
+    "welcome": "I welcome research collaborations and research internship opportunities in computational imaging, physics-aware machine learning, and multimodal sensing.",
+    "resume_summary": "I work on optical measurement design and learning for imaging and perception. Current research explores acquisition-aware learning and pretrained models for optical signals.",
+    "long_term": "Longer term, I aim to develop perception that helps a system decide what to measure next and learn through interaction with the physical world.",
+    "internship_summary": "PhD student working on computational imaging and learning from optical measurements. Research experience spans measurement design, image reconstruction, and image-free perception.",
+    "current_summary": "Developing acquisition-aware models and adapting pretrained multimodal models to bucket-detector signals. Planned visiting research: time-domain diffuse optics and 3D reconstruction."
+  },
+  "profiles": [
+    {
+      "name": "Google Scholar",
+      "url": "https://scholar.google.com/citations?user=-cRrxLRR3vgC&hl=en"
+    },
+    {
+      "name": "ORCID",
+      "url": "https://orcid.org/0009-0005-7643-6331"
+    },
+    {
+      "name": "GitHub",
+      "url": "https://github.com/Hanyuyuan6"
+    },
+    {
+      "name": "LinkedIn",
+      "url": "https://www.linkedin.com/in/yuyuan-han-874818440/"
+    },
+    {
+      "name": "ResearchGate",
+      "url": "https://www.researchgate.net/profile/Yuyuan-Han-2"
+    },
+    {
+      "name": "Web of Science",
+      "url": "https://www.webofscience.com/wos/author/record/OAJ-4659-2025"
+    },
+    {
+      "name": "OpenReview",
+      "url": "https://openreview.net/profile?id=~Yuyuan_Han1"
+    }
+  ],
+  "education": [
+    {
+      "institution": "Xi'an Jiaotong University",
+      "degree": "PhD student",
+      "field": "Electronic Science and Technology",
+      "start": null,
+      "end": null,
+      "display_dates": "Graduate research: 2022 - present",
+      "note": ""
+    },
+    {
+      "institution": "Northwest University",
+      "degree": "B.Eng.",
+      "field": "Electronic Information Science and Technology",
+      "start": "2018",
+      "end": "2022",
+      "display_dates": "2018 - 2022",
+      "note": ""
+    }
+  ],
+  "appointments": [
+    {
+      "institution": "Politecnico di Milano",
+      "role": "Visiting PhD student",
+      "department": "Department of Physics",
+      "host": "Antonio Pifferi",
+      "display_dates": "Oct 2026 - present"
+    }
+  ],
+  "projects": [
+    {
+      "id": "lift",
+      "title": "The Lift Spectrum · Robust image-free perception",
+      "status": "Preprint",
+      "summary": "Our image-free segmentation is more robust to measurement noise than the tested reconstruct-then-segment baselines when models are trained on clean data.",
+      "bullets": [
+        "Demonstrated greater robustness to measurement noise than the tested reconstruct-then-segment baselines, with all models trained on clean data.",
+        "Learned spatial task representations directly from single-pixel measurements, using reconstruction only as auxiliary supervision."
+      ],
+      "role": "First author",
+      "period": "2025 - present",
+      "publication_id": "lift",
+      "code_url": "https://github.com/Hanyuyuan6/STSF-TPLS",
+      "result": ""
+    },
+    {
+      "id": "shsi",
+      "title": "Sparse Hadamard single-pixel imaging",
+      "status": "Published",
+      "summary": "Tunable-sparsity Hadamard illumination for noise-resilient single-pixel imaging, supported by theory and optical experiments.",
+      "bullets": [
+        "Designed tunable-sparsity Hadamard illumination for noise-resilient single-pixel imaging; developed a noise model and validated the approach in optical experiments."
+      ],
+      "role": "First author",
+      "period": "2024 - 2025",
+      "publication_id": "shsi",
+      "code_url": "https://github.com/Hanyuyuan6/SHSI",
+      "result": ""
+    },
+    {
+      "id": "loop",
+      "title": "LDGI · Optical phased-array imaging",
+      "status": "Published",
+      "summary": "A loop differential ghost-imaging algorithm for line-pattern illumination from one-dimensional optical phased arrays.",
+      "bullets": [
+        "Developed loop differential ghost imaging for line patterns from one-dimensional optical phased arrays; validated the algorithm in simulations and optical experiments."
+      ],
+      "role": "First author",
+      "period": "2025",
+      "publication_id": "loop",
+      "code_url": "https://github.com/Hanyuyuan6/LDGI",
+      "result": ""
+    },
+    {
+      "id": "acquisition",
+      "title": "Acquisition-aware learning and multimodal measurement interfaces",
+      "status": "Research in progress",
+      "summary": "Developing models that account for measurement conditions, and adapting pretrained multimodal models to bucket-detector signals.",
+      "bullets": [
+        "Developing acquisition-aware models for reconstruction and perception across changing measurement budgets and acquisition conditions.",
+        "Adapting pretrained multimodal models to detector signals, with current work on fine-tuning for direct interpretation of bucket measurements."
+      ],
+      "role": "Research development",
+      "period": "Current",
+      "publication_id": null,
+      "code_url": null
+    }
+  ],
+  "directions": [
+    {
+      "title": "Learning with acquisition physics",
+      "status": "Ongoing",
+      "description": "I am developing models that incorporate how signals are acquired, and studying how learned representations behave when acquisition conditions change."
+    },
+    {
+      "title": "Connecting optical signals and pretrained models",
+      "status": "Ongoing",
+      "description": "I am adapting pretrained multimodal models to bucket-detector signals, exploring how prior visual knowledge can support inference directly from measurements."
+    },
+    {
+      "title": "Time-domain diffuse optics and 3D reconstruction",
+      "status": "Planned study",
+      "description": "During my current visit at Politecnico di Milano, I plan to investigate light-transport modeling and learning-based inversion for three-dimensional reconstruction."
+    }
+  ],
+  "publications": [
+    {
+      "id": "shsi",
+      "title": "Generalized sparse Hadamard single-pixel Imaging",
+      "authors": [
+        "Yuyuan Han",
+        "Peng Wu",
+        "Hanxiong Xu",
+        "Bin Li",
+        "Yuchen He",
+        "Jianbin Liu",
+        "Hui Chen",
+        "Huaibin Zheng"
+      ],
+      "venue": "Optics Express",
+      "year": 2025,
+      "volume": "33",
+      "issue": "20",
+      "pages": "43324–43341",
+      "doi": "10.1364/OE.576533",
+      "url": "https://doi.org/10.1364/OE.576533",
+      "status": "Published",
+      "code_url": "https://github.com/Hanyuyuan6/SHSI",
+      "verification_source": "https://api.crossref.org/works/10.1364/OE.576533",
+      "verified_on": "2026-10-11",
+      "additional_verification_sources": [
+        "https://opg.optica.org/oe/issue.cfm?issue=20&volume=33",
+        "https://pubmed.ncbi.nlm.nih.gov/41215149/",
+        "https://raw.githubusercontent.com/Hanyuyuan6/SHSI/main/README.md"
+      ]
+    },
+    {
+      "id": "loop",
+      "title": "Loop differential ghost imaging based on line pattern",
+      "authors": [
+        "Yuyuan Han",
+        "Huaibin Zheng",
+        "Bin Li",
+        "Jingwei Li",
+        "Long Qiu",
+        "Wenxuan Hao",
+        "Zheng Dang",
+        "Hui Chen",
+        "Jianbin Liu",
+        "Yuchen He",
+        "Yanyan Liu",
+        "Zhuo Xu"
+      ],
+      "venue": "Optics Communications",
+      "year": 2025,
+      "volume": "580",
+      "issue": null,
+      "pages": "131589",
+      "doi": "10.1016/j.optcom.2025.131589",
+      "url": "https://doi.org/10.1016/j.optcom.2025.131589",
+      "status": "Published",
+      "code_url": "https://github.com/Hanyuyuan6/LDGI",
+      "verification_source": "https://api.crossref.org/works/10.1016/j.optcom.2025.131589",
+      "verified_on": "2026-10-11",
+      "additional_verification_sources": [
+        "https://raw.githubusercontent.com/Hanyuyuan6/LDGI/main/README.md"
+      ]
+    },
+    {
+      "id": "lidar",
+      "title": "Long-Range Imaging LiDAR with Multiple Denoising Technologies",
+      "authors": [
+        "Huaibin Zheng",
+        "Yuyuan Han",
+        "Long Qiu",
+        "Yanfeng Zong",
+        "Jingwei Li",
+        "Yu Zhou",
+        "Yuchen He",
+        "Jianbin Liu",
+        "Gao Wang",
+        "Hui Chen",
+        "Zhuo Xu"
+      ],
+      "venue": "Applied Sciences",
+      "year": 2024,
+      "volume": "14",
+      "issue": "8",
+      "pages": "3414",
+      "doi": "10.3390/app14083414",
+      "url": "https://doi.org/10.3390/app14083414",
+      "status": "Published",
+      "code_url": null,
+      "verification_source": "https://api.crossref.org/works/10.3390/app14083414",
+      "verified_on": "2026-10-11"
+    },
+    {
+      "id": "opa",
+      "title": "Design and analysis of single-electrode integrated lithium niobate optical phased array for two-dimensional beam steering",
+      "authors": [
+        "Jingwei Li",
+        "Huaibin Zheng",
+        "Yuyuan Han",
+        "Bin Li",
+        "Wenxuan Hao",
+        "Long Qiu",
+        "Yanyan Liu",
+        "Yuchen He",
+        "Xiaoyong Wei",
+        "Zhuo Xu"
+      ],
+      "venue": "Optics and Lasers in Engineering",
+      "year": 2025,
+      "volume": "184",
+      "issue": null,
+      "pages": "108617",
+      "doi": "10.1016/j.optlaseng.2024.108617",
+      "url": "https://doi.org/10.1016/j.optlaseng.2024.108617",
+      "status": "Published",
+      "code_url": null,
+      "verification_source": "https://api.crossref.org/works/10.1016/j.optlaseng.2024.108617",
+      "verified_on": "2026-10-11"
+    },
+    {
+      "id": "fusion",
+      "title": "Fusion of near-infrared single-photon LiDAR with visible light camera",
+      "authors": [
+        "Long Qiu",
+        "Huaibin Zheng",
+        "Yuyuan Han",
+        "Bin Li",
+        "Wenxuan Hao",
+        "Zheng Dang",
+        "Yuanlin Yu",
+        "Jiawei Li",
+        "Hanxiong Xu",
+        "Hui Chen",
+        "Jianbin Liu",
+        "Yuchen He",
+        "Yanyan Liu",
+        "Zhuo Xu"
+      ],
+      "venue": "Measurement Science and Technology",
+      "year": 2025,
+      "volume": "36",
+      "issue": "6",
+      "pages": "065409",
+      "doi": "10.1088/1361-6501/addddf",
+      "url": "https://doi.org/10.1088/1361-6501/addddf",
+      "status": "Published",
+      "code_url": null,
+      "verification_source": "https://api.crossref.org/works/10.1088/1361-6501/addddf",
+      "verified_on": "2026-10-11"
+    },
+    {
+      "id": "graph",
+      "title": "Graph-Regularized Estimation for Inverse Problems in Computational Optical Imaging",
+      "authors": [
+        "Chong Wang",
+        "Hao Lu",
+        "Yuyuan Han",
+        "Huaibin Zheng",
+        "Yuchen He"
+      ],
+      "venue": "IEEE Transactions on Image Processing",
+      "year": 2026,
+      "volume": "35",
+      "issue": null,
+      "pages": "9314–9326",
+      "doi": "10.1109/TIP.2026.3726365",
+      "url": "https://doi.org/10.1109/TIP.2026.3726365",
+      "status": "Published",
+      "code_url": null,
+      "verification_source": "https://api.crossref.org/works/10.1109/TIP.2026.3726365",
+      "verified_on": "2026-10-11"
+    },
+    {
+      "id": "opa_review",
+      "title": "Optical Phased Arrays on Photonic Integrated Circuit Platforms: Challenges, Opportunities, and Future Applications",
+      "authors": [
+        "Jingwei Li",
+        "Yuyuan Han",
+        "Aoxiang Chen",
+        "Pengpeng Li",
+        "Xinglin Zhu",
+        "Guanbao Zhao",
+        "Luohan Peng",
+        "Huaibin Zheng"
+      ],
+      "venue": "Nanophotonics",
+      "year": 2026,
+      "volume": "15",
+      "issue": "14",
+      "pages": "e70182",
+      "doi": "10.1002/nap2.70182",
+      "url": "https://doi.org/10.1002/nap2.70182",
+      "status": "Published",
+      "code_url": null,
+      "verification_source": "https://api.crossref.org/works/10.1002/nap2.70182",
+      "verified_on": "2026-10-11"
+    },
+    {
+      "id": "ghost_timing",
+      "title": "Sequence-Controlled Pseudothermal Optical Ghost Imaging System",
+      "authors": [
+        "Yanfeng Zong",
+        "Huaibin Zheng",
+        "Xinwei Wu",
+        "Jingwei Li",
+        "Long Qiu",
+        "Yuyuan Han"
+      ],
+      "venue": "Acta Optica Sinica",
+      "year": 2023,
+      "volume": "43",
+      "issue": "7",
+      "pages": "0711001",
+      "doi": "10.3788/AOS221781",
+      "url": "https://doi.org/10.3788/AOS221781",
+      "status": "Published",
+      "code_url": null,
+      "verification_source": "https://api.crossref.org/works/10.3788/AOS221781",
+      "verified_on": "2026-10-11",
+      "title_zh": "基于时序控制的赝热光鬼成像系统",
+      "additional_verification_sources": [
+        "https://www.researching.cn/ArticlePdf/m00006/2023/43/7/0711001.pdf"
+      ]
+    },
+    {
+      "id": "lift",
+      "title": "The Lift Spectrum: How Measurement-to-Space Adaptivity Shapes Robustness in Image-Free Single-Pixel Sensing",
+      "authors": [
+        "Yuyuan Han",
+        "Jingwei Li",
+        "Xiaoxia Zhang",
+        "Long Qiu",
+        "Chong Wang",
+        "Wenxuan Hao",
+        "Jiangyu Han",
+        "Xinyu Yao",
+        "Yuchen He",
+        "Hui Chen",
+        "Jianbin Liu",
+        "Huaibin Zheng"
+      ],
+      "venue": "arXiv",
+      "year": 2026,
+      "volume": null,
+      "issue": null,
+      "pages": null,
+      "doi": "10.48550/arXiv.2607.22077",
+      "url": "https://arxiv.org/abs/2607.22077",
+      "status": "Preprint",
+      "code_url": "https://github.com/Hanyuyuan6/STSF-TPLS",
+      "verification_source": "https://arxiv.org/abs/2607.22077",
+      "verified_on": "2026-10-11",
+      "arxiv_id": "2607.22077",
+      "arxiv_version": "v2",
+      "additional_verification_sources": [
+        "https://api.openalex.org/works/W7171412126",
+        "https://api.github.com/repos/Hanyuyuan6/STSF-TPLS"
+      ]
+    }
+  ],
+  "software": [
+    {
+      "name": "STSF-TPLS",
+      "url": "https://github.com/Hanyuyuan6/STSF-TPLS",
+      "description": "Code for image-free single-pixel segmentation."
+    },
+    {
+      "name": "SHSI",
+      "url": "https://github.com/Hanyuyuan6/SHSI",
+      "description": "Sparse Hadamard measurement and reconstruction examples."
+    },
+    {
+      "name": "Comparison-of-SPI-DLs",
+      "url": "https://github.com/Hanyuyuan6/Comparison-of-SPI-DLs",
+      "description": "Comparative evaluation of learning-based single-pixel reconstruction."
+    },
+    {
+      "name": "remote-gpu-trainer",
+      "url": "https://github.com/Hanyuyuan6/remote-gpu-trainer",
+      "description": "Agent skill for remote GPU experiment workflows."
+    }
+  ],
+  "skills": [
+    {
+      "label": "Programming and modeling",
+      "items": [
+        "Python",
+        "PyTorch",
+        "MATLAB",
+        "COMSOL"
+      ]
+    },
+    {
+      "label": "Experimental work",
+      "items": [
+        "Optical alignment",
+        "System integration",
+        "Electronic prototyping"
+      ]
+    },
+    {
+      "label": "Languages",
+      "items": [
+        "Mandarin (native)",
+        "English (CET-6)"
+      ]
+    }
+  ],
+  "awards": [
+    {
+      "title": "Second Prize, National Post-Graduate Mathematical Contest in Modeling",
+      "year": "2024"
+    }
+  ],
+  "cvs": [
+    {
+      "label": "Academic CV",
+      "path": "cv/Yuyuan_Han_Academic_CV.pdf"
+    },
+    {
+      "label": "Internship Résumé",
+      "path": "cv/Yuyuan_Han_Internship_Resume.pdf"
+    }
+  ],
+  "platform_copy": {
+    "github_bio": "Computational imaging and physics-aware learning. Optical measurement design, single-pixel reconstruction, and image-free perception.",
+    "linkedin_headline": "PhD Student at XJTU | Visiting PhD Student at Politecnico di Milano | Computational Imaging & Physics-Aware Learning",
+    "researchgate_bio": "I study optical measurement design and learning for imaging and perception. My work includes OPA-oriented ghost imaging, sparse Hadamard imaging, and robust image-free segmentation. Current research explores acquisition-aware learning and pretrained models for optical signals. My planned visiting research at Politecnico di Milano focuses on time-domain diffuse optics and 3D reconstruction.",
+    "long_bio": "I am a PhD student at Xi'an Jiaotong University and a visiting PhD student at Politecnico di Milano. My research connects optical measurement design with learning for imaging and perception, including OPA-oriented ghost imaging, sparse Hadamard imaging, and robust image-free segmentation. Current work explores acquisition-aware learning and pretrained models for optical signals. My planned visiting research focuses on time-domain diffuse optics and three-dimensional reconstruction.",
+    "keywords": [
+      "Computational Imaging",
+      "Single-Pixel Sensing",
+      "Inverse Problems",
+      "Physics-Aware Machine Learning",
+      "Multimodal Learning"
+    ],
+    "orcid_bio": "I am a PhD student at Xi'an Jiaotong University and a visiting PhD student at Politecnico di Milano. My research connects optical measurement design with learning for imaging and perception, including OPA-oriented ghost imaging, sparse Hadamard imaging, and robust image-free segmentation. Current work explores acquisition-aware learning and pretrained models for optical signals. My planned visiting research focuses on time-domain diffuse optics and three-dimensional reconstruction.",
+    "linkedin_about": "I study how measurement physics can help learning systems perceive the physical world. My research includes noise-resilient Hadamard measurement design, ghost-imaging algorithms for optical phased arrays, and image-free segmentation. In The Lift Spectrum, image-free segmentation better withstands measurement noise than the tested reconstruct-then-segment baselines after training on clean data.\n\nI am currently exploring acquisition-aware learning and pretrained multimodal models for optical signals. My long-term goal is to develop sensing systems that learn what to measure next. I welcome research collaborations and internship opportunities in computational imaging, physics-aware machine learning, and multimodal sensing."
+  },
+  "selected_project_ids": [
+    "lift",
+    "shsi",
+    "loop"
+  ],
+  "research_background": [
+    {
+      "id": "electro_optic",
+      "title": "Photonic device modeling",
+      "role": "Contributing researcher",
+      "summary": "Modeled and optimized electro-optic phased-array geometries for beam steering.",
+      "short": "Modeled and optimized electro-optic phased-array geometries for beam steering.",
+      "role_zh": "项目骨干",
+      "title_zh": "光子器件建模",
+      "summary_zh": "开展电光相控阵的器件几何建模与波束扫描优化。",
+      "short_zh": "开展电光相控阵的器件几何建模与波束扫描优化。"
+    },
+    {
+      "id": "optical_systems",
+      "title": "Optical system integration",
+      "role": "",
+      "summary": "Led mechanical design, optical alignment and system integration; participated in underwater field tests.",
+      "short": "Led mechanical design, optical alignment and system integration; participated in underwater field tests.",
+      "role_zh": "",
+      "title_zh": "光学系统集成",
+      "summary_zh": "主导机械设计、光路调校与系统集成，参与水下外场测试。",
+      "short_zh": "主导机械设计、光路调校与系统集成，参与水下外场测试。"
+    }
+  ],
+  "additional_code_ids": [
+    "Comparison-of-SPI-DLs",
+    "remote-gpu-trainer"
+  ]
+}

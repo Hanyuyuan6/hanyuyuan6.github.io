@@ -1,0 +1,196 @@
+{
+  "schema_version": 1,
+  "palette": {
+    "paper": "#ffffff",
+    "ink": "#20252b",
+    "muted": "#5d6570",
+    "accent": "#20252b",
+    "rule": "#dce1e6",
+    "link": "#205b87"
+  },
+  "variants": [
+    {
+      "id": "academic",
+      "language": "en",
+      "label": "Academic CV",
+      "filename": "Yuyuan_Han_Academic_CV",
+      "destination": "public",
+      "pages": 2,
+      "project_ids": [
+        "lift",
+        "shsi",
+        "loop"
+      ],
+      "publication_ids": "all",
+      "software_ids": [
+        "Comparison-of-SPI-DLs",
+        "remote-gpu-trainer"
+      ],
+      "body_size": 9.3,
+      "leading": 13.0,
+      "publication_size": 9.0,
+      "publication_leading": 12.7,
+      "compact": false
+    },
+    {
+      "id": "internship",
+      "language": "en",
+      "label": "Research Internship Résumé",
+      "filename": "Yuyuan_Han_Internship_Resume",
+      "destination": "public",
+      "pages": 1,
+      "project_ids": [
+        "lift",
+        "shsi",
+        "loop"
+      ],
+      "publication_ids": [
+        "lift",
+        "shsi",
+        "loop"
+      ],
+      "software_ids": [],
+      "body_size": 9.8,
+      "leading": 13.5,
+      "publication_size": 8.4,
+      "publication_leading": 11.7,
+      "compact": true
+    },
+    {
+      "id": "zh",
+      "language": "zh-CN",
+      "label": "学术简历",
+      "filename": "Yuyuan_Han_CV_ZH",
+      "destination": "private",
+      "pages": 2,
+      "project_ids": [
+        "lift",
+        "shsi",
+        "loop"
+      ],
+      "publication_ids": "all",
+      "software_ids": [
+        "Comparison-of-SPI-DLs",
+        "remote-gpu-trainer"
+      ],
+      "body_size": 10.0,
+      "leading": 16.0,
+      "publication_size": 9.0,
+      "publication_leading": 12.7,
+      "compact": false
+    },
+    {
+      "id": "internship_zh",
+      "language": "zh-CN",
+      "label": "研究实习简历",
+      "filename": "Yuyuan_Han_Internship_Resume_ZH",
+      "destination": "private",
+      "pages": 1,
+      "project_ids": [
+        "lift",
+        "shsi",
+        "loop"
+      ],
+      "publication_ids": [
+        "lift",
+        "shsi",
+        "loop"
+      ],
+      "software_ids": [],
+      "body_size": 10.4,
+      "leading": 15.0,
+      "publication_size": 8.4,
+      "publication_leading": 11.7,
+      "compact": true
+    }
+  ],
+  "zh": {
+    "field": "计算成像 · 物理驱动学习",
+    "summary": "研究光学测量设计与学习式成像、感知，当前关注采集条件感知学习，以及光学信号与预训练多模态模型的连接。",
+    "direction": "在米兰理工大学当前访学期间，计划研究时域漫射光学与三维重建。长期关注能够决定下一步测量、并通过与物理世界交互持续学习的感知系统。",
+    "location": "意大利 · 米兰",
+    "education": {
+      "Xi'an Jiaotong University": {
+        "institution": "西安交通大学",
+        "degree": "博士研究生",
+        "field": "电子科学与技术"
+      },
+      "Northwest University": {
+        "institution": "西北大学",
+        "degree": "工学学士",
+        "field": "电子信息科学与技术"
+      }
+    },
+    "appointment": {
+      "institution": "米兰理工大学",
+      "role": "访问博士研究生",
+      "department": "物理系",
+      "host_label": "合作导师"
+    },
+    "projects": {
+      "acquisition": {
+        "title": "采集条件感知学习与多模态测量接口",
+        "status": "研究进行中",
+        "role": "研究开发",
+        "bullets": [
+          "开发面向重建与感知的采集条件感知模型，研究测量预算和采集条件变化下的表征与推断。",
+          "将预训练多模态模型适配至桶探测信号，当前开展直接解释桶测量的微调研究。"
+        ]
+      },
+      "lift": {
+        "title": "The Lift Spectrum · 鲁棒免成像感知",
+        "status": "预印本",
+        "role": "第一作者",
+        "bullets": [
+          "在均由干净数据训练的比较中，免成像分割比所评估的先重建再分割基线更耐受测量噪声。",
+          "直接从单像素测量学习空间任务表征，仅将重建用于辅助监督。"
+        ]
+      },
+      "shsi": {
+        "title": "稀疏 Hadamard 单像素成像",
+        "status": "已发表",
+        "role": "第一作者",
+        "bullets": [
+          "设计可调稀疏度的 Hadamard 照明以提高单像素成像抗噪性，建立噪声模型并通过光学实验验证。"
+        ]
+      },
+      "loop": {
+        "title": "LDGI · 光学相控阵成像",
+        "status": "已发表",
+        "role": "第一作者",
+        "bullets": [
+          "针对一维光学相控阵的线光场提出循环差分鬼成像算法，通过数值仿真和光学实验验证。"
+        ]
+      }
+    },
+    "skill_labels": {
+      "Programming and modeling": "编程与建模",
+      "Experimental work": "实验能力",
+      "Languages": "语言"
+    },
+    "skills": {
+      "Optical alignment": "光路搭建与调试",
+      "System integration": "系统集成",
+      "Electronic prototyping": "电子原型开发",
+      "Mandarin (native)": "中文（母语）",
+      "English (CET-6)": "英语（CET-6）"
+    },
+    "awards": {
+      "Second Prize, National Post-Graduate Mathematical Contest in Modeling": "全国研究生数学建模竞赛二等奖"
+    },
+    "software": {
+      "STSF-TPLS": "免成像单像素分割代码。",
+      "SHSI": "稀疏 Hadamard 测量与重建示例。",
+      "Comparison-of-SPI-DLs": "学习式单像素重建方法的比较评估。",
+      "remote-gpu-trainer": "远程 GPU 实验工作流智能体技能。"
+    },
+    "internship_summary": "电子科学与技术博士研究生，研究计算成像与光学测量中的机器学习，具备测量设计、图像重建与免成像感知经验。",
+    "current_summary": "开发采集条件感知模型，并将预训练多模态模型适配至桶探测信号；米理访学计划聚焦时域漫射光学与三维重建。"
+  },
+  "translation_source_hashes": {
+    "lift": "355e648cb7c38264605fb3f7547297aad23a97a8db4b9cd018ddef3ec5aeee64",
+    "shsi": "af76d08b498ad272663888c63f536fc24ef4590e03fbcd3cf487e7a6d466841b",
+    "acquisition": "b8ea85ca21177c7eb28a98ad8ac32e8f8d22be9580c0d1315e5b270e84862483",
+    "loop": "1b0dada88483a415c84bde92e0358d33dd5ef293b4a4f2bec565f81690ba080c"
+  }
+}

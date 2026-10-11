@@ -1,0 +1,20 @@
+__pycache__/
+*.pyc
+.DS_Store
+.qa/
+.venv/
+
+# Local credentials and unpublished work
+.env
+.env.*
+*.key
+*.pem
+*.token
+credentials.json
+.credentials.json
+.npmrc
+.pypirc
+secrets.toml
+.aws/
+.ssh/
+*.log

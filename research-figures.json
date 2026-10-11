@@ -1,0 +1,46 @@
+{
+  "verified_on": "2026-10-11",
+  "figures": [
+    {
+      "path": "assets/research/lift.webp",
+      "width": 2150,
+      "height": 1226,
+      "sha256": "4937a27ac52c5f8eb21a8e9bff1e0aee9022731a5f728ea75546a0910c42655c",
+      "id": "lift",
+      "source_url": "https://arxiv.org/abs/2607.22077v2",
+      "source_title": "The Lift Spectrum: How Measurement-to-Space Adaptivity Shapes Robustness in Image-Free Single-Pixel Sensing",
+      "figure": "Fig. 1 (a–i)",
+      "alt": "Complete STSF+TPLS architecture showing acquisition and temporal encoding, content-adaptive lift, spatial decoding, loss composition, training schedule and auxiliary-head comparisons."
+    },
+    {
+      "path": "assets/research/shsi.webp",
+      "width": 1601,
+      "height": 1249,
+      "sha256": "92c797c853cf763ff68176d1653fab03659830ccb96d1bc038968286737322ae",
+      "id": "shsi",
+      "source_url": "https://doi.org/10.1364/OE.576533",
+      "source_title": "Generalized sparse Hadamard single-pixel Imaging",
+      "figure": "Fig. 9 (a–h)",
+      "alt": "Complete SHSI experiment figure with two ground-glass occluders, the testing-board target and six reconstruction rows at all eight sampling rates, retaining every original panel label and comparison border."
+    },
+    {
+      "path": "assets/research/loop.webp",
+      "width": 1601,
+      "height": 1156,
+      "sha256": "58e9015edb408e0b599c29343f3cc5a3de4658f4ee3b5635cc328b94bc9bf91f",
+      "id": "loop",
+      "source_url": "https://doi.org/10.1016/j.optcom.2025.131589",
+      "source_title": "Loop differential ghost imaging based on line pattern",
+      "figure": "Fig. 2 (a–c)",
+      "alt": "Complete LDGI OPA figure with the LNOI one-dimensional optical phased-array and grating-waveguide schematic, magnified emission region, and X- and Y-direction far-field curves with all axes and legends."
+    }
+  ],
+  "portrait": {
+    "path": "assets/portrait.webp",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "5eb93ed8d2f04dbe6dcd6e468ff13b40033df377095a8022c703d690711c427a",
+    "alt": "Yuyuan Han",
+    "selected_id": "P2"
+  }
+}

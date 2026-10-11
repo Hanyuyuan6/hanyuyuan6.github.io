@@ -1,0 +1,513 @@
+#!/usr/bin/env python3
+"""Build the public academic website from the shared, reviewed profile.
+
+Only the Python standard library is required. This builder writes index.html,
+style.css and reviewed images, preserving separately generated CVs.
+"""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+from datetime import date
+from html import escape
+import json
+from pathlib import Path, PurePosixPath
+import re
+import shutil
+from typing import Any
+from urllib.parse import urlsplit
+
+
+SOURCE_DIR = Path(__file__).resolve().parent
+TOKENS = re.compile(r"@@([A-Z_]+)@@")
+
+
+def e(value: Any) -> str:
+    """Escape every source value before it reaches HTML text or attributes."""
+    return escape(str(value), quote=True)
+
+
+def sequence(profile: dict[str, Any], key: str) -> list[dict[str, Any]]:
+    value = profile.get(key, [])
+    if not isinstance(value, list) or any(not isinstance(row, dict) for row in value):
+        raise ValueError(f"{key} must be a list of objects")
+    return value
+
+
+def slug(value: Any) -> str:
+    normalized = re.sub(r"[^a-z0-9]+", "-", str(value).lower()).strip("-")
+    if not normalized:
+        raise ValueError("A public entry needs a non-empty identifier")
+    return normalized
+
+
+def url(value: Any, *, local: bool = False) -> str:
+    """Accept web links or explicitly requested safe, relative CV paths."""
+    value = str(value).strip()
+    parsed = urlsplit(value)
+    if parsed.scheme in {"http", "https"} and parsed.netloc:
+        if parsed.username or parsed.password:
+            raise ValueError("Public URLs must not contain credentials")
+        return value
+    if local and not parsed.scheme and not parsed.netloc:
+        path = PurePosixPath(parsed.path)
+        if not path.is_absolute() and ".." not in path.parts and "\\" not in value:
+            if path.parts and path.parts[0] == "cv" and path.suffix.lower() == ".pdf":
+                return value
+    raise ValueError(f"Unsupported public link: {value!r}")
+
+
+def link(label: Any, href: Any, *, local: bool = False, css: str = "") -> str:
+    class_attr = f' class="{e(css)}"' if css else ""
+    return f'<a href="{e(url(href, local=local))}"{class_attr}>{e(label)}</a>'
+
+
+def email_link(address: Any, *, css: str = "") -> str:
+    address = str(address).strip()
+    if not re.fullmatch(r"[^@\s<>]+@[^@\s<>]+\.[^@\s<>]+", address):
+        raise ValueError("The public contact email is missing or invalid")
+    class_attr = f' class="{e(css)}"' if css else ""
+    return f'<a href="mailto:{e(address)}"{class_attr}>{e(address)}</a>'
+
+
+def status(value: Any) -> str:
+    text = str(value).strip()
+    if not text:
+        return ""
+    key = text.casefold()
+    if key == "ongoing":
+        return ""
+    if "preprint" in key:
+        css = "preprint"
+    elif key in {"published", "publication"}:
+        css = "published"
+    elif "planned" in key:
+        css = "planned"
+    else:
+        css = "ongoing"
+    return f'<span class="status status-{css}">{e(text)}</span>'
+
+
+def author_list(publication: dict[str, Any], person: dict[str, Any]) -> str:
+    authors = publication.get("authors", [])
+    if not isinstance(authors, list):
+        raise ValueError("Publication authors must be a list")
+    names = {str(person["name"]).casefold(), "yuyuan han", "han, yuyuan"}
+    return ", ".join(
+        f'<strong class="self-author">{e(name)}</strong>'
+        if str(name).casefold() in names
+        else e(name)
+        for name in authors
+    )
+
+
+def venue_line(publication: dict[str, Any]) -> str:
+    venue = str(publication.get("venue", "")).strip()
+    parts = [f'<cite>{e(venue)}</cite>'] if venue else []
+    volume = str(publication.get("volume", "") or "").strip()
+    issue = str(publication.get("issue", "") or "").strip()
+    if volume:
+        parts.append(e(volume) + (f"({e(issue)})" if issue else ""))
+    pages = str(publication.get("pages", "") or "").strip()
+    if pages:
+        parts.append(e(pages))
+    year = str(publication.get("year", "") or "").strip()
+    if year:
+        parts.append(e(year))
+    return " · ".join(parts)
+
+
+def publication_links(
+    publication: dict[str, Any], project: dict[str, Any] | None = None
+) -> str:
+    links = []
+    paper_url = publication.get("url")
+    doi = str(publication.get("doi", "") or "").strip()
+    if paper_url:
+        links.append(f'<a href="{e(url(paper_url))}" aria-label="Paper: {e(publication["title"])}">Paper</a>')
+    elif doi:
+        links.append(f'<a href="https://doi.org/{e(doi)}" aria-label="Paper: {e(publication["title"])}">Paper</a>')
+    code_url = (project or {}).get("code_url") or publication.get("code_url")
+    if code_url:
+        links.append(f'<a href="{e(url(code_url))}" aria-label="Code: {e(publication["title"])}">Code</a>')
+    return '<span class="resource-links">' + "".join(links) + "</span>" if links else ""
+
+
+def citation(
+    publication: dict[str, Any],
+    person: dict[str, Any],
+    *,
+    project: dict[str, Any] | None = None,
+) -> str:
+    identifier = slug(publication["id"])
+    return (
+        f'<div class="publication work-citation" id="publication-{e(identifier)}" '
+        f'data-publication-id="{e(publication["id"])}">'
+        f'<p class="authors">{author_list(publication, person)}</p>'
+        f'<div class="citation-tail"><p class="venue">{venue_line(publication)}</p>'
+        f'{publication_links(publication, project)}</div></div>'
+    )
+
+
+def reviewed_asset(record: dict[str, Any], source_dir: Path, *, portrait: bool = False) -> PurePosixPath:
+    """Only copy the reviewed local image, with explicit intrinsic dimensions."""
+    path = PurePosixPath(str(record.get("path", "")))
+    valid_path = path == PurePosixPath("assets/portrait.webp") if portrait else (
+        len(path.parts) == 3
+        and path.parts[:2] == ("assets", "research")
+        and path.suffix == ".webp"
+    )
+    if not valid_path or path.is_absolute() or ".." in path.parts or "\\" in str(path):
+        raise ValueError("Reviewed images must use the approved local WebP paths")
+    if any(type(record.get(key)) is not int or record[key] <= 0 for key in ("width", "height")):
+        raise ValueError("Reviewed images need positive integer intrinsic dimensions")
+    if not isinstance(record.get("alt"), str) or not record["alt"].strip():
+        raise ValueError("Reviewed images need meaningful alt text")
+    digest = str(record.get("sha256", ""))
+    if not re.fullmatch(r"[0-9a-f]{64}", digest):
+        raise ValueError("Reviewed images need a SHA-256 hash")
+    source = source_dir / path
+    if source.is_symlink() or not source.is_file():
+        raise ValueError("A reviewed image is missing or is a symlink")
+    if hashlib.sha256(source.read_bytes()).hexdigest() != digest:
+        raise ValueError("An image differs from its reviewed source")
+    return path
+
+
+def portrait_image(record: dict[str, Any], name: str) -> str:
+    return (
+        '<figure class="portrait">'
+        f'<a class="portrait-link" href="{e(record["path"])}" '
+        f'aria-label="Open full-size portrait of {e(name)}">'
+        f'<img src="{e(record["path"])}" alt="{e(record["alt"])}" '
+        f'width="{record["width"]}" height="{record["height"]}" '
+        'loading="eager" fetchpriority="high" decoding="async"></a></figure>'
+    )
+
+
+def selected_research(
+    projects: list[dict[str, Any]],
+    publications: list[dict[str, Any]],
+    person: dict[str, Any],
+    figures: dict[str, dict[str, Any]],
+) -> tuple[str, set[str]]:
+    by_id = {str(publication["id"]): publication for publication in publications}
+    selected_ids: set[str] = set()
+    entries = []
+    for index, project in enumerate(projects, start=1):
+        publication_id = str(project.get("publication_id", ""))
+        publication = by_id.get(publication_id)
+        if publication_id and publication is None:
+            raise ValueError(f"Selected research references an unknown publication: {publication_id}")
+        if publication_id in selected_ids:
+            raise ValueError(f"A publication was selected twice: {publication_id}")
+        if publication:
+            selected_ids.add(publication_id)
+        title = (publication or {}).get("title") or project.get("title", "")
+        entry_id = slug(project.get("id", f"research-{index}"))
+        pub_status = project.get("status") or (publication or {}).get("status", "")
+        summary = str(project.get("summary", "")).strip()
+        bullets = project.get("bullets", [])
+        if not isinstance(bullets, list):
+            raise ValueError("Research bullets must be a list")
+        bullet_html = (
+            '<ul class="work-points">'
+            + "".join(f"<li>{e(item)}</li>" for item in bullets)
+            + "</ul>"
+            if bullets
+            else ""
+        )
+        heading = (
+            link(title, publication["url"])
+            if publication and publication.get("url")
+            else e(title)
+        )
+        bib = citation(publication, person, project=project) if publication else ""
+        figure = figures[publication_id]
+        figure_html = (
+            '<figure class="research-figure">'
+            f'<a class="figure-link" href="{e(figure["path"])}" '
+            f'aria-label="Open full-size {e(figure["figure"])} for {e(title)}">'
+            f'<img src="{e(figure["path"])}" alt="{e(figure["alt"])}" '
+            f'width="{int(figure["width"])}" height="{int(figure["height"])}" '
+            f'loading="{"eager" if index == 1 else "lazy"}" decoding="async"></a></figure>'
+        )
+        extra = f'<details class="research-details"><summary>Full citation</summary>{bib}</details>'
+        badge = status(pub_status) if pub_status.casefold() != "published" else ""
+        result_html = f'<p class="work-result">{e(project["result"])}</p>' if project.get("result") else ""
+        entries.append(
+            f'<article class="research-entry" id="research-{e(entry_id)}">'
+            f'{figure_html}<div class="work-body"><header class="work-header">'
+            f'<div class="work-heading"><h3>{heading}</h3>{badge}</div>'
+            f'<p class="work-meta"><cite>{e(publication["venue"])}</cite> · {e(publication["year"])}</p></header>'
+            f'<p class="work-summary">{e(summary)}</p>'
+            f'{result_html}'
+            f'<div class="work-links">{publication_links(publication, project)}'
+            f'<a href="{e(figure["path"])}">Full figure</a></div>{extra}</div></article>'
+        )
+    return "\n".join(entries), selected_ids
+
+
+def other_publications(
+    publications: list[dict[str, Any]], selected_ids: set[str], person: dict[str, Any]
+) -> str:
+    entries = []
+    for publication in publications:
+        if str(publication["id"]) in selected_ids:
+            continue
+        identifier = slug(publication["id"])
+        title = (
+            link(publication["title"], publication["url"])
+            if publication.get("url")
+            else e(publication["title"])
+        )
+        publication_status = str(publication.get("status", "") or "")
+        badge = "" if publication_status.casefold() == "published" else status(publication_status)
+        entries.append(
+            f'<li class="publication publication-entry" id="publication-{e(identifier)}" '
+            f'data-publication-id="{e(publication["id"])}">'
+            '<div class="publication-heading">'
+            f'<h3>{title}</h3>{badge}</div>'
+            f'<p class="authors">{author_list(publication, person)}</p>'
+            '<div class="citation-tail">'
+            f'<p class="venue">{venue_line(publication)}</p>'
+            f'{publication_links(publication)}</div></li>'
+        )
+    return "\n".join(entries)
+
+
+def current_directions(directions: list[dict[str, Any]]) -> str:
+    entries = []
+    for index, direction in enumerate(directions, start=1):
+        entries.append(
+            '<li class="direction-entry">'
+            f'<span class="direction-number" aria-hidden="true">{index:02d}</span>'
+            '<div><div class="direction-heading">'
+            f'<h3>{e(direction.get("title", ""))}</h3>'
+            f'{status(direction.get("status", ""))}</div>'
+            f'<p>{e(direction.get("description", ""))}</p></div></li>'
+        )
+    return "\n".join(entries)
+
+
+def education(rows: list[dict[str, Any]]) -> str:
+    entries = []
+    for row in rows:
+        degree = row.get("degree", "")
+        field = str(row.get("field", "") or "").strip()
+        degree_line = e(degree) + (f" · {e(field)}" if field else "")
+        dates = str(row.get("display_dates", "") or "").strip()
+        entries.append(
+            '<li><h4>' + e(row.get("institution", "")) + "</h4>"
+            f'<p>{degree_line}</p>'
+            + (f'<p class="entry-dates">{e(dates)}</p>' if dates else "")
+            + "</li>"
+        )
+    return "\n".join(entries)
+
+
+def appointments(rows: list[dict[str, Any]]) -> str:
+    entries = []
+    for row in rows:
+        department = str(row.get("department", "") or "").strip()
+        host = str(row.get("host", "") or "").strip()
+        dates = str(row.get("display_dates", "") or "").strip()
+        entries.append(
+            f'<li><h4>{e(row.get("institution", ""))}</h4>'
+            f'<p>{e(row.get("role", ""))}</p>'
+            + (f'<p class="entry-note">{e(department)}</p>' if department else "")
+            + (f'<p class="entry-note">Host: {e(host)}</p>' if host else "")
+            + (f'<p class="entry-dates">{e(dates)}</p>' if dates else "")
+            + "</li>"
+        )
+    return "\n".join(entries)
+
+
+def software(rows: list[dict[str, Any]]) -> str:
+    return "\n".join(
+        '<li class="software-entry">'
+        f'<h3>{link(row.get("name", ""), row["url"])}</h3>'
+        f'<p>{e(row.get("description", ""))}</p></li>'
+        for row in rows
+    )
+
+
+def profile_links(rows: list[dict[str, Any]], *, primary: bool = False) -> str:
+    if primary:
+        rows = [row for row in rows if str(row.get("name", "")).casefold() in {
+            "google scholar", "scholar", "orcid", "github"
+        }]
+    return "\n".join(
+        f'<li>{link(row.get("name", ""), row["url"])}</li>' for row in rows
+    )
+
+
+def cv_links(rows: list[dict[str, Any]]) -> str:
+    return "\n".join(
+        f'<a class="cv-link" href="{e(url(row["path"], local=True))}">'
+        f'{e(row.get("label", "CV"))}<span class="file-type">PDF</span></a>'
+        for row in rows
+    )
+
+
+def build(
+    profile: dict[str, Any],
+    output_dir: Path,
+    *,
+    source_dir: Path | None = None,
+) -> Path:
+    """Build the public site while leaving CV output and unrelated assets alone."""
+    source_dir = Path(source_dir) if source_dir else SOURCE_DIR
+    output_dir = Path(output_dir)
+    person = profile.get("person", {})
+    narrative = profile.get("narrative", {})
+    if not isinstance(person, dict) or not person.get("name"):
+        raise ValueError("person.name is required")
+    if not isinstance(narrative, dict) or not narrative.get("hero") or not narrative.get("bio"):
+        raise ValueError("narrative.hero and narrative.bio are required")
+    project_map = {p["id"]: p for p in sequence(profile, "projects")}
+    projects = [project_map[pid] for pid in profile["selected_project_ids"]]
+    publications = sorted(
+        sequence(profile, "publications"),
+        key=lambda publication: int(publication.get("year", 0) or 0),
+        reverse=True,
+    )
+    profiles = sequence(profile, "profiles")
+    cvs = sequence(profile, "cvs")
+    ids = [str(publication["id"]) for publication in publications]
+    if len(ids) != len(set(ids)):
+        raise ValueError("Publication identifiers must be unique")
+    figure_records = json.loads((source_dir / "research-figures.json").read_text(encoding="utf-8"))
+    figures = {record["id"]: record for record in figure_records["figures"]}
+    if len(figures) != len(figure_records["figures"]):
+        raise ValueError("Duplicate research figure IDs")
+    if set(figures) != {project["publication_id"] for project in projects}:
+        raise ValueError("Each selected paper must have exactly one reviewed figure")
+    portrait = figure_records.get("portrait")
+    if not isinstance(portrait, dict):
+        raise ValueError("The reviewed portrait metadata is required")
+    assets = [reviewed_asset(portrait, source_dir, portrait=True)]
+    for project in projects:
+        record = figures[project["publication_id"]]
+        assets.append(reviewed_asset(record, source_dir))
+    selected, selected_ids = selected_research(projects, publications, person, figures)
+    roles = [
+        str(person.get("position", "") or "").strip(),
+        str(person.get("institution", "") or "").strip(),
+    ]
+    institution = "".join(f"<p>{e(role)}</p>" for role in roles if role)
+    visiting = str(person.get("visiting_role", "") or "").strip()
+    visiting_institution = str(person.get("visiting_institution", "") or "").strip()
+    visiting_html = (
+        '<div class="visiting-identity">'
+        + (f"<p>{e(visiting)}</p>" if visiting else "")
+        + (f"<p>{e(visiting_institution)}</p>" if visiting_institution else "")
+        + "</div>"
+        if visiting or visiting_institution
+        else ""
+    )
+    location = str(person.get("location", "") or "").strip()
+    name_zh = str(person.get("name_zh", "") or "").strip()
+    direction = str(narrative.get("long_term") or narrative.get("direction", "") or "").strip()
+    welcome = str(narrative.get("welcome", "") or "").strip()
+    description = re.sub(r"\s+", " ", str(narrative["bio"])).strip()
+    updated = profile.get("last_updated")
+    if not updated:
+        source_date = str(profile.get("updated", "2026-10-11"))
+        updated = date.fromisoformat(source_date).strftime("%B %Y")
+    structured = {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": person["name"],
+        "jobTitle": person.get("position", ""),
+        "email": str(person.get("email", "")),
+        "affiliation": {
+            "@type": "CollegeOrUniversity",
+            "name": person.get("institution", ""),
+        },
+        "sameAs": [url(row["url"]) for row in profiles],
+    }
+    structured_json = json.dumps(structured, ensure_ascii=False, indent=2)
+    structured_json = structured_json.replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026")
+    awards = sequence(profile, "awards")
+    award_html = ""
+    if awards:
+        award_html = (
+            '<div class="awards-block"><h3>Award</h3><ul>'
+            + "".join(
+                f'<li><span>{e(row.get("title", ""))}</span>'
+                f'<span class="entry-dates">{e(row.get("year", ""))}</span></li>'
+                for row in awards
+            )
+            + "</ul></div>"
+        )
+    other_cv_html = ""
+    if len(cvs) > 2:
+        other_cv_html = '<p class="additional-cv">' + " · ".join(
+            link(row.get("label", "CV"), row["path"], local=True)
+            for row in cvs[2:]
+        ) + ' <span class="file-type">PDF</span></p>'
+    replacements = {
+        "TITLE": e(f'{person["name"]} · Computational imaging & physics-aware learning'),
+        "DESCRIPTION": e(description),
+        "STRUCTURED_DATA": structured_json,
+        "NAME": e(person["name"]),
+        "CHINESE_NAME": f'<span lang="zh-Hans" class="chinese-name">{e(name_zh)}</span>' if name_zh else "",
+        "PORTRAIT": portrait_image(portrait, str(person["name"])),
+        "IDENTITY": institution,
+        "VISITING_IDENTITY": visiting_html,
+        "LOCATION": f'<p class="location">{e(location)}</p>' if location else "",
+        "FIELD": e(narrative.get("field", "Computational imaging · Physics-aware learning")),
+        "HERO": e(narrative["hero"]),
+        "BIO": e(narrative["bio"]),
+        "RESEARCH_BACKGROUND": "".join(f'<p><strong>{e(row["title"])}</strong> · {e(row["summary"])}</p>' for row in sequence(profile, "research_background")),
+        "WELCOME": f'<p class="welcome">{e(welcome)}</p>' if welcome else "",
+        "CV_LINKS": cv_links(cvs[:2]),
+        "EMAIL": email_link(person.get("email", "")),
+        "PRIMARY_PROFILES": profile_links(profiles, primary=True),
+        "SELECTED_RESEARCH": selected,
+        "DIRECTIONS": current_directions(sequence(profile, "directions")),
+        "DIRECTION_PARAGRAPH": f'<p class="future-paragraph">{e(direction)}</p>' if direction else "",
+        "PUBLICATIONS": other_publications(publications, selected_ids, person),
+        "PUBLICATION_COUNT": e(len(publications)),
+        "SELECTED_COUNT": e(len(selected_ids)),
+        "EDUCATION": education(sequence(profile, "education")),
+        "APPOINTMENTS": appointments(sequence(profile, "appointments")),
+        "AWARDS": award_html,
+        "OTHER_CVS": other_cv_html,
+        "SOFTWARE": software([row for row in sequence(profile, "software") if row["name"] in profile["additional_code_ids"]]),
+        "PROFILES": profile_links(profiles),
+        "UPDATED": e(updated),
+    }
+    template = (source_dir / "template.html").read_text(encoding="utf-8")
+    needed = set(TOKENS.findall(template))
+    missing = needed - replacements.keys()
+    if missing:
+        raise ValueError(f"Unknown template tokens: {sorted(missing)}")
+    document = TOKENS.sub(lambda match: replacements[match.group(1)], template)
+    if TOKENS.search(document):
+        raise ValueError("The generated page contains an unresolved template token")
+    output_dir.mkdir(parents=True, exist_ok=True)
+    destination = output_dir / "index.html"
+    destination.write_text(document, encoding="utf-8", newline="\n")
+    shutil.copyfile(source_dir / "style.css", output_dir / "style.css")
+    for relative in assets:
+        destination_asset = output_dir / relative
+        destination_asset.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(source_dir / relative, destination_asset)
+    return destination
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--profile", type=Path, default=SOURCE_DIR / "profile.json")
+    parser.add_argument("--out", type=Path, default=SOURCE_DIR / "dist")
+    args = parser.parse_args()
+    profile = json.loads(args.profile.read_text(encoding="utf-8"))
+    destination = build(profile, args.out)
+    print(f"Built {destination}")
+
+
+if __name__ == "__main__":
+    main()
