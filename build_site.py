@@ -371,6 +371,14 @@ def portrait_image(record: dict[str, Any], variants: list[dict[str, Any]], name:
     )
 
 
+def highlights(project: dict[str, Any]) -> str:
+    """Key results as short chips, so the numbers can be scanned without the prose."""
+    items = [str(item).strip() for item in project.get("highlights", []) if str(item).strip()]
+    if not items:
+        return ""
+    return '<ul class="highlights" aria-label="Key results">' + "".join(f"<li>{e(item)}</li>" for item in items) + "</ul>"
+
+
 def selected_research(
     projects: list[dict[str, Any]],
     publications: list[dict[str, Any]],
@@ -410,6 +418,7 @@ def selected_research(
             f'<p class="authors">{author_list(publication, person)}</p>'
             f'<p class="work-meta">{venue_line(publication, full=False)}</p>'
             f'<p class="work-summary">{e(str(project.get("summary", "")).strip())}</p>'
+            f'{highlights(project)}'
             f'{publication_links(publication, project)}</div></article>'
         )
     return "\n".join(entries), selected_ids

@@ -1,29 +1,29 @@
 {
  "reviewed_on": "2026-10-12",
  "reviewer": "Claude (Opus 5.5)",
- "method": "pdftoppm at 100 dpi; every page of both public PDFs and both private Chinese PDFs inspected at full page after the 2026-10-12 redesign (24 pt name, accent title-case section headings, regular-weight publication titles, theme.json colours). Checked: education order XJTU → Politecnico di Milano → Northwest University; 'Supervisor: Antonio Pifferi'; Lift claims (+3.2–9.9 pp, near-constant down to 0.78% sampling, up to +21.7 pp at 20 dB noise) against arXiv:2607.22077v2 Table S4 and abstract; SHSI wording against the Optics Express abstract; no orphan words; no number–unit or line-start-punctuation breaks in the Chinese PDFs; no clipping, overlap, missing glyphs or abnormal page breaks.",
- "source_fingerprint": "f0184793aa23c7188ad363e8e24ea9e2cba32eb6da1930f54027a8e83206351f",
+ "method": "pdftoppm at 100 dpi; every page of both public PDFs and both private Chinese PDFs inspected at full page after the 2026-10-12 redesign (24 pt name, accent title-case section headings, regular-weight publication titles, theme.json colours). Re-reviewed page 1 of all four PDFs after shortening the selected-research bullets (page-2 renders are pixel-identical by hash). Checked: education order XJTU → Politecnico di Milano → Northwest University; 'Supervisor: Antonio Pifferi'; Lift claims (+3.2–9.9 pp, near-constant down to 0.78% sampling, up to +21.7 pp at 20 dB noise) against arXiv:2607.22077v2 Table S4 and abstract; SHSI wording against the Optics Express abstract; no orphan words; no number–unit or line-start-punctuation breaks in the Chinese PDFs; no clipping, overlap, missing glyphs or abnormal page breaks.",
+ "source_fingerprint": "836f17417db6104c1d716a5d4176e419c9a8acda65f491b68453b0a0fd63cb54",
  "pdf_sha256": {
-  "Yuyuan_Han_Academic_CV.pdf": "940fccd69e4ec3a8834c9f8bf58e4e38f601fdd4272640a286dfd85e83ffed84",
-  "Yuyuan_Han_Internship_Resume.pdf": "9b07575d29d12b436d132cca37064955560036e3306ddbe9fc4755f431ac4fb0"
+  "Yuyuan_Han_Academic_CV.pdf": "f9ba00cca7b81af070b69ac4de7a17e294fe197ca1d7e22d3fad08ce1ff9e8c5",
+  "Yuyuan_Han_Internship_Resume.pdf": "1bff29effff9eeaf73b18e1906649ec2e575097d5d0da0c13f560149c9e81e52"
  },
  "html_visual_qa": "not separately reviewed; HTML CVs are unlinked companions of the PDFs",
- "reviewed_at": "2026-10-12T12:05:09.918670+00:00",
+ "reviewed_at": "2026-10-12T12:29:27.285881+00:00",
  "reviewed_pages": [
   {
    "id": "academic-en-page-1",
-   "render_sha256": "ab4cc85b4b55fdac9ded0ea83b8457e0e9735ab0dfe66e6ab05f094a3d690aab",
-   "pdf_sha256": "940fccd69e4ec3a8834c9f8bf58e4e38f601fdd4272640a286dfd85e83ffed84"
+   "render_sha256": "7448853a94d5be7f3a9ff38be9936ed0b7a5becc64ef7275861aaab0cc98dd4e",
+   "pdf_sha256": "f9ba00cca7b81af070b69ac4de7a17e294fe197ca1d7e22d3fad08ce1ff9e8c5"
   },
   {
    "id": "academic-en-page-2",
    "render_sha256": "e860974227f698ecd8be4ee554c399f14ac96a951d899755bb2bbbc269b66e6a",
-   "pdf_sha256": "940fccd69e4ec3a8834c9f8bf58e4e38f601fdd4272640a286dfd85e83ffed84"
+   "pdf_sha256": "f9ba00cca7b81af070b69ac4de7a17e294fe197ca1d7e22d3fad08ce1ff9e8c5"
   },
   {
    "id": "internship-en-page-1",
-   "render_sha256": "69700c62fe8e79dce2ad72ef3aea98016a9126386867bd022700c2041b7737e2",
-   "pdf_sha256": "9b07575d29d12b436d132cca37064955560036e3306ddbe9fc4755f431ac4fb0"
+   "render_sha256": "453a6dc89c4a64508dd027e2e8d51d3be637124dfea74bce377a729ffd3c782d",
+   "pdf_sha256": "1bff29effff9eeaf73b18e1906649ec2e575097d5d0da0c13f560149c9e81e52"
   }
  ]
 }

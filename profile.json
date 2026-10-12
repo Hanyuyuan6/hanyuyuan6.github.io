@@ -92,44 +92,59 @@
       "id": "lift",
       "title": "The Lift Spectrum · Robust image-free perception",
       "status": "Preprint",
-      "summary": "Without reconstruction, the hard part becomes the lift from 1D measurements to 2D features. Our STSF + TPLS lift keeps near-constant accuracy down to 0.78% sampling and, at 20 dB noise, beats clean-trained reconstruct-then-segment by up to 21.7 mIoU points.",
+      "summary": "Image-free sensing moves the hard problem to the 1D-to-2D lift; how adaptive that lift is decides robustness.",
       "bullets": [
-        "Showed that removing reconstruction moves the design problem to the 1D-to-2D lift; organized lifts into a spectrum from fixed-physics inverse to content-adaptive retrieval.",
-        "Proposed STSF + TPLS: +3.2–9.9 pp mIoU over the prior image-free method, near-constant accuracy down to 0.78% sampling, and up to +21.7 pp over clean-trained reconstruct-then-segment at 20 dB noise."
+        "Showed that without reconstruction the 1D-to-2D lift is the design problem; mapped the lift spectrum.",
+        "Proposed STSF + TPLS: +3.2–9.9 pp over prior image-free methods; near-constant accuracy down to 0.78% sampling; up to +21.7 pp over clean-trained reconstruct-then-segment at 20 dB noise."
       ],
       "role": "First author",
       "period": "2025–present",
       "publication_id": "lift",
       "code_url": "https://github.com/Hanyuyuan6/STSF-TPLS",
-      "result": ""
+      "result": "",
+      "highlights": [
+        "Accuracy holds down to 0.78% sampling",
+        "+21.7 mIoU at 20 dB vs clean-trained reconstruct-then-segment",
+        "+3.2–9.9 mIoU vs prior image-free"
+      ]
     },
     {
       "id": "shsi",
       "title": "Sparse Hadamard single-pixel imaging",
       "status": "Published",
-      "summary": "Gives orthogonal Hadamard patterns tunable sparsity: robust imaging through scattering and noise, high resolution from low-order matrices that save memory, and no training or post-processing.",
+      "summary": "Orthogonal Hadamard patterns with tunable sparsity make single-pixel imaging robust through scattering and noise.",
       "bullets": [
-        "Gave orthogonal Hadamard patterns tunable sparsity (two acquisition modes, full theory): noise-robust imaging through scattering, low-order matrices that save memory, and no training or post-processing."
+        "Gave orthogonal Hadamard patterns tunable sparsity: noise-robust imaging through scattering, low-order matrices that save memory, no training or post-processing."
       ],
       "role": "First author",
       "period": "2024–2025",
       "publication_id": "shsi",
       "code_url": "https://github.com/Hanyuyuan6/SHSI",
-      "result": ""
+      "result": "",
+      "highlights": [
+        "Low-order matrices, less memory",
+        "No training or post-processing",
+        "Two acquisition modes with theory"
+      ]
     },
     {
       "id": "loop",
       "title": "LDGI · Optical phased-array imaging",
       "status": "Published",
-      "summary": "Line patterns from one-dimensional optical phased arrays break the noise symmetry that ghost-imaging denoising assumes; loop differential ghost imaging overcomes it, with orders-of-magnitude gains over traditional algorithms.",
+      "summary": "Line patterns from one-dimensional optical phased arrays break the noise symmetry ghost imaging relies on; LDGI overcomes it.",
       "bullets": [
-        "Showed that line patterns from one-dimensional optical phased arrays break the noise symmetry assumed by ghost-imaging denoising; proposed LDGI (orders-of-magnitude gains) and validated it optically."
+        "Showed that line patterns from one-dimensional optical phased arrays break the noise symmetry of ghost-imaging denoising; proposed LDGI (orders-of-magnitude gains), validated optically."
       ],
       "role": "First author",
       "period": "2025",
       "publication_id": "loop",
       "code_url": "https://github.com/Hanyuyuan6/LDGI",
-      "result": ""
+      "result": "",
+      "highlights": [
+        "Orders-of-magnitude gain over traditional ghost imaging",
+        "Noise-symmetry metric κs",
+        "Validated optically"
+      ]
     },
     {
       "id": "acquisition",

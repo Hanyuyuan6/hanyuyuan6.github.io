@@ -249,6 +249,11 @@ def validate(root):
             if project['id'] in selected:
                 require(escape(project['summary'], quote=True) in home_text, f"Selected-work conclusion appears in homepage: {project['id']}")
         require(all(term in home_text for term in ('20 dB', 'clean-trained', 'reconstruct-then-segment')), 'Lift homepage states its noise level, training condition and baseline')
+        for project in profile['projects']:
+            if project['id'] in selected:
+                chips = project.get('highlights', [])
+                require(1 <= len(chips) <= 4 and all(len(chip) <= 64 and escape(chip, quote=False) in home_text for chip in chips), f"Selected work shows 1-4 short key-result chips: {project['id']}")
+                require(len(project['summary'].split()) <= 22, f"Selected-work takeaway is one short sentence (22 words max): {project['id']}")
         require('one-dimensional optical phased arrays' in home_text, 'LDGI homepage identifies its OPA illumination setting')
         require(all(f"Advisor: {escape(row['advisor'], quote=True)}" in home_text for row in profile['education'] if row.get('advisor')), 'Homepage names the recorded advisor')
         first_authored = [p for p in publications if p['id'] in {pr['publication_id'] for pr in profile['projects'] if pr['id'] in selected}]
