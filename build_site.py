@@ -417,18 +417,18 @@ def social_card(profile: dict[str, Any], portrait_path: Path, source_dir: Path, 
         regular = ImageFont.truetype(str(fonts / "NotoSans-Regular.ttf"), size)
         if x + draw.textlength(narrative["field"], font=regular) <= right:
             break
+    # One identity line (owner, 2026-10-12: the PhD is enough); the block stays centred on the photo.
     lines = [
-        (person["name"], bold, palette["ink"], 172),
-        (narrative["field"], regular, palette["link"], 266),
-        (f'{person["position"]} · {person["institution"]}', small, palette["muted"], 322),
-        (f'{person["visiting_role"]} · {person["visiting_institution"]}', small, palette["muted"], 358),
-        (person["homepage"].replace("https://", "").rstrip("/"), small, palette["link"], 426),
+        (person["name"], bold, palette["ink"], 190),
+        (narrative["field"], regular, palette["link"], 284),
+        (f'{person["position"]} · {person["institution"]}', small, palette["muted"], 340),
+        (person["homepage"].replace("https://", "").rstrip("/"), small, palette["link"], 408),
     ]
     for text, font, colour, y in lines:
         if x + draw.textlength(text, font=font) > right:
             raise ValueError(f"Social card text overflows its 84 px margin: {text!r}")
         draw.text((x, y), text, font=font, fill=colour)
-    draw.line((x, 412, x + 96, 412), fill=palette["accent"], width=2)
+    draw.line((x, 394, x + 96, 394), fill=palette["accent"], width=2)
     card.save(output_dir / "social-card.png", optimize=True)
 
 
@@ -546,9 +546,10 @@ def current_directions(directions: list[dict[str, Any]]) -> str:
     )
 
 
-def education(rows: list[dict[str, Any]]) -> str:
+def education(rows: list[dict[str, Any]], visits: list[dict[str, Any]]) -> str:
+    """Degrees, newest first; a visiting period follows the PhD it belongs to, as on the CVs."""
     entries = []
-    for row in rows:
+    for index, row in enumerate(rows):
         field = str(row.get("field", "") or "").strip()
         degree_line = e(row.get("degree", "")) + (f" · {e(field)}" if field else "")
         advisor = str(row.get("advisor", "") or "").strip()
@@ -560,6 +561,8 @@ def education(rows: list[dict[str, Any]]) -> str:
             + (f'<p class="entry-dates">{e(dates)}</p>' if dates else "")
             + "</li>"
         )
+        if index == 0 and visits:
+            entries.append(appointments(visits))
     return "\n".join(entries)
 
 
@@ -699,16 +702,6 @@ def build(profile: dict[str, Any], output_dir: Path, *, source_dir: Path | None 
     selected, selected_ids = selected_research(projects, publications, person, figures, derived["figures"])
     roles = [str(person.get("position", "") or "").strip(), str(person.get("institution", "") or "").strip()]
     institution = "".join(f"<p>{e(role)}</p>" for role in roles if role)
-    visiting = str(person.get("visiting_role", "") or "").strip()
-    visiting_institution = str(person.get("visiting_institution", "") or "").strip()
-    visiting_html = (
-        '<div class="visiting-identity">'
-        + (f"<p>{e(visiting)}</p>" if visiting else "")
-        + (f"<p>{e(visiting_institution)}</p>" if visiting_institution else "")
-        + "</div>"
-        if visiting or visiting_institution
-        else ""
-    )
     name_zh = str(person.get("name_zh", "") or "").strip()
     direction = str(narrative.get("long_term") or narrative.get("direction", "") or "").strip()
     welcome = str(narrative.get("welcome", "") or "").strip()
@@ -723,10 +716,8 @@ def build(profile: dict[str, Any], output_dir: Path, *, source_dir: Path | None 
         "image": SITE_URL + "assets/portrait-480.webp",
         "jobTitle": person.get("position", ""),
         "email": str(person.get("email", "")),
-        "affiliation": [
-            {"@type": "CollegeOrUniversity", "name": person.get("institution", "")},
-            {"@type": "CollegeOrUniversity", "name": person.get("visiting_institution", "")},
-        ],
+        "affiliation": [{"@type": "CollegeOrUniversity", "name": person.get("institution", "")}]
+        + [{"@type": "CollegeOrUniversity", "name": row["institution"]} for row in sequence(profile, "appointments")],
         "knowsAbout": profile.get("platform_copy", {}).get("keywords", []),
         "sameAs": [url(row["url"]) for row in profiles],
     }
@@ -741,7 +732,6 @@ def build(profile: dict[str, Any], output_dir: Path, *, source_dir: Path | None 
         "CHINESE_NAME": f'<span lang="zh-Hans" class="chinese-name">{e(name_zh)}</span>' if name_zh else "",
         "PORTRAIT": portrait_image(portrait, derived["portrait"], str(person["name"])),
         "IDENTITY": institution,
-        "VISITING_IDENTITY": visiting_html,
         "FIELD": e(narrative["field"]),
         "HERO": e(narrative["hero"]),
         "BIO": e(narrative["bio"]),
@@ -760,8 +750,7 @@ def build(profile: dict[str, Any], output_dir: Path, *, source_dir: Path | None 
         "STYLE_VERSION": style_version,
         "ICON_VERSION": icon_version(theme["mark"]),
         "THEME_META": theme_meta(theme),
-        "EDUCATION": education(sequence(profile, "education")),
-        "APPOINTMENTS": appointments(sequence(profile, "appointments")),
+        "EDUCATION": education(sequence(profile, "education"), sequence(profile, "appointments")),
         "AWARDS": awards(sequence(profile, "awards")) + service(sequence(profile, "service")),
         "SOFTWARE": software([row for row in sequence(profile, "software") if row["name"] in profile["additional_code_ids"]]),
         "PROFILES": profile_links(profiles),

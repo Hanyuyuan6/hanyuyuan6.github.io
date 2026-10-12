@@ -166,15 +166,18 @@ def validate(root):
     require(len(profile['platform_copy']['researchgate_bio']) <= 500, 'ResearchGate bio within observed 500-character limit')
     # Platform texts are compositions of the narrative, so a hand edit to one of them is drift.
     copy, narrative, person = profile['platform_copy'], profile['narrative'], profile['person']
-    identity = f"I am a {person['position']} at {person['institution']} and a {person['visiting_role'][:1].lower() + person['visiting_role'][1:]} at {person['visiting_institution']}."
+    identity = f"I am a {person['position']} at {person['institution']}."
     require(narrative['bio'].startswith(narrative['short_bio']), 'Biography opens with the short bio')
     require(copy['researchgate_bio'] == f"{narrative['short_bio']} {identity}", 'ResearchGate bio is the short bio plus the identity sentence')
     require(copy['long_bio'] == copy['orcid_bio'] == f"{identity} {narrative['bio']}", 'ORCID biography is the identity sentence plus the biography')
     require(copy['linkedin_about'] == f"{copy['long_bio']}\n\n{narrative['welcome']}", 'LinkedIn About is the long bio plus the welcome line')
     require(copy['github_bio'].startswith(narrative['hero']) and copy['linkedin_headline'].endswith(narrative['hero'].rstrip('.')), 'GitHub bio and LinkedIn headline carry the hero line')
+    # Identity lines name the PhD only; the visit is listed under Education (owner, 2026-10-12).
     visit, visit_zh = profile['appointments'][0], json.loads((root / 'cv-variants.json').read_text(encoding='utf-8'))['zh']['appointment']
-    require(visit['department'] in copy['linkedin_experience_polimi'] and visit['host'] in copy['linkedin_experience_polimi'], 'LinkedIn experience names the department and supervisor of record')
-    require(visit_zh['department'] in copy['linkedin_experience_polimi_zh'] and visit['host'] in copy['linkedin_experience_polimi_zh'] and visit_zh['institution'] + visit_zh['role'] in copy['linkedin_headline_zh'], 'Chinese LinkedIn copy uses the Chinese appointment of record')
+    identity_lines = [identity, narrative['meta_description'], copy['linkedin_headline'], copy['linkedin_headline_zh'], copy['github_company'], copy['github_bio'],
+                      copy['long_bio'].split('. ')[0], copy['linkedin_about_zh'].split('。')[0]]
+    require(not any(visit['institution'] in line or visit_zh['institution'] in line or 'isiting' in line or '访问' in line for line in identity_lines), 'Identity lines name the PhD only, not the visit')
+    require(not any(key in person for key in ('visiting_role', 'visiting_institution')) and not any('experience_polimi' in key for key in copy), 'The visit is recorded once, as an appointment listed under Education')
 
     expected = set(manifest['repository_files'])
     actual = set()
@@ -271,6 +274,10 @@ def validate(root):
         order = [home_text.find(f'id="{anchor}"') for anchor in ('news', 'research', 'directions', 'publications', 'software', 'background', 'contact')]
         require(-1 not in order and order == sorted(order), 'Sections run News, Research, Directions, Publications, Code, Background, Contact')
         require('Host:' not in home_text and all(f"Supervisor: {escape(row['host'], quote=True)}" in home_text for row in profile['appointments'] if row.get('host')), 'Visiting appointment names its supervisor')
+        intro = home_text[home_text.find('class="intro"'):home_text.find('class="bio"')]
+        education_block = home_text[home_text.find('<h3>Education</h3>'):home_text.find('<h3>Additional experience</h3>')]
+        places = [education_block.find(f'<h4>{escape(name, quote=True)}</h4>') for name in (profile['education'][0]['institution'], profile['appointments'][0]['institution'], profile['education'][1]['institution'])]
+        require(bool(intro) and profile['appointments'][0]['institution'] not in intro and 'Research appointments' not in home_text and -1 not in places and places == sorted(places), 'Header names the PhD only; the visit sits under Education, after the PhD')
         require('overleaf.com/project/' not in home_text, 'Private Overleaf editor is not a public CV link')
         image_metadata = json.loads((root / 'research-figures.json').read_text(encoding='utf-8'))
         figures = image_metadata['figures']

@@ -79,12 +79,16 @@ def check_orcid(profile: dict, drift: list[str]) -> None:
     if claimed and reviews < claimed:
         drift.append(f'ORCID shows {reviews} verified reviews; the site claims {claimed}.')
     summaries = record['activities-summary']
-    affiliations = {s['organization']['name'] for kind in ('educations', 'invited-positions')
-                    for group in summaries[kind].get('affiliation-group', []) for item in group['summaries']
-                    for s in item.values()}
+    def organisations(kind: str) -> set[str]:
+        return {s['organization']['name'] for group in summaries[kind].get('affiliation-group', [])
+                for item in group['summaries'] for s in item.values()}
+    # The visit is part of the PhD, so it is listed under Education (owner, 2026-10-12).
+    educations, invited = organisations('educations'), organisations('invited-positions')
     for name in [row['institution'] for row in profile['education']] + [row['institution'] for row in profile['appointments']]:
-        if name not in affiliations:
-            drift.append(f'ORCID affiliations lack {name}.')
+        if name not in educations:
+            drift.append(f'ORCID Education lacks {name}.')
+    for name in sorted(invited & {row['institution'] for row in profile['appointments']}):
+        drift.append(f'ORCID lists {name} as an invited position; it belongs under Education.')
 
 
 def check_github(profile: dict, drift: list[str]) -> None:
@@ -111,10 +115,10 @@ def check_github(profile: dict, drift: list[str]) -> None:
 
 def manual_checklist(profile: dict) -> list[str]:
     copy, person = profile['platform_copy'], profile['person']
-    affiliation = f'{person["position"]}, {person["institution"]}; {person["visiting_role"]}, {person["visiting_institution"]}'
+    affiliation = f'{person["position"]}, {person["institution"]}'
     return [
         f'- Google Scholar: affiliation "{affiliation}"; interests {copy["keywords"]}; homepage {person["homepage"]}.',
-        f'- LinkedIn: headline "{copy["linkedin_headline"]}" (Chinese profile: "{copy["linkedin_headline_zh"]}"); About = `platform_copy.linkedin_about` (and `_zh`); Politecnico di Milano under both Experience (`linkedin_experience_polimi`, and `_zh`) and Education, translated on the English profile; skills lead with {copy["keywords"]}; featured links use `linkedin_featured_*`.',
+        f'- LinkedIn: headline "{copy["linkedin_headline"]}" (Chinese profile: "{copy["linkedin_headline_zh"]}"); About = `platform_copy.linkedin_about` (and `_zh`); Politecnico di Milano under Education only (department and supervisor), translated on the English profile, and the top card naming Xi'an Jiaotong University only; skills lead with {copy["keywords"]}; featured links use `linkedin_featured_*`.',
         f'- ResearchGate: About = `platform_copy.researchgate_bio`; current activity "{copy["researchgate_activity"]}"; skills include {copy["keywords"]}.',
         f'- OpenReview: expertise {copy["openreview_expertise"]}; emails include {person.get("institutional_email")}.',
         '- Web of Science: primary organization Xi\'an Jiaotong University; 8 Core Collection works.',
