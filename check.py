@@ -164,6 +164,16 @@ def validate(root):
     require(len(profile['profiles']) == 7 and len({x['url'] for x in profile['profiles']}) == 7, 'Seven distinct academic profile links')
     require(len(profile['platform_copy']['github_bio']) <= 160, 'GitHub bio within 160 characters')
     require(len(profile['platform_copy']['researchgate_bio']) <= 500, 'ResearchGate bio within observed 500-character limit')
+    # Google Scholar's interests field holds 100 characters; a longer list is cut on the next save.
+    require(len(','.join(profile['platform_copy']['keywords'])) <= 100, 'Scholar interests fit its 100-character field (comma-separated)')
+    # The weekly watcher runs only in its own job, so a syntax error there would ship unnoticed.
+    for script in sorted(root.glob('*.py')):
+        try:
+            compile(script.read_text(encoding='utf-8'), str(script), 'exec')
+            compiles = True
+        except SyntaxError:
+            compiles = False
+        require(compiles, f'Script compiles: {script.name}')
     # Platform texts are compositions of the narrative, so a hand edit to one of them is drift.
     copy, narrative, person = profile['platform_copy'], profile['narrative'], profile['person']
     identity = f"I am a {person['position']} at {person['institution']}."
