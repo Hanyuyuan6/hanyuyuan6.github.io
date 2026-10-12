@@ -221,6 +221,12 @@ def validate(root):
         icons = {a.get('href') for t, a in home.tags if t == 'link' and 'icon' in (a.get('rel') or '')}
         require({'favicon.svg', 'favicon.ico', 'apple-touch-icon.png'} <= {icon.split('?')[0] for icon in icons} and all((root / 'dist' / name).is_file() for name in ('favicon.svg', 'favicon.ico', 'apple-touch-icon.png')), 'Site icons are declared and deployed')
         require(all('?v=' in icon for icon in icons), 'Icon URLs carry a version, so browsers drop a cached old icon')
+        # Every public page names the current mark; a page without its own icon falls back to a
+        # cached /favicon.ico, which is how an old mark lingers in a tab.
+        version = sha(root / 'dist' / 'favicon.svg')[:10] if (root / 'dist' / 'favicon.svg').is_file() else None
+        for page in [root / 'dist' / 'index.html', root / 'dist' / '404.html', *sorted((root / 'dist' / 'cv').glob('*.html'))]:
+            hrefs = re.findall(r'<link rel="(?:icon|apple-touch-icon)" href="([^"]+)"', page.read_text(encoding='utf-8')) if page.is_file() else []
+            require(version is not None and all(any(h.endswith(f'{name}?v={version}') for h in hrefs) for name in ('favicon.svg', 'favicon.ico', 'apple-touch-icon.png')), f'Page declares the current icon set: {page.relative_to(root / "dist")}')
         theme = json.loads((root / 'theme.json').read_text(encoding='utf-8'))
         palette = theme['palettes'][theme['selected']]
         favicon = (root / 'dist' / 'favicon.svg').read_text(encoding='utf-8') if (root / 'dist' / 'favicon.svg').is_file() else ''
