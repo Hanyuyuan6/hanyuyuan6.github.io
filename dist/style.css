@@ -2,25 +2,27 @@
 :root {
   color-scheme: light;
   --bg: #ffffff;
-  --ink: #20252b;
-  --muted: #5d6570;
-  --link: #205b87;
-  --hover: #0f3d5e;
-  --line: #dce1e6;
-  --tint: #eef4f8;
-  --wash: #f5f7f9;
+  --ink: #1d1528;
+  --muted: #5c5470;
+  --link: #5a2ea6;
+  --hover: #3b1a73;
+  --line: #e5dff0;
+  --tint: #f1ecfa;
+  --wash: #f8f6fc;
+  --accent: #a8821a;
 }
 @media (prefers-color-scheme: dark) {
   :root {
     color-scheme: dark;
-    --bg: #14181d;
-    --ink: #e6e9ec;
-    --muted: #9aa4ae;
-    --link: #7db7e8;
-    --hover: #b5d8f5;
-    --line: #2a3138;
-    --tint: #1c2530;
-    --wash: #1b2128;
+    --bg: #121018;
+    --ink: #ebe6f5;
+    --muted: #a49db6;
+    --link: #c4b5fd;
+    --hover: #f5c33b;
+    --line: #2a2438;
+    --tint: #211a2f;
+    --wash: #1a1623;
+    --accent: #f5c33b;
   }
 }
 
@@ -77,6 +79,8 @@ h1 { font-size: 34px; line-height: 1.2; font-weight: 600; letter-spacing: -.6px;
 .section { padding: 30px 0; border-top: 1px solid var(--line); }
 .section-heading { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 7px 18px; margin-bottom: 18px; }
 h2 { font-size: 22px; line-height: 1.3; font-weight: 600; letter-spacing: -.2px; }
+/* One gold square before each section title: the pixel from the mark. */
+.section-heading h2::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 10px; background: var(--accent); vertical-align: 3px; }
 .section-link, .section-note { font-size: 13px; }
 .section-note { color: var(--muted); }
 
@@ -94,6 +98,7 @@ h2 { font-size: 22px; line-height: 1.3; font-weight: 600; letter-spacing: -.2px;
 .figure-link { display: block; border: 1px solid var(--line); background: #fff; }
 .figure-link:hover { border-color: var(--muted); }
 .research-figure img { display: block; width: 100%; height: auto; }
+.figure-caption { margin-top: 6px; color: var(--muted); font-size: 12px; line-height: 1.4; }
 .work-body { min-width: 0; }
 .work-body h3, .publication-entry h3 { font-size: 17px; line-height: 1.4; font-weight: 600; overflow-wrap: anywhere; }
 .publication-entry h3 { font-size: 16px; }
@@ -130,7 +135,7 @@ h2 { font-size: 22px; line-height: 1.3; font-weight: 600; letter-spacing: -.2px;
 .publication-entry + .publication-entry { margin-top: 12px; }
 .publication-entry { padding: 8px 12px; margin: 0 -12px; border-radius: 6px; }
 /* Featured works stay in the complete list, highlighted (as on jonbarron.info). */
-.publication-entry.is-selected { background: var(--tint); }
+.publication-entry.is-selected { background: var(--tint); box-shadow: inset 3px 0 0 var(--accent); }
 .section-note a { margin-left: 12px; }
 
 /* Background: every sub-heading shares one style and one rhythm */

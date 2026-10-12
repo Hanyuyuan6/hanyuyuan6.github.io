@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
-  "built_at": "2026-10-12T17:43:28.703092+00:00",
-  "source_fingerprint": "806a93cf6063f46295da3a5f41190dafc527c7f1a8f0e35864cae7a99673cae0",
+  "built_at": "2026-10-12T19:01:02.323046+00:00",
+  "source_fingerprint": "8a4d72086b0c85733c78532db5ba0496b5a8c7f71a71e0390d4c200d88984d88",
   "inputs": {
     "profile": {
       "path": "profile.json",
@@ -9,7 +9,7 @@
     },
     "template": {
       "path": "build_cv.py",
-      "sha256": "2ca7a369d70e222d99b0fd7bda0a709bea0e52c78f70af04783c42edca471ff7"
+      "sha256": "01e5813f840daa26fe7f0c370525f654c81f85272cd2a3cadd49d97dd0c7788d"
     },
     "variants": {
       "path": "cv-variants.json",
@@ -17,7 +17,7 @@
     },
     "theme": {
       "path": "theme.json",
-      "sha256": "57994cf5ed3105ec5e56825802d5d3f77f2d8b16be76400e8cc63c86792d28cb"
+      "sha256": "1e10cfef458bddaac685b68479f9cab1003bee93c62997c3b7139022017aa2b5"
     }
   },
   "fonts": {
@@ -70,12 +70,12 @@
       },
       "pdf": {
         "path": "Yuyuan_Han_Academic_CV.pdf",
-        "sha256": "782c23d38734e2b6dff87c52d602fc1cd70c7606e067144f38fabf13b12ea0cb",
-        "bytes": 59482
+        "sha256": "317547a7625cf3b12c4be00a4897d3231fb9c0595568de4a4a4f57ce8bb5559e",
+        "bytes": 59484
       },
       "html": {
         "path": "Yuyuan_Han_Academic_CV.html",
-        "sha256": "182e3085af30e86e6643e83e1bd7fe31d9855a0f24a6a4236611b8865c52e486",
+        "sha256": "71540e02c06ba8aea497ea81a8a887e7d96edd99e4af17f1fe0ccb44e80564b1",
         "bytes": 15542
       },
       "checks": {
@@ -811,12 +811,12 @@
       },
       "pdf": {
         "path": "Yuyuan_Han_Internship_Resume.pdf",
-        "sha256": "c301f7050055752301b8f0fc1ac0606dbc39172ff0312a715d2eb512a049c7aa",
-        "bytes": 35733
+        "sha256": "65237ccca5f77a5583848dd725c4aba475c6a0da3e75cb9ad85c06ae24762228",
+        "bytes": 35730
       },
       "html": {
         "path": "Yuyuan_Han_Internship_Resume.html",
-        "sha256": "65e8246e19a4fd836111f9052ada4ea2afcd46b83e5bd0a2ea42e56b79545cc4",
+        "sha256": "486d5e1c7f36f4155b145513a203a1280ca54fe2f63db245696151790542969b",
         "bytes": 9542
       },
       "checks": {
