@@ -342,6 +342,18 @@ def mark_svg(mark: dict[str, str]) -> str:
     )
 
 
+def icon_version(mark: dict[str, str]) -> str:
+    """Browsers cache icons by URL for a long time; a new mark gets a new URL."""
+    return hashlib.sha256(mark_svg(mark).encode("utf-8")).hexdigest()[:10]
+
+
+def icon_links(prefix: str, version: str) -> str:
+    """The icon set every public page declares: SVG, ICO for older browsers, iOS touch icon."""
+    return (f'<link rel="icon" href="{prefix}favicon.svg?v={version}" type="image/svg+xml">'
+            f'<link rel="icon" href="{prefix}favicon.ico?v={version}" sizes="48x48">'
+            f'<link rel="apple-touch-icon" href="{prefix}apple-touch-icon.png?v={version}">')
+
+
 def write_icons(output_dir: Path, mark: dict[str, str]) -> None:
     """The Y-and-pixel mark: legible at 16 px, unlike the old 4×4 pattern."""
     (output_dir / "favicon.svg").write_text(mark_svg(mark), encoding="utf-8", newline="\n")
@@ -592,7 +604,7 @@ def write_support_files(profile: dict[str, Any], output_dir: Path, style_version
         '  <meta name="viewport" content="width=device-width, initial-scale=1">\n'
         '  <meta name="robots" content="noindex">\n'
         f'  <title>Page not found · {name}</title>\n'
-        f'  <link rel="icon" href="/favicon.svg?v={icon_version}" type="image/svg+xml">\n'
+        f'  {icon_links("/", icon_version)}\n'
         f'  <link rel="stylesheet" href="/style.css?v={style_version}">\n</head>\n<body>\n'
         '  <main class="page-shell not-found">\n    <h1>Page not found</h1>\n'
         f'    <p>This page does not exist. Go to <a href="/">{name}’s homepage</a>.</p>\n'
@@ -705,8 +717,7 @@ def build(profile: dict[str, Any], output_dir: Path, *, source_dir: Path | None 
         "PUBLICATIONS": all_publications(publications, selected_ids, person),
         "PUBLICATION_COUNT": e(len(publications)),
         "STYLE_VERSION": style_version,
-        # Browsers cache icons by URL for a long time; a new mark gets a new URL.
-        "ICON_VERSION": hashlib.sha256(mark_svg(theme["mark"]).encode("utf-8")).hexdigest()[:10],
+        "ICON_VERSION": icon_version(theme["mark"]),
         "THEME_META": theme_meta(theme),
         "EDUCATION": education(sequence(profile, "education")),
         "APPOINTMENTS": appointments(sequence(profile, "appointments")),
