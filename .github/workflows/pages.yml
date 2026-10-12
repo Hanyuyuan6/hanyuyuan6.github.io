@@ -20,10 +20,18 @@ jobs:
       - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
           python-version: '3.12'
-      - name: Install PDF reader for validation
-        run: python -m pip install -r requirements-check.txt
-      - name: Generate website and check reviewed PDFs
+      - name: Install pinned build and check tools
+        run: python -m pip install -r requirements-build.txt
+      - name: Build the website and check content, links, images and reviewed PDFs
         run: python build.py --site-only
+      - name: Rebuild the public CVs from source and compare with the committed PDFs
+        run: python build_cv.py --verify
+      - name: Install a headless browser for layout checks
+        run: |
+          python -m pip install playwright==1.62.0
+          python -m playwright install --with-deps chromium
+      - name: Check rendered layout at desktop, tablet and phone widths
+        run: python check_layout.py --out layout-screenshots
       - name: Upload public site only
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4

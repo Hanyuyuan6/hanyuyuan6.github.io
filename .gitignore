@@ -18,3 +18,6 @@ secrets.toml
 .aws/
 .ssh/
 *.log
+
+# CI-only layout screenshots
+layout-screenshots/

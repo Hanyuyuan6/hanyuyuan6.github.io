@@ -10,12 +10,13 @@ blocks; the public outputs contain only the two English variants.
 from __future__ import annotations
 
 import argparse
+import calendar
 import hashlib
 import html
 import json
+import os
 import re
-import subprocess
-import sys
+import tempfile
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from html.parser import HTMLParser
@@ -35,8 +36,10 @@ from pypdf import PdfReader
 
 
 HERE = Path(__file__).resolve().parent
-RUNTIME = Path.home() / '.cache/codex-runtimes/codex-primary-runtime/dependencies'
-RUNTIME_FONTS = RUNTIME / 'native/libreoffice-headless/libreoffice/LibreOfficeDev.app/Contents/Resources/fonts/truetype'
+# Noto Sans 2.015 (SIL OFL 1.1) is vendored so any machine and CI build identical
+# English CVs. Chinese variants are private and use the macOS STHeiti SC faces.
+FONTS = HERE / 'fonts'
+SYSTEM_FONTS = Path('/System/Library/Fonts')
 PAGE_W, PAGE_H = A4
 LEFT = 44.0
 RIGHT = 44.0
@@ -51,8 +54,13 @@ def sha256(path: Path) -> str:
 
 
 def clean_text(value: Any) -> str:
-    # Standard hyphens keep the PDFs friendly to basic parsers and copy/paste.
-    return str(value).replace('\u2011', '-').replace('\u2013', '-').replace('\u2014', '-').replace('\u00a0', ' ')
+    # Keep typographic en dashes for ranges; normalise only invisible variants.
+    return str(value).replace('\u2011', '-').replace('\u00a0', ' ')
+
+
+def sep(zh: bool) -> str:
+    """A compact middle dot; CJK faces draw U+00B7 full-width, so use the Latin face."""
+    return '<font name="CVSans"> \u00b7 </font>' if zh else ' \u00b7 '
 
 
 def esc(value: Any) -> str:
@@ -73,20 +81,22 @@ def chinese_period(value: str) -> str:
     """Translate date words only; all date values come from the profile."""
     if value == 'Current':
         return '当前'
-    match = re.fullmatch(r'Graduate research: (\d{4}) - present', value)
+    dash = r'\s*[–-]\s*'
+    match = re.fullmatch(rf'Graduate research: (\d{{4}}){dash}present', value)
     if match:
         return f'研究生科研：{match[1]} 年至今'
-    match = re.fullmatch(r'([A-Za-z]{3}) (\d{4}) - present', value)
+    match = re.fullmatch(rf'([A-Za-z]{{3}}) (\d{{4}}){dash}present', value)
     if match:
         months = {m: str(i) for i, m in enumerate(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], 1)}
         if match[1] not in months:
             raise ValueError(f'Unsupported appointment month: {value}')
         return f'{match[2]} 年 {months[match[1]]} 月至今'
-    match = re.fullmatch(r'(\d{4}) - present', value)
+    match = re.fullmatch(rf'(\d{{4}}){dash}present', value)
     if match:
         return f'{match[1]} 年至今'
-    if re.fullmatch(r'\d{4}( - \d{4})?', value):
-        return value
+    match = re.fullmatch(rf'(\d{{4}})(?:{dash}(\d{{4}}))?', value)
+    if match:
+        return f'{match[1]}–{match[2]}' if match[2] else match[1]
     raise ValueError(f'Untranslated profile date: {value}')
 
 
@@ -99,26 +109,31 @@ def validate_translations(profile: dict[str, Any], config: dict[str, Any]) -> No
                 raise ValueError(f'Chinese translation requires review after English project changed: {project["id"]}')
 
 
-def load_fonts() -> None:
+def load_fonts(chinese: bool = True) -> None:
     fonts = {
-        'CVSans': (RUNTIME_FONTS / 'NotoSans-Regular.ttf', 0),
-        'CVSansBold': (RUNTIME_FONTS / 'NotoSans-Bold.ttf', 0),
-        'CVSansItalic': (RUNTIME_FONTS / 'NotoSans-Italic.ttf', 0),
-        'CVSerif': (RUNTIME_FONTS / 'NotoSerif-Regular.ttf', 0),
-        'CVSerifBold': (RUNTIME_FONTS / 'NotoSerif-Bold.ttf', 0),
-        'CVSerifItalic': (RUNTIME_FONTS / 'NotoSerif-Italic.ttf', 0),
-        'CVChinese': (Path('/System/Library/Fonts/STHeiti Light.ttc'), 0),
-        'CVChineseBold': (Path('/System/Library/Fonts/STHeiti Medium.ttc'), 0),
+        'CVSans': (FONTS / 'NotoSans-Regular.ttf', 0),
+        'CVSansBold': (FONTS / 'NotoSans-Bold.ttf', 0),
+        'CVSansItalic': (FONTS / 'NotoSans-Italic.ttf', 0),
     }
+    if chinese:
+        # Index 1 of each STHeiti collection is the Simplified Chinese (SC) face;
+        # index 0 is Traditional Chinese (TC) and must not set Simplified text.
+        fonts['CVChinese'] = (SYSTEM_FONTS / 'STHeiti Light.ttc', 1)
+        fonts['CVChineseBold'] = (SYSTEM_FONTS / 'STHeiti Medium.ttc', 1)
     for name, (path, index) in fonts.items():
         if not path.is_file():
             raise FileNotFoundError(f'CV font unavailable: {path}')
         if name not in pdfmetrics.getRegisteredFontNames():
-            pdfmetrics.registerFont(TTFont(name, str(path), subfontIndex=index))
-        FONT_SOURCES[name] = {'filename': path.name, 'source': 'bundled runtime' if path.is_relative_to(RUNTIME) else 'system font', 'subfont_index': index, 'sha256': sha256(path)}
+            font = TTFont(name, str(path), subfontIndex=index)
+            face_name = font.face.name
+            face_name = face_name.decode('latin-1', 'ignore') if isinstance(face_name, bytes) else str(face_name)
+            if name.startswith('CVChinese') and 'SC-' not in face_name:
+                raise ValueError(f'Expected a Simplified Chinese face for {name}, got {face_name!r}')
+            pdfmetrics.registerFont(font)
+        FONT_SOURCES[name] = {'filename': path.name, 'source': 'vendored (SIL OFL 1.1)' if path.is_relative_to(FONTS) else 'system font', 'subfont_index': index, 'sha256': sha256(path)}
     pdfmetrics.registerFontFamily('CVSans', normal='CVSans', bold='CVSansBold', italic='CVSansItalic', boldItalic='CVSansBold')
-    pdfmetrics.registerFontFamily('CVSerif', normal='CVSerif', bold='CVSerifBold', italic='CVSerifItalic', boldItalic='CVSerifBold')
-    pdfmetrics.registerFontFamily('CVChinese', normal='CVChinese', bold='CVChineseBold', italic='CVChinese', boldItalic='CVChineseBold')
+    if chinese:
+        pdfmetrics.registerFontFamily('CVChinese', normal='CVChinese', bold='CVChineseBold', italic='CVChinese', boldItalic='CVChineseBold')
 
 
 @dataclass
@@ -203,17 +218,18 @@ def appointment_blocks(profile: dict[str, Any], cfg: dict[str, Any], zh: bool, c
         if zh:
             a.update(cfg['zh']['appointment'])
             a['display_dates'] = chinese_period(app['display_dates'])
-        label = f"<b>{esc(a['institution'])}</b> · {esc(a['role'])}"
+        label = f"<b>{esc(a['institution'])}</b>{sep(zh)}{esc(a['role'])}"
         out.append(Block('entry', label, f'appointments[{i}]', meta={'right': a['display_dates']}))
         host_label = a.get('host_label', 'Host')
-        out.append(Block('detail', f"{esc(a['department'])} · {esc(host_label)}: {esc(app['host'])}", f'appointments[{i}].host', gap=5 if compact else 8))
+        colon = '：' if zh else ': '
+        out.append(Block('detail', f"{esc(a['department'])}{sep(zh)}{esc(host_label)}{colon}{esc(app['host'])}", f'appointments[{i}].host', gap=5 if compact else 8))
     return out
 
 
 def education_blocks(profile: dict[str, Any], cfg: dict[str, Any], zh: bool, compact: bool) -> list[Block]:
     out = []
     for i, e in enumerate(translated_education(profile, cfg, zh)):
-        out.append(Block('entry', f"<b>{esc(e['institution'])}</b> · {esc(e['degree'])}", f'education[{i}]', meta={'right': e['display_dates']}))
+        out.append(Block('entry', f"<b>{esc(e['institution'])}</b>{sep(zh)}{esc(e['degree'])}", f'education[{i}]', meta={'right': e['display_dates']}))
         out.append(Block('detail', esc(e['field']), f'education[{i}].field', gap=5 if compact else 8))
     return out
 
@@ -231,14 +247,14 @@ def project_blocks(profile: dict[str, Any], cfg: dict[str, Any], variant: dict[s
             p['period'] = chinese_period(projects[pid]['period'])
         paper = publications[p['publication_id']] if p.get('publication_id') else None
         title = link(p['title'], publication_url(paper)) if paper else esc(p['title'])
-        # Publication status is informative; current work already has present-
-        # tense bullets and a source-backed period, so it needs no extra badge.
-        out.append(Block('project', f'<b>{title}</b>', f'projects.{pid}', meta={'right': p['status'] if paper else ''}))
-        role = esc(f"{paper['venue']} · {paper['year']}") if paper else ''
+        # Only a preprint needs a status label; a journal name already says
+        # "published", so a "Published" badge would be noise.
+        out.append(Block('project', f'<b>{title}</b>', f'projects.{pid}', meta={'right': p['status'] if paper and is_preprint(paper) else ''}))
+        role = f"{esc(paper['venue'])}{sep(zh)}{esc(paper['year'])}" if paper else ''
         if paper:
-            role += ' · ' + link('Paper' if not zh else '论文', publication_url(paper))
+            role += sep(zh) + link('Paper' if not zh else '论文', publication_url(paper))
         if p.get('code_url'):
-            role += ' · ' + link('Code' if not zh else '代码', p['code_url'])
+            role += sep(zh) + link('Code' if not zh else '代码', p['code_url'])
         if role:
             out.append(Block('detail', role, f'projects.{pid}.role', gap=3))
         for i, bullet in enumerate(p['bullets']):
@@ -263,8 +279,24 @@ def awards_blocks(profile: dict[str, Any], cfg: dict[str, Any], zh: bool, compac
     out = []
     for i, award in enumerate(profile['awards']):
         title = cfg['zh']['awards'].get(award['title'], award['title']) if zh else award['title']
-        out.append(Block('body', f"<b>{esc(award['year'])}</b> · {esc(title)}", f'awards[{i}]', gap=2))
+        code = sep(zh) + link('代码' if zh else 'Code', award['code_url']) if award.get('code_url') else ''
+        out.append(Block('body', f"<b>{esc(award['year'])}</b>{sep(zh)}{esc(title)}{code}", f'awards[{i}]', gap=2))
     return out
+
+
+def linked_text(row: dict[str, Any]) -> str:
+    """Escape a sentence and link its declared substring, if any."""
+    text, target = row['text'], row.get('link_text')
+    if not row.get('url') or not target or target not in text:
+        return esc(text)
+    before, after = text.split(target, 1)
+    return esc(before) + link(target, row['url']) + esc(after)
+
+
+def technical_blocks(profile: dict[str, Any], cfg: dict[str, Any], zh: bool) -> list[Block]:
+    """Tools grounded in the listed research, for industry résumés only."""
+    rows = cfg['zh']['internship_technical'] if zh else profile['internship_technical']
+    return [Block('body', f"<b>{esc(row['label'])}</b>{sep(zh)}{linked_text(row)}", f'internship_technical[{i}]', gap=2) for i, row in enumerate(rows)]
 
 
 def software_blocks(profile: dict[str, Any], cfg: dict[str, Any], variant: dict[str, Any]) -> list[Block]:
@@ -275,7 +307,7 @@ def software_blocks(profile: dict[str, Any], cfg: dict[str, Any], variant: dict[
         if software['name'] not in names:
             continue
         desc = cfg['zh']['software'][software['name']] if zh else software['description']
-        out.append(Block('body', f"<b>{link(software['name'], software['url'])}</b> · {esc(desc)}", f'software[{i}]', gap=5))
+        out.append(Block('body', f"<b>{link(software['name'], software['url'])}</b>{sep(zh)}{esc(desc)}", f'software[{i}]', gap=5))
     return out
 
 
@@ -285,14 +317,14 @@ def background_blocks(profile: dict[str, Any], cfg: dict[str, Any], zh: bool, co
     for row in rows:
         title = row['title_zh'] if zh else row['title']
         body = row['short_zh' if zh else 'short']
-        blocks.append(Block('body', f'<b>{esc(title)}</b> · {esc(body)}', f'research_background.{row["id"]}', gap=5))
+        blocks.append(Block('body', f'<b>{esc(title)}</b>{sep(zh)}{esc(body)}', f'research_background.{row["id"]}', gap=5))
     return blocks
 
 
 def compact_education(profile: dict[str, Any], cfg: dict[str, Any], zh: bool) -> list[Block]:
     out = []
     for i, row in enumerate(translated_education(profile, cfg, zh)):
-        title = f"<b>{esc(row['institution'])}</b> · {esc(row['degree'])}"
+        title = f"<b>{esc(row['institution'])}</b>{sep(zh)}{esc(row['degree'])}"
         out.append(Block('entry', title, f'education[{i}]', meta={'right': row['display_dates']}))
         out.append(Block('detail', esc(row['field']), f'education[{i}].field', gap=4))
     out += appointment_blocks(profile, cfg, zh, True)
@@ -319,11 +351,21 @@ def model(profile: dict[str, Any], cfg: dict[str, Any], variant: dict[str, Any])
     current_text = esc(current).replace('；', '。<br/>', 1) if zh else esc(current)
     page1.append(Block('body', current_text, 'narrative.current_summary', gap=7))
     if compact:
+        # One page: device-modeling experience stays, as a line under tools.
+        page1.append(Block('section', '技术与开源' if zh else 'TOOLS & OPEN SOURCE'))
+        page1 += technical_blocks(profile, cfg, zh)
         page1.append(Block('section', '奖励' if zh else 'AWARD'))
         page1 += awards_blocks(profile, cfg, zh, compact)
-        page1.append(Block('section', '其他经历' if zh else 'ADDITIONAL EXPERIENCE'))
-        page1 += background_blocks(profile, cfg, zh, compact)
         return [page1]
+    # Page 1 is the profile; page 2 holds the unbroken publication list, code and
+    # whichever closing sections the variant's page-1 budget cannot hold.
+    closing = {
+        'background': [Block('section', '其他经历' if zh else 'ADDITIONAL EXPERIENCE')] + background_blocks(profile, cfg, zh, compact),
+        'awards': [Block('section', '奖励' if zh else 'AWARD')] + awards_blocks(profile, cfg, zh, compact),
+    }
+    on_page1 = variant.get('page1_closing', ['background', 'awards'])
+    for key in on_page1:
+        page1 += closing[key]
     page2 = [Block('section', '论文' if zh else 'PUBLICATIONS')]
     journals = sorted((p for p in chosen if not is_preprint(p)), key=lambda p: str(p['year']), reverse=True)
     preprints = [p for p in chosen if is_preprint(p)]
@@ -336,11 +378,22 @@ def model(profile: dict[str, Any], cfg: dict[str, Any], variant: dict[str, Any])
             page2.append(Block('publication', pub_reference(pub), f'publications.{pub["id"]}', gap=8, meta={'number': len(journals) + i + 1}))
     page2.append(Block('section', '研究代码' if zh else 'RESEARCH CODE'))
     page2 += software_blocks(profile, cfg, variant)
-    page2.append(Block('section', '其他经历' if zh else 'ADDITIONAL EXPERIENCE'))
-    page2 += background_blocks(profile, cfg, zh, compact)
-    page2.append(Block('section', '奖励' if zh else 'AWARD'))
-    page2 += awards_blocks(profile, cfg, zh, compact)
+    for key in ['background', 'awards']:
+        if key not in on_page1:
+            page2 += closing[key]
     return [page1, page2]
+
+
+def web_links(profile: dict[str, Any]) -> list[tuple[str, str]]:
+    """Homepage first: every CV points readers back to the maintained website."""
+    homepage = profile['person']['homepage']
+    profiles = {x['name']: x['url'] for x in profile['profiles']}
+    return [
+        (homepage.replace('https://', '').rstrip('/'), homepage),
+        ('GitHub / Hanyuyuan6', profiles['GitHub']),
+        ('Google Scholar', profiles['Google Scholar']),
+        ('ORCID / 0009-0005-7643-6331', profiles['ORCID']),
+    ]
 
 
 def is_preprint(pub: dict[str, Any]) -> bool:
@@ -430,13 +483,11 @@ class CVTemplate:
             field = self.config['zh']['field'] if self.zh else self.profile['narrative']['field']
             c.drawString(LEFT, self.y, field)
             self.y -= 18
+            dot = sep(self.zh)
             contacts = [link(p['email'], 'mailto:' + p['email']), link(p['institutional_email'], 'mailto:' + p['institutional_email']), esc(self.config['zh']['location'] if self.zh else p['location'])]
-            self.paragraph(' · '.join(contacts), 'detail')
+            self.paragraph(dot.join(contacts), 'detail')
             self.y -= 3
-            names = ['GitHub', 'Google Scholar', 'ORCID']
-            profiles = {x['name']: x['url'] for x in self.profile['profiles']}
-            shortlabels = {'GitHub': 'GitHub / Hanyuyuan6', 'Google Scholar': 'Google Scholar', 'ORCID': 'ORCID / 0009-0005-7643-6331'}
-            self.paragraph(' · '.join(link(shortlabels[n], profiles[n]) for n in names), 'detail')
+            self.paragraph(dot.join(link(label, target) for label, target in web_links(self.profile)), 'detail')
             self.y -= 10 if self.compact else 13
         else:
             c.setFont(self.title_font, 17)
@@ -451,8 +502,11 @@ class CVTemplate:
         c.line(LEFT, 38, PAGE_W - RIGHT, 38)
         c.setFillColor(self.palette['muted'])
         c.setFont(self.font, 7.3)
-        updated = datetime.strptime(self.profile['updated'], '%Y-%m-%d').strftime('%b %Y')
-        footer_label = self.variant['label'] + ' · ' + updated
+        updated = datetime.strptime(self.profile['updated'], '%Y-%m-%d')
+        if self.zh:
+            footer_label = f"{self.variant['label']}　{updated.year} 年 {updated.month} 月"
+        else:
+            footer_label = self.variant['label'] + ' · ' + updated.strftime('%b %Y')
         c.drawString(LEFT, 25, footer_label)
         c.drawRightString(PAGE_W - RIGHT, 25, f'{number} / {total}')
 
@@ -522,8 +576,7 @@ def render_html(profile: dict[str, Any], config: dict[str, Any], variant: dict[s
     person = profile['person']
     display_name = person['name_zh'] + ' / ' + person['name'] if zh else person['name']
     fieldname = config['zh']['field'] if zh else profile['narrative']['field']
-    profiles = {p['name']: p['url'] for p in profile['profiles']}
-    links = ' · '.join([link(person['email'], 'mailto:' + person['email']), link(person['institutional_email'], 'mailto:' + person['institutional_email']), esc(config['zh']['location'] if zh else person['location']), link('GitHub', profiles['GitHub']), link('Google Scholar', profiles['Google Scholar']), link('ORCID', profiles['ORCID'])])
+    links = ' · '.join([link(person['email'], 'mailto:' + person['email']), link(person['institutional_email'], 'mailto:' + person['institutional_email']), esc(config['zh']['location'] if zh else person['location'])] + [link(label, target) for label, target in web_links(profile)])
     bodies = []
     for page_no, blocks in enumerate(pages, 1):
         elements = []
@@ -531,6 +584,8 @@ def render_html(profile: dict[str, Any], config: dict[str, Any], variant: dict[s
             attrs = f' class="{esc(block.kind)}"' + (f' data-source="{esc(block.source)}"' if block.source else '')
             if block.kind == 'space':
                 continue
+            # ReportLab-only font switches have no meaning in HTML.
+            block = Block(block.kind, re.sub(r'<font name="[^"]+">(.*?)</font>', r'\1', block.text), block.source, block.gap, block.meta)
             if block.kind == 'section':
                 elements.append(f'<h2{attrs}>{esc(block.text)}</h2>')
             elif block.kind == 'subsection':
@@ -598,15 +653,10 @@ def verify_pdf_links(path: Path, pages: list[list[Block]], positions: list[dict[
     publication_titles = 0
     project_papers = 0
     project_codes = 0
-    profile_links = {p['name']: p['url'] for p in profile['profiles']}
     header_links = [
         {'uri': 'mailto:' + profile['person'][key], 'text': profile['person'][key]}
         for key in ['email', 'institutional_email']
-    ] + [
-        {'uri': profile_links['GitHub'], 'text': 'GitHub / Hanyuyuan6'},
-        {'uri': profile_links['Google Scholar'], 'text': 'Google Scholar'},
-        {'uri': profile_links['ORCID'], 'text': 'ORCID / 0009-0005-7643-6331'},
-    ]
+    ] + [{'uri': target, 'text': label} for label, target in web_links(profile)]
     with pdfplumber.open(path) as pdf:
         for page_number, blocks in enumerate(pages, 1):
             page = pdf.pages[page_number - 1]
@@ -687,21 +737,18 @@ def validate_pdf(path: Path, pages: list[list[Block]], expected_pages: int, posi
     return {'page_count': len(reader.pages), 'extracted_characters': len(text), 'embedded_fonts': sorted(set(fonts)), 'link_annotation_count': annotations, 'hyperlink_coverage': verify_pdf_links(path, pages, positions, profile), 'text_extractable': True, 'replacement_characters': 0, 'name_subtitle_gap_pt': round(header_gap, 2)}
 
 
-def clean_pdf_provenance(path: Path) -> dict[str, Any]:
-    """Run the owner's required cleaner on the actual authored PDF."""
-    cleaner = Path.home() / '.agents/skills/nature-shared/scripts/provenance_hygiene.py'
-    if not cleaner.is_file():
-        raise FileNotFoundError('Required provenance_hygiene.py is unavailable')
-    cleaned = path.with_name('.' + path.stem + '.cleaned.pdf')
-    command = [sys.executable, str(cleaner), 'clean', str(path), '-o', str(cleaned), '--force', '--json']
-    done = subprocess.run(command, capture_output=True, text=True)
-    if done.returncode != 0:
-        raise RuntimeError(f'PDF provenance cleanup failed ({done.returncode}): {done.stderr[-400:]} {done.stdout[-400:]}')
-    report = json.loads(done.stdout)
-    if report.get('residue'):
-        raise ValueError(f'PDF provenance cleanup left residue: {report["residue"]}')
-    cleaned.replace(path)
-    return {key: report[key] for key in ['layer', 'residue', 'objects_cleaned', 'content'] if key in report} | {'exit_code': done.returncode, 'verified': True}
+def metadata_report(path: Path) -> dict[str, Any]:
+    """The PDF carries only explicit, public document metadata (no XMP, no tool stamp)."""
+    reader = PdfReader(path)
+    info = {str(k): str(v) for k, v in (reader.metadata or {}).items()}
+    if reader.trailer['/Root'].get('/Metadata') is not None:
+        raise ValueError(f'{path.name}: unexpected XMP metadata stream')
+    if info.get('/Producer', '') not in ('', 'unspecified'):
+        raise ValueError(f'{path.name}: unexpected producer stamp {info.get("/Producer")!r}')
+    allowed = {'/Author', '/Title', '/Subject', '/Creator', '/Producer', '/CreationDate', '/ModDate', '/Trapped', '/Keywords'}
+    if set(info) - allowed:
+        raise ValueError(f'{path.name}: unexpected metadata keys {sorted(set(info) - allowed)}')
+    return {key.lstrip('/'): value for key, value in sorted(info.items())}
 
 
 def read_prior(path: Path) -> dict[str, Any]:
@@ -721,28 +768,34 @@ def preserve_visual_qa(manifest: dict[str, Any], prior: dict[str, Any]) -> dict[
     return manifest
 
 
-def build(profile_path: Path, output_dir: Path, private_dir: Path) -> dict[str, Any]:
+def build(profile_path: Path, output_dir: Path, private_dir: Path | None, *, public_only: bool = False, write_manifest: bool = True) -> dict[str, Any]:
     global LINK_COLOR
-    profile_path, output_dir, private_dir = Path(profile_path).resolve(), Path(output_dir).resolve(), Path(private_dir).resolve()
-    if private_dir == HERE or HERE in private_dir.parents:
-        raise ValueError('The Chinese CV must stay outside the public website repository')
-    if output_dir == private_dir or output_dir in private_dir.parents:
-        raise ValueError('The Chinese CV must stay outside the public output directory')
+    profile_path, output_dir = Path(profile_path).resolve(), Path(output_dir).resolve()
+    if not public_only:
+        if private_dir is None:
+            raise ValueError('Building the Chinese CVs needs a private output directory')
+        private_dir = Path(private_dir).resolve()
+        if private_dir == HERE or HERE in private_dir.parents:
+            raise ValueError('The Chinese CV must stay outside the public website repository')
+        if output_dir == private_dir or output_dir in private_dir.parents:
+            raise ValueError('The Chinese CV must stay outside the public output directory')
     profile = json.loads(profile_path.read_text(encoding='utf-8'))
     config_path = HERE / 'cv-variants.json'
     config = json.loads(config_path.read_text(encoding='utf-8'))
     LINK_COLOR = config['palette'].get('link', LINK_COLOR)
     validate_translations(profile, config)
-    load_fonts()
+    load_fonts(chinese=not public_only)
+    # Reproducible PDFs: document dates come from the profile, not the clock.
+    os.environ['SOURCE_DATE_EPOCH'] = str(calendar.timegm(datetime.strptime(profile['updated'], '%Y-%m-%d').timetuple()))
     output_dir.mkdir(parents=True, exist_ok=True)
-    private_dir.mkdir(parents=True, exist_ok=True)
+    if not public_only:
+        private_dir.mkdir(parents=True, exist_ok=True)
     inputs = {'profile': {'path': profile_path.name, 'sha256': sha256(profile_path)}, 'template': {'path': Path(__file__).name, 'sha256': sha256(Path(__file__))}, 'variants': {'path': config_path.name, 'sha256': sha256(config_path)}}
     fingerprint = hashlib.sha256(json.dumps({k: v['sha256'] for k, v in inputs.items()}, sort_keys=True).encode()).hexdigest()
-    manifest: dict[str, Any] = {'schema_version': 1, 'built_at': datetime.now(timezone.utc).isoformat(), 'source_fingerprint': fingerprint, 'inputs': inputs, 'fonts': FONT_SOURCES, 'outputs': [], 'visual_qa': {'status': 'pending', 'method': 'pdftoppm and view_image on every latest PDF page'}}
-    prior_public = read_prior(HERE / 'cv-build.json')
-    prior_private = read_prior(private_dir / 'cv-build.json')
-    prior_outputs = {o['variant']: o for prior in [prior_public, prior_private] for o in prior.get('outputs', [])}
+    manifest: dict[str, Any] = {'schema_version': 2, 'built_at': datetime.now(timezone.utc).isoformat(), 'source_fingerprint': fingerprint, 'inputs': inputs, 'fonts': FONT_SOURCES, 'outputs': [], 'visual_qa': {'status': 'pending', 'method': 'render every latest PDF page and inspect it; then record hashes in cv-review.json'}}
     for variant in config['variants']:
+        if public_only and variant['destination'] != 'public':
+            continue
         pages = model(profile, config, variant)
         if len(pages) != variant['pages']:
             raise ValueError('Content model page count disagrees with variants config')
@@ -750,33 +803,63 @@ def build(profile_path: Path, output_dir: Path, private_dir: Path) -> dict[str, 
         dest = output_dir if variant['destination'] == 'public' else private_dir
         pdf_path = dest / (variant['filename'] + '.pdf')
         html_path = dest / (variant['filename'] + '.html')
-        generated_path = dest / ('.' + variant['filename'] + '.generated.pdf')
-        geometry = CVTemplate(profile, config, variant, generated_path).build(pages)
-        authored_pdf_sha256 = sha256(generated_path)
-        prior = prior_outputs.get(variant['id'], {})
-        if prior.get('authored_pdf_sha256') == authored_pdf_sha256 and prior.get('provenance', {}).get('verified') and pdf_path.is_file() and prior.get('pdf', {}).get('sha256') == sha256(pdf_path):
-            generated_path.unlink()
-            provenance = prior['provenance']
-        else:
-            generated_path.replace(pdf_path)
-            provenance = clean_pdf_provenance(pdf_path)
+        geometry = CVTemplate(profile, config, variant, pdf_path).build(pages)
         render_html(profile, config, variant, pages, html_path, fingerprint)
         checks = validate_pdf(pdf_path, pages, variant['pages'], geometry['positions'], profile)
-        manifest['outputs'].append({'variant': variant['id'], 'language': variant['language'], 'destination': variant['destination'], 'authored_pdf_sha256': authored_pdf_sha256, 'provenance': provenance, 'pdf': {'path': pdf_path.name, 'sha256': sha256(pdf_path), 'bytes': pdf_path.stat().st_size}, 'html': {'path': html_path.name, 'sha256': sha256(html_path), 'bytes': html_path.stat().st_size}, 'checks': checks, 'layout': geometry, 'sources': sorted({b.source for p in pages for b in p if b.source})})
-    public_manifest = preserve_visual_qa(dict(manifest, outputs=[o for o in manifest['outputs'] if o['destination'] == 'public']), prior_public)
-    private_manifest = preserve_visual_qa(dict(manifest, outputs=[o for o in manifest['outputs'] if o['destination'] == 'private']), prior_private)
-    (HERE / 'cv-build.json').write_text(json.dumps(public_manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
-    (private_dir / 'cv-build.json').write_text(json.dumps(private_manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
+        manifest['outputs'].append({'variant': variant['id'], 'language': variant['language'], 'destination': variant['destination'], 'metadata': metadata_report(pdf_path), 'pdf': {'path': pdf_path.name, 'sha256': sha256(pdf_path), 'bytes': pdf_path.stat().st_size}, 'html': {'path': html_path.name, 'sha256': sha256(html_path), 'bytes': html_path.stat().st_size}, 'checks': checks, 'layout': geometry, 'sources': sorted({b.source for p in pages for b in p if b.source})})
+    if write_manifest:
+        public_manifest = preserve_visual_qa(dict(manifest, outputs=[o for o in manifest['outputs'] if o['destination'] == 'public']), read_prior(HERE / 'cv-build.json'))
+        (HERE / 'cv-build.json').write_text(json.dumps(public_manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
+        if not public_only:
+            private_manifest = preserve_visual_qa(dict(manifest, outputs=[o for o in manifest['outputs'] if o['destination'] == 'private']), read_prior(private_dir / 'cv-build.json'))
+            (private_dir / 'cv-build.json').write_text(json.dumps(private_manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
     return manifest
+
+
+def pdf_signature(path: Path) -> list[dict[str, Any]]:
+    """What a reader gets from each page: text and link targets."""
+    pages = []
+    for page in PdfReader(path).pages:
+        uris = sorted(str(a.get_object().get('/A', {}).get('/URI', '')) for a in page.get('/Annots', []) or [])
+        pages.append({'text': re.sub(r'\s+', ' ', page.extract_text() or '').strip(), 'uris': uris})
+    return pages
+
+
+def verify(profile_path: Path) -> int:
+    """Rebuild the public CVs from source and require the committed PDFs to match.
+
+    Byte-identical output is expected with the vendored fonts; if a platform's
+    zlib differs, identical page text and link targets are still required.
+    """
+    failures, report = [], []
+    with tempfile.TemporaryDirectory() as tmp:
+        manifest = build(profile_path, Path(tmp), None, public_only=True, write_manifest=False)
+        for output in manifest['outputs']:
+            fresh = Path(tmp) / output['pdf']['path']
+            committed = HERE / 'dist' / 'cv' / output['pdf']['path']
+            if not committed.is_file():
+                failures.append(f'missing committed {committed.name}')
+                continue
+            identical = sha256(fresh) == sha256(committed)
+            same_reading = identical or pdf_signature(fresh) == pdf_signature(committed)
+            report.append({'pdf': committed.name, 'byte_identical': identical, 'same_text_and_links': same_reading})
+            if not same_reading:
+                failures.append(f'{committed.name} is stale: rebuild locally with build.py and review the pages')
+    print(json.dumps({'passed': not failures, 'outputs': report, 'failures': failures}, ensure_ascii=False, indent=2))
+    return 1 if failures else 0
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--profile', type=Path, required=True)
-    parser.add_argument('--out', type=Path, required=True)
-    parser.add_argument('--private-out', type=Path, required=True)
+    parser.add_argument('--profile', type=Path, default=HERE / 'profile.json')
+    parser.add_argument('--out', type=Path, default=HERE / 'dist' / 'cv')
+    parser.add_argument('--private-out', type=Path)
+    parser.add_argument('--public-only', action='store_true', help='Build only the English public CVs (no system fonts needed).')
+    parser.add_argument('--verify', action='store_true', help='Rebuild public CVs in a temporary directory and compare with dist/cv.')
     args = parser.parse_args()
-    manifest = build(args.profile, args.out, args.private_out)
+    if args.verify:
+        raise SystemExit(verify(args.profile))
+    manifest = build(args.profile, args.out, args.private_out, public_only=args.public_only)
     print(json.dumps({'source_fingerprint': manifest['source_fingerprint'], 'outputs': [{'variant': o['variant'], 'pages': o['checks']['page_count'], 'pdf': o['pdf']['path'], 'html': o['html']['path']} for o in manifest['outputs']]}, ensure_ascii=False, indent=2))
 
 

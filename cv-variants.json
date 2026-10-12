@@ -30,7 +30,11 @@
       "leading": 13.0,
       "publication_size": 9.0,
       "publication_leading": 12.7,
-      "compact": false
+      "compact": false,
+      "page1_closing": [
+        "background",
+        "awards"
+      ]
     },
     {
       "id": "internship",
@@ -77,7 +81,10 @@
       "leading": 16.0,
       "publication_size": 9.0,
       "publication_leading": 12.7,
-      "compact": false
+      "compact": false,
+      "page1_closing": [
+        "awards"
+      ]
     },
     {
       "id": "internship_zh",
@@ -105,10 +112,10 @@
     }
   ],
   "zh": {
-    "field": "计算成像 · 物理驱动学习",
+    "field": "计算成像与物理驱动学习",
     "summary": "研究光学测量设计与学习式成像、感知，当前关注采集条件感知学习，以及光学信号与预训练多模态模型的连接。",
     "direction": "在米兰理工大学当前访学期间，计划研究时域漫射光学与三维重建。长期关注能够决定下一步测量、并通过与物理世界交互持续学习的感知系统。",
-    "location": "意大利 · 米兰",
+    "location": "意大利米兰",
     "education": {
       "Xi'an Jiaotong University": {
         "institution": "西安交通大学",
@@ -138,12 +145,12 @@
         ]
       },
       "lift": {
-        "title": "The Lift Spectrum · 鲁棒免成像感知",
+        "title": "The Lift Spectrum：鲁棒免成像感知",
         "status": "预印本",
         "role": "第一作者",
         "bullets": [
-          "在均由干净数据训练的比较中，免成像分割比所评估的先重建再分割基线更耐受测量噪声。",
-          "直接从单像素测量学习空间任务表征，仅将重建用于辅助监督。"
+          "证明直接从 3.13% 采样的单像素测量进行分割，在 20 dB 噪声下比最强的干净数据训练先重建再分割基线的前景 mIoU 高 3.1–21.7 个百分点。",
+          "设计内容自适应的测量—空间提升模块，并以分阶段辅助重建监督训练；同采样率下比已有免成像基线高 3.2–9.9 个百分点。"
         ]
       },
       "shsi": {
@@ -151,15 +158,15 @@
         "status": "已发表",
         "role": "第一作者",
         "bullets": [
-          "设计可调稀疏度的 Hadamard 照明以提高单像素成像抗噪性，建立噪声模型并通过光学实验验证。"
+          "设计可调稀疏度的 Hadamard 照明及两种采集模式；建立稀疏度与噪声的关系模型，并通过仿真和穿透毛玻璃的光学实验验证抗噪性。"
         ]
       },
       "loop": {
-        "title": "LDGI · 光学相控阵成像",
+        "title": "LDGI：光学相控阵成像",
         "status": "已发表",
         "role": "第一作者",
         "bullets": [
-          "针对一维光学相控阵的线光场提出循环差分鬼成像算法，通过数值仿真和光学实验验证。"
+          "揭示一维光学相控阵线光场会破坏传统鬼成像去噪算法所依赖的噪声对称性；提出循环差分鬼成像算法并完成光学实验验证。"
         ]
       }
     },
@@ -182,15 +189,31 @@
       "STSF-TPLS": "免成像单像素分割代码。",
       "SHSI": "稀疏 Hadamard 测量与重建示例。",
       "Comparison-of-SPI-DLs": "学习式单像素重建方法的比较评估。",
-      "remote-gpu-trainer": "远程 GPU 实验工作流智能体技能。"
+      "remote-gpu-trainer": "可复现远程 GPU 深度学习实验的开源智能体技能。"
     },
-    "internship_summary": "电子科学与技术博士研究生，研究计算成像与光学测量中的机器学习，具备测量设计、图像重建与免成像感知经验。",
-    "current_summary": "开发采集条件感知模型，并将预训练多模态模型适配至桶探测信号；米理访学计划聚焦时域漫射光学与三维重建。"
+    "internship_summary": "电子科学与技术博士研究生，研究计算成像与面向光学测量的物理驱动学习。",
+    "current_summary": "开发采集条件感知模型，并将预训练多模态模型适配至桶探测信号；米理访学计划聚焦时域漫射光学与三维重建。",
+    "internship_technical": [
+      {
+        "label": "工具",
+        "text": "Python、PyTorch、MATLAB、COMSOL；开源项目 remote-gpu-trainer（可复现远程 GPU 实验，GitHub 60+ 星）",
+        "url": "https://github.com/Hanyuyuan6/remote-gpu-trainer",
+        "link_text": "remote-gpu-trainer"
+      },
+      {
+        "label": "实验",
+        "text": "DMD/SLM 照明、单像素探测、光路调校与系统集成"
+      },
+      {
+        "label": "器件建模",
+        "text": "电光相控阵器件几何建模与波束扫描优化"
+      }
+    ]
   },
   "translation_source_hashes": {
-    "lift": "355e648cb7c38264605fb3f7547297aad23a97a8db4b9cd018ddef3ec5aeee64",
-    "shsi": "af76d08b498ad272663888c63f536fc24ef4590e03fbcd3cf487e7a6d466841b",
+    "lift": "4f79d0ec343ca082c8d85189f5528f34718d170717c7a909da05fbd3aa0b4abc",
+    "shsi": "675b24f7676c23661ad7fc7f30ac647ec2c947c60a85a4787f56bab8571405a6",
     "acquisition": "b8ea85ca21177c7eb28a98ad8ac32e8f8d22be9580c0d1315e5b270e84862483",
-    "loop": "1b0dada88483a415c84bde92e0358d33dd5ef293b4a4f2bec565f81690ba080c"
+    "loop": "57bdfaea7db02204e3708590a9d0d9f021c5802416bdf4895e119146c9a973d1"
   }
 }

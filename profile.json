@@ -1,12 +1,13 @@
 {
   "schema_version": 1,
-  "updated": "2026-10-11",
+  "updated": "2026-10-12",
   "publication_verification_date": "2026-10-11",
   "person": {
     "name": "Yuyuan Han",
     "name_zh": "韩聿源",
     "email": "hanyuyuan6@gmail.com",
     "institutional_email": "yuyuan.han@mail.polimi.it",
+    "homepage": "https://hanyuyuan6.github.io/",
     "location": "Milan, Italy",
     "position": "PhD student",
     "institution": "Xi'an Jiaotong University",
@@ -21,8 +22,9 @@
     "welcome": "I welcome research collaborations and research internship opportunities in computational imaging, physics-aware machine learning, and multimodal sensing.",
     "resume_summary": "I work on optical measurement design and learning for imaging and perception. Current research explores acquisition-aware learning and pretrained models for optical signals.",
     "long_term": "Longer term, I aim to develop perception that helps a system decide what to measure next and learn through interaction with the physical world.",
-    "internship_summary": "PhD student working on computational imaging and learning from optical measurements. Research experience spans measurement design, image reconstruction, and image-free perception.",
-    "current_summary": "Developing acquisition-aware models and adapting pretrained multimodal models to bucket-detector signals. Planned visiting research: time-domain diffuse optics and 3D reconstruction."
+    "internship_summary": "PhD student in computational imaging and physics-aware learning from optical measurements.",
+    "current_summary": "Developing acquisition-aware models and adapting pretrained multimodal models to bucket-detector signals. Planned visiting research: time-domain diffuse optics and 3D reconstruction.",
+    "meta_description": "PhD student at Xi'an Jiaotong University, visiting Politecnico di Milano. Computational imaging and physics-aware learning from optical measurements."
   },
   "profiles": [
     {
@@ -61,7 +63,7 @@
       "field": "Electronic Science and Technology · Master’s-to-PhD track",
       "start": "2022-09",
       "end": null,
-      "display_dates": "2022 - present",
+      "display_dates": "2022–present",
       "note": "Continuous graduate study from 2022; transferred to the PhD program in 2024.",
       "phd_start_year": 2024
     },
@@ -71,7 +73,7 @@
       "field": "Electronic Information Science and Technology",
       "start": "2018",
       "end": "2022",
-      "display_dates": "2018 - 2022",
+      "display_dates": "2018–2022",
       "note": ""
     }
   ],
@@ -81,7 +83,7 @@
       "role": "Visiting PhD student",
       "department": "Department of Physics",
       "host": "Antonio Pifferi",
-      "display_dates": "Oct 2026 - present"
+      "display_dates": "Oct 2026–present"
     }
   ],
   "projects": [
@@ -89,13 +91,13 @@
       "id": "lift",
       "title": "The Lift Spectrum · Robust image-free perception",
       "status": "Preprint",
-      "summary": "Our image-free segmentation is more robust to measurement noise than the tested reconstruct-then-segment baselines when models are trained on clean data.",
+      "summary": "Skipping reconstruction pays off under noise: at 20 dB, segmenting directly from single-pixel measurements beats the strongest clean-trained reconstruct-then-segment baseline by 3.1–21.7 foreground-mIoU points on three datasets.",
       "bullets": [
-        "Demonstrated greater robustness to measurement noise than the tested reconstruct-then-segment baselines, with all models trained on clean data.",
-        "Learned spatial task representations directly from single-pixel measurements, using reconstruction only as auxiliary supervision."
+        "Showed that segmenting directly from 3.13%-sampled single-pixel measurements beats the strongest clean-trained reconstruct-then-segment baseline by 3.1–21.7 foreground-mIoU points under 20 dB noise.",
+        "Designed a content-adaptive measurement-to-space lift trained with scheduled auxiliary reconstruction, exceeding the prior image-free baseline by 3.2–9.9 points at the same sampling rate."
       ],
       "role": "First author",
-      "period": "2025 - present",
+      "period": "2025–present",
       "publication_id": "lift",
       "code_url": "https://github.com/Hanyuyuan6/STSF-TPLS",
       "result": ""
@@ -104,12 +106,12 @@
       "id": "shsi",
       "title": "Sparse Hadamard single-pixel imaging",
       "status": "Published",
-      "summary": "Tunable-sparsity Hadamard illumination for noise-resilient single-pixel imaging, supported by theory and optical experiments.",
+      "summary": "Tunable-sparsity Hadamard patterns make single-pixel imaging noise-resilient, from a noise model to an optical experiment through two ground-glass diffusers.",
       "bullets": [
-        "Designed tunable-sparsity Hadamard illumination for noise-resilient single-pixel imaging; developed a noise model and validated the approach in optical experiments."
+        "Designed tunable-sparsity Hadamard illumination with two acquisition modes; derived a sparsity-noise model and validated noise resilience in simulations and an optical experiment through ground glass."
       ],
       "role": "First author",
-      "period": "2024 - 2025",
+      "period": "2024–2025",
       "publication_id": "shsi",
       "code_url": "https://github.com/Hanyuyuan6/SHSI",
       "result": ""
@@ -118,9 +120,9 @@
       "id": "loop",
       "title": "LDGI · Optical phased-array imaging",
       "status": "Published",
-      "summary": "A loop differential ghost-imaging algorithm for line-pattern illumination from one-dimensional optical phased arrays.",
+      "summary": "Line patterns from one-dimensional optical phased arrays break the noise symmetry that traditional ghost-imaging denoising relies on; loop differential ghost imaging overcomes this limitation.",
       "bullets": [
-        "Developed loop differential ghost imaging for line patterns from one-dimensional optical phased arrays; validated the algorithm in simulations and optical experiments."
+        "Showed that line patterns from one-dimensional optical phased arrays break the noise symmetry assumed by traditional ghost-imaging denoising; developed a loop differential algorithm and validated it optically."
       ],
       "role": "First author",
       "period": "2025",
@@ -438,7 +440,7 @@
     {
       "name": "remote-gpu-trainer",
       "url": "https://github.com/Hanyuyuan6/remote-gpu-trainer",
-      "description": "Agent skill for remote GPU experiment workflows."
+      "description": "Open-source agent skill for reproducible remote-GPU deep-learning experiments."
     }
   ],
   "skills": [
@@ -470,7 +472,8 @@
   "awards": [
     {
       "title": "Second Prize, National Post-Graduate Mathematical Contest in Modeling",
-      "year": "2024"
+      "year": "2024",
+      "code_url": "https://github.com/Hanyuyuan6/2024-Huawei-Math-Model-A"
     }
   ],
   "cvs": [
@@ -530,5 +533,45 @@
   "additional_code_ids": [
     "Comparison-of-SPI-DLs",
     "remote-gpu-trainer"
+  ],
+  "news": [
+    {
+      "date": "2026-10",
+      "text": "Started a visiting PhD period at Politecnico di Milano, Department of Physics, hosted by Antonio Pifferi."
+    },
+    {
+      "date": "2026-07",
+      "text": "Preprint: The Lift Spectrum, on robust image-free single-pixel sensing, released with code.",
+      "link_text": "The Lift Spectrum",
+      "url": "https://arxiv.org/abs/2607.22077"
+    },
+    {
+      "date": "2026-07",
+      "text": "Review of optical phased arrays on photonic integrated circuits published in Nanophotonics.",
+      "link_text": "Review of optical phased arrays",
+      "url": "https://doi.org/10.1002/nap2.70182"
+    },
+    {
+      "date": "2025-10",
+      "text": "Generalized sparse Hadamard single-pixel imaging published in Optics Express.",
+      "link_text": "Generalized sparse Hadamard single-pixel imaging",
+      "url": "https://doi.org/10.1364/OE.576533"
+    }
+  ],
+  "internship_technical": [
+    {
+      "label": "Tools",
+      "text": "Python, PyTorch, MATLAB, COMSOL; open-source remote-gpu-trainer for reproducible remote-GPU experiments (60+ GitHub stars)",
+      "url": "https://github.com/Hanyuyuan6/remote-gpu-trainer",
+      "link_text": "remote-gpu-trainer"
+    },
+    {
+      "label": "Experiments",
+      "text": "DMD/SLM illumination, single-pixel detection, optical alignment and system integration"
+    },
+    {
+      "label": "Device modeling",
+      "text": "Electro-optic phased-array geometry modeling and optimization for beam steering"
+    }
   ]
 }
