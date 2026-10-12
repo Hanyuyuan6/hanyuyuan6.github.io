@@ -1,29 +1,29 @@
 {
  "reviewed_on": "2026-10-12",
  "reviewer": "Claude (Opus 5.5)",
- "method": "pdftoppm at 100 dpi; every page of both public PDFs and both private Chinese PDFs inspected at full page after the 2026-10-12 third-round copy (unified narrative, Award & Service with 13 verified reviews, SPIFS-qualified Lift claim, corrected Comparison count). The build now fails on orphans, split number-unit pairs and line-initial CJK punctuation (typography_issues); all four variants pass. Checked by eye: no clipping, overlap, missing glyphs or abnormal page breaks; education order; Supervisor label. Later on 2026-10-12: PDF Subject and Keywords now come from profile.json (all page renders byte-identical); the internship summary was rewritten with a subject (\"designs optical measurements and trains networks…\") and the Chinese current-research line no longer says 学习. The two changed pages (internship EN and ZH page 1) and the changed Chinese academic page 1 were re-inspected at full page: no clipping, overlap, orphan or abnormal break; all other pages are byte-identical renders. The remote-gpu-trainer entry now says \"delivers\" as the repository does; the changed academic page 2 was re-inspected at full page. The STSF-TPLS code line now names its lift and loss schedule (English and Chinese academic CVs, page 2); both changed pages were re-inspected. The summaries now open with the robot-AI vision (all four variants, page 1); every changed page was re-inspected at full page: two-line summaries, no orphan, overflow or abnormal break.",
- "source_fingerprint": "5e7b9fa6ac016a94a91388911b2ff996b745e5af109bf6b6482fa5148111b463",
+ "method": "pdftoppm at 100 dpi; every page of both public PDFs and both private Chinese PDFs inspected at full page after the 2026-10-12 third-round copy (unified narrative, Award & Service with 13 verified reviews, SPIFS-qualified Lift claim, corrected Comparison count). The build now fails on orphans, split number-unit pairs and line-initial CJK punctuation (typography_issues); all four variants pass. Checked by eye: no clipping, overlap, missing glyphs or abnormal page breaks; education order; Supervisor label. Later on 2026-10-12: PDF Subject and Keywords now come from profile.json (all page renders byte-identical); the internship summary was rewritten with a subject (\"designs optical measurements and trains networks…\") and the Chinese current-research line no longer says 学习. The two changed pages (internship EN and ZH page 1) and the changed Chinese academic page 1 were re-inspected at full page: no clipping, overlap, orphan or abnormal break; all other pages are byte-identical renders. The remote-gpu-trainer entry now says \"delivers\" as the repository does; the changed academic page 2 was re-inspected at full page. The STSF-TPLS code line now names its lift and loss schedule (English and Chinese academic CVs, page 2); both changed pages were re-inspected. The summaries now open with the robot-AI vision (all four variants, page 1); every changed page was re-inspected at full page: two-line summaries, no orphan, overflow or abnormal break. The CV summaries were then returned to present work only; all six page renders are byte-identical to the renders reviewed before the vision line was tried.",
+ "source_fingerprint": "78d8e1d826f0085a38598c6de6539d6f680565f977a9c0ff5f4dbce651a72e6f",
  "pdf_sha256": {
-  "Yuyuan_Han_Academic_CV.pdf": "e27a89b8769e1d26b5b8cae9fd177005680ac9c76fde4bc27f741591cf5841ac",
-  "Yuyuan_Han_Internship_Resume.pdf": "83873335742ba18fc7cc1ed14bcf41bb131d3f0426386fef7c4688c5d3bca4f9"
+  "Yuyuan_Han_Academic_CV.pdf": "f6ef9431e4b029e68586e844411a2039c26874c5170a92a26f9c992e99edb39f",
+  "Yuyuan_Han_Internship_Resume.pdf": "05781101c4ca094ba74502db7d15006fc54785ff64566612fbda42e36e26ae75"
  },
  "html_visual_qa": "not separately reviewed; HTML CVs are unlinked companions of the PDFs",
- "reviewed_at": "2026-10-12T14:29:49.313852+00:00",
+ "reviewed_at": "2026-10-12T14:42:00.686865+00:00",
  "reviewed_pages": [
   {
    "id": "academic-en-page-1",
-   "render_sha256": "418f6028f24d9164b751ad8b0638f872bdac9658d286456c083c97d682eb3bd0",
-   "pdf_sha256": "e27a89b8769e1d26b5b8cae9fd177005680ac9c76fde4bc27f741591cf5841ac"
+   "render_sha256": "c81f5fdeecd682364b688bc7d531e9dfb57246fb01d6245586cebbc30ad3dde1",
+   "pdf_sha256": "f6ef9431e4b029e68586e844411a2039c26874c5170a92a26f9c992e99edb39f"
   },
   {
    "id": "academic-en-page-2",
    "render_sha256": "cb9a4b4b5f0ccc89c34d31bb4dff6541290673d53aa43305d5e19e5395119762",
-   "pdf_sha256": "e27a89b8769e1d26b5b8cae9fd177005680ac9c76fde4bc27f741591cf5841ac"
+   "pdf_sha256": "f6ef9431e4b029e68586e844411a2039c26874c5170a92a26f9c992e99edb39f"
   },
   {
    "id": "internship-en-page-1",
-   "render_sha256": "b320324a1e96f855a7d2cf5947dd5a390f38691d5e6fa8d890b77ea4595e9657",
-   "pdf_sha256": "83873335742ba18fc7cc1ed14bcf41bb131d3f0426386fef7c4688c5d3bca4f9"
+   "render_sha256": "b13d8cb294e8293e44a879417e884599a1b11970fe94d62bad99168a1818313f",
+   "pdf_sha256": "05781101c4ca094ba74502db7d15006fc54785ff64566612fbda42e36e26ae75"
   }
  ]
 }
