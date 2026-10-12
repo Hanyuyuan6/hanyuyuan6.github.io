@@ -266,6 +266,7 @@ def validate(root):
         require(all(f"{row['count']} verified reviews" in home_text and all(escape(v, quote=False) in home_text for v in row['venues']) for row in profile.get('service', [])), 'Homepage lists verified peer review with its venues and count')
         require('Ten deep' not in home_text and 'Eight deep architectures' in home_text, 'Comparison repository is described as in the paper (eight networks plus a classical inverse)')
         require(escape(profile['narrative']['short_bio'], quote=False) in home_text, 'Homepage carries the canonical short biography verbatim')
+        require(not profile['narrative'].get('personal') or f'<p class="personal">{escape(profile["narrative"]["personal"], quote=True)}</p>' in home_text, 'Homepage shows the personal line when profile.json has one')
         require(all(f"Advisor: {escape(row['advisor'], quote=True)}" in home_text for row in profile['education'] if row.get('advisor')), 'Homepage names the recorded advisor')
         first_authored = [p for p in publications if p['id'] in {pr['publication_id'] for pr in profile['projects'] if pr['id'] in selected}]
         require(home_text.count('<strong class="self-author">Yuyuan Han</strong>') >= len(publications) and all(p['authors'][0] == 'Yuyuan Han' for p in first_authored), 'Author lists are visible with the researcher highlighted')

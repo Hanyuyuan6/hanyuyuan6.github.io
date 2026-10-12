@@ -45,6 +45,7 @@ h1 { font-size: 34px; line-height: 1.2; font-weight: 600; letter-spacing: -.6px;
 .primary-profiles a { display: inline-block; padding: 3px 0; }
 .hero-email { overflow-wrap: anywhere; }
 .welcome { margin-top: 12px; color: var(--muted); font-size: 14px; }
+.personal { margin-top: 4px; color: var(--muted); font-size: 14px; }
 
 /* Sections */
 .section { padding: 30px 0; border-top: 1px solid var(--line); }

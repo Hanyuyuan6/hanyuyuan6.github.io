@@ -694,6 +694,7 @@ def build(profile: dict[str, Any], output_dir: Path, *, source_dir: Path | None 
         "BIO": e(narrative["bio"]),
         "RESEARCH_BACKGROUND": "".join(f'<p><strong>{e(row["title"])}</strong> · {e(row["summary"])}</p>' for row in sequence(profile, "research_background")),
         "WELCOME": f'<p class="welcome">{e(welcome)}</p>' if welcome else "",
+        "PERSONAL": f'<p class="personal">{e(narrative["personal"])}</p>' if narrative.get("personal") else "",
         "CV_LINKS": cv_links(cvs[:2]),
         "EMAIL": email_link(person.get("email", "")),
         "PRIMARY_PROFILES": profile_links(profiles, primary=True),
