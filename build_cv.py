@@ -31,6 +31,8 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
 from reportlab.platypus import Paragraph
+from reportlab.lib.utils import ImageReader
+from PIL import Image
 import pdfplumber
 from pypdf import PdfReader
 
@@ -47,6 +49,9 @@ LEFT = 44.0
 RIGHT = 44.0
 WIDTH = PAGE_W - LEFT - RIGHT
 BOTTOM = 48.0
+# Chinese CVs carry the customary ID photo (5:7, like a one-inch photo) at the top right;
+# English CVs follow the international norm of no photo.
+PHOTO_W, PHOTO_H = 60.0, 84.0
 FONT_SOURCES: dict[str, dict[str, Any]] = {}
 LINK_COLOR = ''  # set from theme.json in build()
 
@@ -488,6 +493,36 @@ class CVTemplate:
         self.y -= height
         return height
 
+    def item_lines(self, items: list[str], measure: float) -> None:
+        """Detail lines that break only between items, never inside a label such as 'ORCID / 0009-…'."""
+        style, dot = self.style('detail'), sep(self.zh)
+
+        def one_line(parts: list[str]) -> bool:  # set it as the renderer would, mixed fonts included
+            trial = Paragraph(dot.join(parts), style)
+            trial.wrap(measure, 10_000)
+            return len(trial.blPara.lines) <= 1
+
+        lines: list[list[str]] = [[]]
+        for item in items:
+            if lines[-1] and not one_line(lines[-1] + [item]):
+                lines.append([item])
+            else:
+                lines[-1] = lines[-1] + [item]
+        for line in lines:
+            self.paragraph(dot.join(line), 'detail', width=measure)
+
+    def photo(self, top: float) -> None:
+        """The website portrait, centre-cropped to 5:7, flush with the right margin."""
+        record = json.loads((HERE / 'research-figures.json').read_text(encoding='utf-8'))['portrait']
+        with Image.open(HERE / record['path']) as source:
+            image = source.convert('RGB')
+        w, h = image.size
+        crop_w = round(h * PHOTO_W / PHOTO_H)
+        image = image.crop(((w - crop_w) // 2, 0, (w - crop_w) // 2 + crop_w, h))
+        x, y = PAGE_W - RIGHT - PHOTO_W, top - PHOTO_H
+        self.c.drawImage(ImageReader(image), x, y, width=PHOTO_W, height=PHOTO_H)
+        self.photo_box = (x, y, x + PHOTO_W, top)
+
     def header(self, number: int, total: int) -> None:
         c, p = self.c, self.profile['person']
         c.setFillColor(self.palette['paper'])
@@ -511,10 +546,16 @@ class CVTemplate:
             self.y -= 18
             dot = sep(self.zh)
             contacts = [link(p['email'], 'mailto:' + p['email']), link(p['institutional_email'], 'mailto:' + p['institutional_email']), esc(self.config['zh']['location'] if self.zh else p['location'])]
-            self.paragraph(dot.join(contacts), 'detail')
+            # Beside the photo the contact lines keep an 8 pt gutter, so a longer line wraps instead of overlapping it.
+            measure = WIDTH - PHOTO_W - 8 if self.zh else WIDTH
+            self.item_lines(contacts, measure)
             self.y -= 3
-            self.paragraph(dot.join(link(label, target) for label, target in web_links(self.profile)), 'detail')
+            self.item_lines([link(label, target) for label, target in web_links(self.profile)], measure)
+            if self.zh:
+                self.photo(PAGE_H - 46)
             self.y -= 10 if self.compact else 13
+            if self.zh and self.y > self.photo_box[1] - 3:
+                raise ValueError(f"{self.variant['id']}: the first full-width block would start beside the photo")
         else:
             c.setFont(self.title_font, 17)
             c.setFillColor(self.palette['ink'])
