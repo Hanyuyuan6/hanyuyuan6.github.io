@@ -61,7 +61,7 @@
     "style.css",
     "template.html",
     "theme.json",
-    "watch_orcid.py"
+    "watch_profiles.py"
   ],
   "site_files": [
     ".nojekyll",

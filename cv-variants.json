@@ -112,9 +112,9 @@
     }
   ],
   "zh": {
-    "field": "计算成像与物理驱动学习",
-    "summary": "研究光学测量设计与学习式成像、感知，当前关注采集条件感知学习，以及光学信号与预训练多模态模型的连接。",
-    "direction": "在米兰理工大学当前访学期间，计划研究时域漫射光学与三维重建。长期关注能够决定下一步测量、并通过与物理世界交互持续学习的感知系统。",
+    "field": "计算成像与鲁棒免成像感知",
+    "summary": "设计单像素光学测量，并训练直接作用于原始信号、无需重建图像的网络。",
+    "direction": "",
     "location": "意大利米兰",
     "education": {
       "Xi'an Jiaotong University": {
@@ -151,7 +151,7 @@
         "role": "第一作者",
         "bullets": [
           "揭示去掉重建后，1D 到 2D 的提升（lift）成为核心设计问题，并梳理出 lift 谱系。",
-          "提出 STSF + TPLS：比已有免成像方法高 3.2–9.9 个百分点；采样率降至 0.78% 时精度几乎不变；在 20 dB 噪声下比干净数据训练的先重建再分割高达 21.7 个百分点。"
+          "提出 STSF + TPLS：比已有免成像方法（SPIFS）高 3.2–9.9 个百分点；采样率降至 0.78% 时精度几乎不变；20 dB 噪声下，比干净数据训练的先重建再分割高达 21.7 个百分点。"
         ]
       },
       "shsi": {
@@ -189,13 +189,13 @@
     "software": {
       "STSF-TPLS": "免成像单像素分割：代码与预训练权重（PyTorch）。",
       "SHSI": "稀疏 Hadamard 单像素成像：图样生成与重建（MATLAB）。",
-      "Comparison-of-SPI-DLs": "十种深度单像素重建方法在同一 Hadamard 采集下的基准比较（PyTorch）。",
+      "Comparison-of-SPI-DLs": "八种深度网络与一种经典逆变换在同一 Hadamard 采集下的基准比较（PyTorch）。",
       "remote-gpu-trainer": "面向 Claude Code 与 Codex 的开源智能体技能：运行、核验并交付 GPU 实验（60+ 星）。",
       "LDGI": "面向光学相控阵线光场的循环差分鬼成像（MATLAB）。",
       "TGIs-Entry": "传统、差分与归一化鬼成像的参考实现（MATLAB）。"
     },
-    "internship_summary": "电子科学与技术博士研究生，研究计算成像与面向光学测量的物理驱动学习。",
-    "current_summary": "开发采集条件感知模型，并将预训练多模态模型适配至桶探测信号；米理访学计划聚焦时域漫射光学与三维重建。",
+    "internship_summary": "单像素成像与免成像感知方向博士研究生：光学测量设计与原始信号上的学习。",
+    "current_summary": "采集条件感知的单像素学习与光学平台验证（论文准备中）；直接从原始测量完成语言任务（探索中）。米理访学计划：时域漫射光学层析。",
     "internship_technical": [
       {
         "label": "开源",
@@ -214,7 +214,7 @@
     ]
   },
   "translation_source_hashes": {
-    "lift": "075e8164238c2202f7cb28e1764f928ef620ebdf8b7dc65284573440a8afb099",
+    "lift": "6f7c4dffb4a5d0fc60a995c484655ae8fdd682b9a818e3c51ef81df22c1dea15",
     "shsi": "78ba6f3616cd10976fc66f73a3fecb3f1440d3330e53039840939169bb6ffbe1",
     "acquisition": "b8ea85ca21177c7eb28a98ad8ac32e8f8d22be9580c0d1315e5b270e84862483",
     "loop": "0ca902d40aaefdc5a756d6f644bbb3722e3160342972787fc26d0180d1d25150"

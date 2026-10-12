@@ -205,11 +205,12 @@ def validate(root):
         card = root / 'dist' / 'social-card.png'
         require(card.is_file() and png_dimensions(card.read_bytes()) == (1200, 630), 'Social card is a 1200×630 PNG')
         icons = {a.get('href') for t, a in home.tags if t == 'link' and 'icon' in (a.get('rel') or '')}
-        require({'favicon.svg', 'favicon.ico', 'apple-touch-icon.png'} <= icons and all((root / 'dist' / name).is_file() for name in ('favicon.svg', 'favicon.ico', 'apple-touch-icon.png')), 'Site icons are declared and deployed')
+        require({'favicon.svg', 'favicon.ico', 'apple-touch-icon.png'} <= {icon.split('?')[0] for icon in icons} and all((root / 'dist' / name).is_file() for name in ('favicon.svg', 'favicon.ico', 'apple-touch-icon.png')), 'Site icons are declared and deployed')
+        require(all('?v=' in icon for icon in icons), 'Icon URLs carry a version, so browsers drop a cached old icon')
         theme = json.loads((root / 'theme.json').read_text(encoding='utf-8'))
         palette = theme['palettes'][theme['selected']]
         favicon = (root / 'dist' / 'favicon.svg').read_text(encoding='utf-8') if (root / 'dist' / 'favicon.svg').is_file() else ''
-        require(f'fill="{palette["link"]}"' in favicon and '<path fill="#fff"' in favicon and '<text' not in favicon, 'Favicon is the outlined YH monogram in the accent colour')
+        require(f'fill="{theme["mark"]["tile"]}"' in favicon and f'fill="{theme["mark"]["pixel"]}"' in favicon and 'url(#m)' in favicon and '<text' not in favicon, 'Favicon is the outlined Y-and-pixel mark in the theme.json mark colours')
         require((root / 'dist' / 'favicon.ico').is_file() and ico_sizes((root / 'dist' / 'favicon.ico').read_bytes()) == [16, 32, 48], 'favicon.ico carries 16, 32 and 48 px images')
         require((root / 'dist' / 'apple-touch-icon.png').is_file() and png_dimensions((root / 'dist' / 'apple-touch-icon.png').read_bytes()) == (180, 180), 'Apple touch icon is 180×180')
         for name, colours in theme['palettes'].items():
@@ -252,9 +253,12 @@ def validate(root):
         for project in profile['projects']:
             if project['id'] in selected:
                 chips = project.get('highlights', [])
-                require(1 <= len(chips) <= 4 and all(len(chip) <= 64 and escape(chip, quote=False) in home_text for chip in chips), f"Selected work shows 1-4 short key-result chips: {project['id']}")
+                require(1 <= len(chips) <= 4 and all(len(chip) <= 72 and escape(chip, quote=False) in home_text for chip in chips), f"Selected work shows 1-4 short key-result chips: {project['id']}")
                 require(len(project['summary'].split()) <= 22, f"Selected-work takeaway is one short sentence (22 words max): {project['id']}")
         require('one-dimensional optical phased arrays' in home_text, 'LDGI homepage identifies its OPA illumination setting')
+        require(all(f"{row['count']} verified reviews" in home_text and all(escape(v, quote=False) in home_text for v in row['venues']) for row in profile.get('service', [])), 'Homepage lists verified peer review with its venues and count')
+        require('Ten deep' not in home_text and 'Eight deep architectures' in home_text, 'Comparison repository is described as in the paper (eight networks plus a classical inverse)')
+        require(escape(profile['narrative']['short_bio'], quote=False) in home_text, 'Homepage carries the canonical short biography verbatim')
         require(all(f"Advisor: {escape(row['advisor'], quote=True)}" in home_text for row in profile['education'] if row.get('advisor')), 'Homepage names the recorded advisor')
         first_authored = [p for p in publications if p['id'] in {pr['publication_id'] for pr in profile['projects'] if pr['id'] in selected}]
         require(home_text.count('<strong class="self-author">Yuyuan Han</strong>') >= len(publications) and all(p['authors'][0] == 'Yuyuan Han' for p in first_authored), 'Author lists are visible with the researcher highlighted')

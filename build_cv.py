@@ -284,6 +284,21 @@ def awards_blocks(profile: dict[str, Any], cfg: dict[str, Any], zh: bool, compac
     return out
 
 
+def service_blocks(profile: dict[str, Any], zh: bool, compact: bool) -> list[Block]:
+    """Verified peer review (ORCID). The résumé abbreviates the journal names."""
+    out = []
+    for i, row in enumerate(profile.get('service', [])):
+        venues = row['venues']
+        if compact:
+            venues = [v.replace('IEEE Transactions on Image Processing', 'IEEE TIP').replace('IEEE Transactions on Computational Imaging', 'IEEE TCI') for v in venues]
+        if zh:
+            text = f"<b>审稿人</b>{sep(zh)}{esc('、'.join(venues))}（{row['count']} 次已验证审稿，{esc(row['years'])}）"
+        else:
+            text = f"<b>{esc(row['role'])}</b>{sep(zh)}{esc(', '.join(venues))} ({row['count']} verified reviews, {esc(row['years'])})"
+        out.append(Block('body', text, f'service[{i}]', gap=2))
+    return out
+
+
 def linked_text(row: dict[str, Any]) -> str:
     """Escape a sentence and link its declared substring, if any."""
     text, target = row['text'], row.get('link_text')
@@ -359,14 +374,15 @@ def model(profile: dict[str, Any], cfg: dict[str, Any], variant: dict[str, Any])
         # One page: open-source evidence first, then tools; device modeling stays.
         page1.append(Block('section', '开源与技术' if zh else 'Open Source & Tools'))
         page1 += technical_blocks(profile, cfg, zh)
-        page1.append(Block('section', '奖励' if zh else 'Award'))
-        page1 += awards_blocks(profile, cfg, zh, compact)
+        page1.append(Block('section', '奖励与学术服务' if zh else 'Award & Service'))
+        page1 += awards_blocks(profile, cfg, zh, compact) + service_blocks(profile, zh, compact)
         return [page1]
     # Page 1 is the profile; page 2 holds the unbroken publication list, code and
     # whichever closing sections the variant's page-1 budget cannot hold.
     closing = {
         'background': [Block('section', '其他经历' if zh else 'Additional Experience')] + background_blocks(profile, cfg, zh, compact),
-        'awards': [Block('section', '奖励' if zh else 'Award')] + awards_blocks(profile, cfg, zh, compact),
+        'awards': [Block('section', ('奖励与学术服务' if zh else 'Award & Service') if profile.get('service') else ('奖励' if zh else 'Award'))]
+                  + awards_blocks(profile, cfg, zh, compact) + service_blocks(profile, zh, compact),
     }
     on_page1 = variant.get('page1_closing', ['background', 'awards'])
     for key in on_page1:
@@ -617,6 +633,42 @@ def render_html(profile: dict[str, Any], config: dict[str, Any], variant: dict[s
     path.write_text(content, encoding='utf-8', newline='\n')
 
 
+def wrapped_lines(template: 'CVTemplate', block: Block) -> list[str]:
+    """The lines ReportLab will set for a text block, at the width the renderer uses."""
+    width = {'bullet': WIDTH - 12, 'publication': WIDTH - 23}.get(block.kind, WIDTH)
+    style = template.style('body' if block.kind == 'bullet' else block.kind)
+    paragraph = Paragraph(block.text, style)
+    paragraph.wrap(width, PAGE_H)
+    lines = []
+    for line in paragraph.blPara.lines:
+        if isinstance(line, tuple):
+            lines.append(' '.join(line[1]))
+        else:
+            lines.append(''.join(w if isinstance(w, str) else getattr(w, 'text', '') for w in line.words))
+    return [re.sub(r'\s+', ' ', line).strip() for line in lines]
+
+
+def typography_issues(template: 'CVTemplate', pages: list[list[Block]], zh: bool) -> list[str]:
+    """Orphans, split number-unit pairs and line-initial CJK punctuation fail the build."""
+    issues = []
+    for blocks in pages:
+        for block in blocks:
+            if block.kind not in ('body', 'bullet', 'detail', 'publication') or not block.text:
+                continue
+            lines = wrapped_lines(template, block)
+            if len(lines) > 1:
+                last = lines[-1]
+                cjk = len(re.findall(r'[\u4e00-\u9fff]', last))
+                if (zh and cjk and len(re.sub(r'[\s。，、；：）」』]', '', last)) <= 2) or (not re.search(r'[\u4e00-\u9fff]', last) and len(last.split()) == 1 and not re.match(r'(doi:|arXiv:|https?://)', last)):
+                    issues.append(f'{block.source}: orphan last line {last!r}')
+            for upper, lower in zip(lines, lines[1:]):
+                if re.search(r'\d$', upper) and re.match(r'(dB|%|pp|ms|nm|μm|px)\b', lower):
+                    issues.append(f'{block.source}: number and unit split across lines ({upper[-12:]!r} / {lower[:12]!r})')
+                if zh and re.match(r'[；，。、：）」』]', lower):
+                    issues.append(f'{block.source}: line starts with punctuation {lower[:8]!r}')
+    return issues
+
+
 def validate_fonts(pages: list[list[Block]], variant: dict[str, Any]) -> None:
     """Check every emitted code point against the embedded font's cmap."""
     zh = variant['language'].startswith('zh')
@@ -809,6 +861,9 @@ def build(profile_path: Path, output_dir: Path, private_dir: Path | None, *, pub
         if len(pages) != variant['pages']:
             raise ValueError('Content model page count disagrees with variants config')
         validate_fonts(pages, variant)
+        issues = typography_issues(CVTemplate(profile, config, variant, Path(tempfile.gettempdir()) / 'lint.pdf'), pages, variant['language'].startswith('zh'))
+        if issues:
+            raise ValueError(f"{variant['id']}: typography issues: {issues}")
         dest = output_dir if variant['destination'] == 'public' else private_dir
         pdf_path = dest / (variant['filename'] + '.pdf')
         html_path = dest / (variant['filename'] + '.html')

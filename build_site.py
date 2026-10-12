@@ -26,13 +26,16 @@ SOURCE_DIR = Path(__file__).resolve().parent
 SITE_URL = "https://hanyuyuan6.github.io/"
 TOKENS = re.compile(r"@@([A-Z_]+)@@")
 THEME_KEYS = ("bg", "ink", "muted", "link", "hover", "line", "tint", "wash")
-# "YH" outlined from Noto Sans Bold (fonts/, OFL) and centred in a 32-unit
-# square with fontTools, once. Only straight segments, so the same polygons
-# draw the SVG icon and the raster ICO/PNG.
-MONOGRAM = (
-    "M9.82 14.92 12.55 9.36H15.64L11.25 17.47V22.64H8.39V17.56L4 9.36H7.09Z"
-    "M28 22.64H25.19V16.91H19.93V22.64H17.12V9.36H19.93V14.57H25.19V9.36H28Z"
+# The mark: a Y whose three strokes stop short of one square pixel, the single
+# detector a single-pixel camera reads. Straight segments in a 32-unit square,
+# so the same polygons draw the SVG icon and the raster ICO/PNG.
+MARK_STROKES = (
+    "M4.64 5.6 11.27 13.49 14.56 10.73 10.25 5.6Z"
+    "M27.36 5.6 20.73 13.49 17.44 10.73 21.75 5.6Z"
+    "M13.85 18.6H18.15V26.6H13.85Z"
 )
+MARK_PIXEL = "M13.85 13.05H18.15V17.35H13.85Z"
+MARK_KEYS = ("tile", "from", "to", "pixel")
 MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
 
@@ -47,6 +50,8 @@ def load_theme(source_dir: Path) -> dict[str, Any]:
     for role in ("selected", "dark"):
         if theme.get(role) is not None and theme[role] not in palettes:
             raise ValueError(f"theme.json {role} names an unknown palette: {theme[role]!r}")
+    if any(not re.fullmatch(r"#[0-9a-f]{6}", str(theme.get("mark", {}).get(key, ""))) for key in MARK_KEYS):
+        raise ValueError(f"theme.json mark needs lowercase #rrggbb {', '.join(MARK_KEYS)}")
     return theme
 
 
@@ -286,11 +291,11 @@ def srcset(variants: list[dict[str, Any]]) -> str:
     return ", ".join(f'{e(v["path"])} {v["width"]}w' for v in variants)
 
 
-def monogram_polygons() -> list[list[tuple[float, float]]]:
-    """Parse MONOGRAM's absolute M/L/H/V/Z commands into point lists."""
+def path_polygons(path: str) -> list[list[tuple[float, float]]]:
+    """Parse absolute M/L/H/V/Z path commands into point lists."""
     polygons: list[list[tuple[float, float]]] = []
     x = y = 0.0
-    for command, args in re.findall(r"([MLHVZ])([^MLHVZ]*)", MONOGRAM):
+    for command, args in re.findall(r"([MLHVZ])([^MLHVZ]*)", path):
         values = [float(v) for v in args.split()]
         if command == "M":
             polygons.append([])
@@ -306,29 +311,46 @@ def monogram_polygons() -> list[list[tuple[float, float]]]:
     return polygons
 
 
-def monogram_icon(size: int, background: str, *, radius: float = 7) -> Image.Image:
+def mark_icon(size: int, mark: dict[str, str], *, radius: float = 7) -> Image.Image:
     """Draw at 512 px and downsample, so small sizes stay crisp and anti-aliased."""
-    scale = 512 / 32
-    image = Image.new("RGBA", (512, 512), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(image)
-    draw.rounded_rectangle((0, 0, 511, 511), radius=radius * scale, fill=background)
-    for polygon in monogram_polygons():
-        draw.polygon([(px * scale, py * scale) for px, py in polygon], fill="#ffffff")
+    scale, full = 512 / 32, 512
+    image = Image.new("RGBA", (full, full), (0, 0, 0, 0))
+    ImageDraw.Draw(image).rounded_rectangle((0, 0, full - 1, full - 1), radius=radius * scale, fill=mark["tile"])
+    start, end = (tuple(int(mark[key][i:i + 2], 16) for i in (1, 3, 5)) for key in ("from", "to"))
+    # Same geometry as the SVG's objectBoundingBox gradient: t = (u + v) / 2 over
+    # the strokes' bounding box, from its top-left to its bottom-right corner.
+    points = [pt for polygon in path_polygons(MARK_STROKES) for pt in polygon]
+    x0, y0 = (min(pt[i] for pt in points) * scale for i in (0, 1))
+    x1, y1 = (max(pt[i] for pt in points) * scale for i in (0, 1))
+    gradient = Image.new("RGB", (full, full))
+    gradient.putdata([
+        tuple(round(a + (b - a) * min(max(((x - x0) / (x1 - x0) + (y - y0) / (y1 - y0)) / 2, 0), 1)) for a, b in zip(start, end))
+        for y in range(full) for x in range(full)
+    ])
+    for path, fill in ((MARK_STROKES, gradient), (MARK_PIXEL, Image.new("RGB", (full, full), mark["pixel"]))):
+        mask = Image.new("L", (full, full), 0)
+        for polygon in path_polygons(path):
+            ImageDraw.Draw(mask).polygon([(px * scale, py * scale) for px, py in polygon], fill=255)
+        image.paste(fill, (0, 0), mask)
     return image.resize((size, size), Image.LANCZOS)
 
 
-def write_icons(output_dir: Path, palette: dict[str, str]) -> None:
-    """A "YH" monogram in the accent colour: legible at 16 px, unlike a pattern."""
-    accent = palette["link"]
-    svg = (
+def mark_svg(mark: dict[str, str]) -> str:
+    return (
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">'
-        f'<rect width="32" height="32" rx="7" fill="{accent}"/>'
-        f'<path fill="#fff" d="{MONOGRAM}"/></svg>\n'
+        f'<defs><linearGradient id="m" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{mark["from"]}"/>'
+        f'<stop offset="1" stop-color="{mark["to"]}"/></linearGradient></defs>'
+        f'<rect width="32" height="32" rx="7" fill="{mark["tile"]}"/>'
+        f'<path fill="url(#m)" d="{MARK_STROKES}"/><path fill="{mark["pixel"]}" d="{MARK_PIXEL}"/></svg>\n'
     )
-    (output_dir / "favicon.svg").write_text(svg, encoding="utf-8", newline="\n")
-    monogram_icon(256, accent).save(output_dir / "favicon.ico", sizes=[(16, 16), (32, 32), (48, 48)])
+
+
+def write_icons(output_dir: Path, mark: dict[str, str]) -> None:
+    """The Y-and-pixel mark: legible at 16 px, unlike the old 4×4 pattern."""
+    (output_dir / "favicon.svg").write_text(mark_svg(mark), encoding="utf-8", newline="\n")
+    mark_icon(256, mark).save(output_dir / "favicon.ico", sizes=[(16, 16), (32, 32), (48, 48)])
     # iOS masks its own corners, so the touch icon fills the square.
-    monogram_icon(180, accent, radius=0).convert("RGB").save(output_dir / "apple-touch-icon.png", optimize=True)
+    mark_icon(180, mark, radius=0).convert("RGB").save(output_dir / "apple-touch-icon.png", optimize=True)
 
 
 def social_card(profile: dict[str, Any], portrait_path: Path, source_dir: Path, output_dir: Path, palette: dict[str, str]) -> None:
@@ -343,6 +365,11 @@ def social_card(profile: dict[str, Any], portrait_path: Path, source_dir: Path, 
         card.paste(portrait.convert("RGB").resize((300, 300), Image.LANCZOS), (84, 165))
     draw = ImageDraw.Draw(card)
     x, right = 432, 1116
+    # The field line takes the largest size (28 px down to 22 px) that fits the margin.
+    for size in range(28, 21, -1):
+        regular = ImageFont.truetype(str(fonts / "NotoSans-Regular.ttf"), size)
+        if x + draw.textlength(narrative["field"], font=regular) <= right:
+            break
     lines = [
         (person["name"], bold, palette["ink"], 172),
         (narrative["field"], regular, palette["ink"], 266),
@@ -541,7 +568,18 @@ def awards(rows: list[dict[str, Any]]) -> str:
     return f'<div class="awards-block"><h3>Award</h3><ul>{items}</ul></div>'
 
 
-def write_support_files(profile: dict[str, Any], output_dir: Path, style_version: str) -> None:
+def service(rows: list[dict[str, Any]]) -> str:
+    if not rows:
+        return ""
+    items = "".join(
+        f'<li><span>{e(row["role"])} for {e(", ".join(row["venues"][:-1]))} and {e(row["venues"][-1])}</span>'
+        f'<span class="entry-dates">{e(row["count"])} verified reviews · {e(row["years"])}</span></li>'
+        for row in rows
+    )
+    return f'<div class="awards-block"><h3>Service</h3><ul>{items}</ul></div>'
+
+
+def write_support_files(profile: dict[str, Any], output_dir: Path, style_version: str, icon_version: str) -> None:
     updated = str(profile.get("updated", ""))
     pages = ["", *(row["path"] for row in sequence(profile, "cvs"))]
     urls = "".join(f"  <url><loc>{e(SITE_URL + path)}</loc><lastmod>{e(updated)}</lastmod></url>\n" for path in pages)
@@ -557,7 +595,7 @@ def write_support_files(profile: dict[str, Any], output_dir: Path, style_version
         '  <meta name="viewport" content="width=device-width, initial-scale=1">\n'
         '  <meta name="robots" content="noindex">\n'
         f'  <title>Page not found · {name}</title>\n'
-        '  <link rel="icon" href="/favicon.svg" type="image/svg+xml">\n'
+        f'  <link rel="icon" href="/favicon.svg?v={icon_version}" type="image/svg+xml">\n'
         f'  <link rel="stylesheet" href="/style.css?v={style_version}">\n</head>\n<body>\n'
         '  <main class="page-shell not-found">\n    <h1>Page not found</h1>\n'
         f'    <p>This page does not exist. Go to <a href="/">{name}’s homepage</a>.</p>\n'
@@ -669,10 +707,12 @@ def build(profile: dict[str, Any], output_dir: Path, *, source_dir: Path | None 
         "PUBLICATIONS": all_publications(publications, selected_ids, person),
         "PUBLICATION_COUNT": e(len(publications)),
         "STYLE_VERSION": style_version,
+        # Browsers cache icons by URL for a long time; a new mark gets a new URL.
+        "ICON_VERSION": hashlib.sha256(mark_svg(theme["mark"]).encode("utf-8")).hexdigest()[:10],
         "THEME_META": theme_meta(theme),
         "EDUCATION": education(sequence(profile, "education")),
         "APPOINTMENTS": appointments(sequence(profile, "appointments")),
-        "AWARDS": awards(sequence(profile, "awards")),
+        "AWARDS": awards(sequence(profile, "awards")) + service(sequence(profile, "service")),
         "SOFTWARE": software([row for row in sequence(profile, "software") if row["name"] in profile["additional_code_ids"]]),
         "PROFILES": profile_links(profiles),
         "UPDATED": e(updated),
@@ -694,9 +734,9 @@ def build(profile: dict[str, Any], output_dir: Path, *, source_dir: Path | None 
         destination_asset = output_dir / relative
         destination_asset.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(source_dir / relative, destination_asset)
-    write_icons(output_dir, palette)
+    write_icons(output_dir, theme["mark"])
     social_card(profile, source_dir / portrait["path"], source_dir, output_dir, palette)
-    write_support_files(profile, output_dir, style_version)
+    write_support_files(profile, output_dir, style_version, replacements["ICON_VERSION"])
     return destination
 
 

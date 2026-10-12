@@ -15,7 +15,7 @@ Source for <https://hanyuyuan6.github.io/>: a static, research-first homepage pl
 | `fonts/` | Noto Sans 2.015 (SIL Open Font License 1.1, see `fonts/OFL.txt`) for reproducible PDFs |
 | `check.py` | Content, link, image, metadata and allowlist checks on the built site and PDFs |
 | `check_layout.py` | Renders the site in Chromium at 1440/1024/390 px (and 1440 px dark) and checks spacing, overflow, image sharpness and BibTeX-toggle alignment |
-| `watch_orcid.py` | Weekly job: opens an issue when ORCID lists a DOI that `profile.json` lacks |
+| `watch_profiles.py` | Weekly job: compares ORCID and GitHub with `profile.json` (works, biography, keywords, links, emails, affiliations, reviews) and opens one issue on drift, with a paste-ready checklist for platforms without an API |
 | `public-files.json` | Explicit allowlist of every published file |
 
 ## Build and check

@@ -15,16 +15,17 @@
     "visiting_institution": "Politecnico di Milano"
   },
   "narrative": {
-    "hero": "Learning to sense the physical world",
-    "field": "Computational imaging & physics-aware learning",
-    "bio": "I study how measurement physics can help learning systems perceive the physical world. My research connects optical measurement design with learned representations for image reconstruction and image-free perception. I am now exploring acquisition-aware learning and interfaces between optical signals and pretrained multimodal models. My long-term goal is sensing that lets AI systems and embodied robots genuinely understand the physical world.",
-    "direction": "During my current visit at Politecnico di Milano, I plan to extend this work to time-domain diffuse optics and three-dimensional reconstruction, investigating how physical modeling can support transfer from simulation to optical experiments.",
-    "welcome": "I welcome research collaborations and research internship opportunities in computational imaging, physics-aware machine learning, and multimodal sensing.",
-    "resume_summary": "I work on optical measurement design and learning for imaging and perception. Current research explores acquisition-aware learning and pretrained models for optical signals.",
-    "long_term": "Longer term, I want AI systems and embodied robots to understand the physical world through what they sense: learning from interaction, and choosing what to measure when it matters.",
-    "internship_summary": "PhD student in computational imaging and physics-aware learning from optical measurements.",
-    "current_summary": "Developing acquisition-aware models and adapting pretrained multimodal models to bucket-detector signals. Planned visiting research: time-domain diffuse optics and 3D reconstruction.",
-    "meta_description": "PhD student at Xi'an Jiaotong University, visiting Politecnico di Milano. Computational imaging and physics-aware learning from optical measurements."
+    "hero": "Teaching machines to see from raw measurements, not images.",
+    "field": "Computational imaging & robust image-free sensing",
+    "bio": "A single-pixel camera does not record an image; it records one number per illumination pattern. I design these measurements and train networks that act on the raw signal, so that perception does not wait for a reconstruction. The results hold where conventional pipelines struggle: through scattering, under measurement noise and below 1% sampling. At Politecnico di Milano I am now exploring time-domain diffuse optics, where the signal is the arrival time of photons that have travelled through tissue. The long-term aim is sensing that lets AI systems and embodied robots understand the physical world through what they measure.",
+    "direction": "",
+    "welcome": "I welcome research collaborations and research internships in computational imaging, image-free sensing and machine perception.",
+    "resume_summary": "I design single-pixel optical measurements and train networks that act on the raw signal rather than on a reconstructed image.",
+    "long_term": "",
+    "internship_summary": "PhD researcher in single-pixel imaging and image-free sensing: optical measurement design and learning on raw signals.",
+    "current_summary": "Acquisition-aware single-pixel sensing with optical-bench tests (manuscript in preparation); language tasks from raw single-pixel measurements (exploratory). Planned at Politecnico di Milano: time-domain diffuse optical tomography.",
+    "meta_description": "Yuyuan Han, PhD student at Xi'an Jiaotong University visiting Politecnico di Milano: single-pixel imaging and image-free sensing from raw measurements.",
+    "short_bio": "A single-pixel camera does not record an image; it records one number per illumination pattern. I design these measurements and train networks that act on the raw signal, so that perception does not wait for a reconstruction."
   },
   "profiles": [
     {
@@ -90,12 +91,12 @@
   "projects": [
     {
       "id": "lift",
-      "title": "The Lift Spectrum · Robust image-free perception",
+      "title": "The Lift Spectrum · Robust image-free sensing",
       "status": "Preprint",
       "summary": "Image-free sensing moves the hard problem to the 1D-to-2D lift; how adaptive that lift is decides robustness.",
       "bullets": [
         "Showed that without reconstruction the 1D-to-2D lift is the design problem; mapped the lift spectrum.",
-        "Proposed STSF + TPLS: +3.2–9.9 pp over prior image-free methods; near-constant accuracy down to 0.78% sampling; up to +21.7 pp over clean-trained reconstruct-then-segment at 20 dB noise."
+        "Proposed STSF + TPLS: +3.2–9.9 pp over the prior image-free method (SPIFS); near-constant accuracy down to 0.78% sampling; up to +21.7 pp over clean-trained reconstruct-then-segment at 20 dB noise."
       ],
       "role": "First author",
       "period": "2025–present",
@@ -104,8 +105,9 @@
       "result": "",
       "highlights": [
         "Accuracy holds down to 0.78% sampling",
-        "+21.7 mIoU at 20 dB vs clean-trained reconstruct-then-segment",
-        "+3.2–9.9 mIoU vs prior image-free"
+        "Up to +21.7 mIoU at 20 dB vs clean-trained reconstruct-then-segment",
+        "+3.2–9.9 mIoU vs the prior image-free method (SPIFS)",
+        "Runs on a real DMD bench without fine-tuning"
       ]
     },
     {
@@ -163,19 +165,19 @@
   ],
   "directions": [
     {
-      "title": "Learning with acquisition physics",
+      "title": "Acquisition-aware sensing",
       "status": "Ongoing",
-      "description": "I am developing models that incorporate how signals are acquired, and studying how learned representations behave when acquisition conditions change."
+      "description": "Networks that take how a signal was acquired as an input, tested on an optical bench. Manuscript in preparation."
     },
     {
-      "title": "Connecting optical signals and pretrained models",
-      "status": "Ongoing",
-      "description": "I am adapting pretrained multimodal models to bucket-detector signals, exploring how prior visual knowledge can support inference directly from measurements."
+      "title": "Language from raw measurements",
+      "status": "Exploratory",
+      "description": "Whether a frozen vision–language model can answer questions directly from single-pixel measurements."
     },
     {
-      "title": "Time-domain diffuse optics and 3D reconstruction",
+      "title": "Time-domain diffuse optics",
       "status": "Planned study",
-      "description": "During my current visit at Politecnico di Milano, I plan to investigate light-transport modeling and learning-based inversion for three-dimensional reconstruction."
+      "description": "At Politecnico di Milano: 3D reconstruction inside scattering media from photon arrival times, from simulation to phantoms."
     }
   ],
   "publications": [
@@ -446,7 +448,7 @@
     {
       "name": "Comparison-of-SPI-DLs",
       "url": "https://github.com/Hanyuyuan6/Comparison-of-SPI-DLs",
-      "description": "Ten deep single-pixel reconstruction methods benchmarked on one shared Hadamard acquisition (PyTorch)."
+      "description": "Eight deep architectures and a classical inverse, benchmarked on one shared Hadamard acquisition (PyTorch)."
     },
     {
       "name": "SHSI",
@@ -513,26 +515,27 @@
     }
   ],
   "platform_copy": {
-    "github_bio": "Computational imaging and physics-aware learning. Optical measurement design, single-pixel reconstruction, and image-free perception.",
-    "linkedin_headline": "PhD Student at XJTU | Visiting PhD Student at Politecnico di Milano | Computational Imaging & Physics-Aware Learning",
-    "researchgate_bio": "I study optical measurement design and learning for imaging and perception. My work includes OPA-oriented ghost imaging, sparse Hadamard imaging, and robust image-free segmentation. Current research explores acquisition-aware learning and pretrained models for optical signals. My planned visiting research at Politecnico di Milano focuses on time-domain diffuse optics and 3D reconstruction.",
-    "long_bio": "I am a PhD student at Xi'an Jiaotong University and a visiting PhD student at Politecnico di Milano. My research connects optical measurement design with learning for imaging and perception, including OPA-oriented ghost imaging, sparse Hadamard imaging, and robust image-free segmentation. Current work explores acquisition-aware learning and pretrained models for optical signals. My planned visiting research focuses on time-domain diffuse optics and three-dimensional reconstruction.",
+    "github_bio": "Teaching machines to see from raw measurements, not images. Single-pixel imaging & image-free sensing.",
+    "linkedin_headline": "PhD Student at Xi'an Jiaotong University | Visiting PhD Student at Politecnico di Milano | Teaching machines to see from raw measurements, not images",
+    "researchgate_bio": "A single-pixel camera does not record an image; it records one number per illumination pattern. I design these measurements and train networks that act on the raw signal, so that perception does not wait for a reconstruction. I am a PhD student at Xi'an Jiaotong University and a visiting PhD student at Politecnico di Milano.",
+    "long_bio": "I am a PhD student at Xi'an Jiaotong University and a visiting PhD student at Politecnico di Milano. A single-pixel camera does not record an image; it records one number per illumination pattern. I design these measurements and train networks that act on the raw signal, so that perception does not wait for a reconstruction. The results hold where conventional pipelines struggle: through scattering, under measurement noise and below 1% sampling. At Politecnico di Milano I am now exploring time-domain diffuse optics, where the signal is the arrival time of photons that have travelled through tissue. The long-term aim is sensing that lets AI systems and embodied robots understand the physical world through what they measure.",
     "keywords": [
       "Computational Imaging",
-      "Single-Pixel Sensing",
+      "Single-Pixel Imaging",
+      "Image-Free Sensing",
       "Inverse Problems",
-      "Physics-Aware Machine Learning",
-      "Multimodal Learning"
+      "Machine Perception"
     ],
-    "orcid_bio": "I am a PhD student at Xi'an Jiaotong University and a visiting PhD student at Politecnico di Milano. My research connects optical measurement design with learning for imaging and perception, including OPA-oriented ghost imaging, sparse Hadamard imaging, and robust image-free segmentation. Current work explores acquisition-aware learning and pretrained models for optical signals. My planned visiting research focuses on time-domain diffuse optics and three-dimensional reconstruction.",
-    "linkedin_about": "I study how measurement physics can help learning systems perceive the physical world. My research includes noise-resilient Hadamard measurement design, ghost-imaging algorithms for optical phased arrays, and image-free segmentation. In The Lift Spectrum, our STSF + TPLS lift keeps near-constant accuracy down to 0.78% sampling and, at 20 dB noise, beats the strongest clean-trained reconstruct-then-segment baseline by up to 21.7 foreground-mIoU points.\n\nI am currently exploring acquisition-aware learning and pretrained multimodal models for optical signals. My long-term goal is sensing that lets AI systems and embodied robots genuinely understand the physical world. I welcome research collaborations and internship opportunities in computational imaging, physics-aware machine learning, and multimodal sensing.",
-    "linkedin_about_zh": "我研究如何利用测量物理，帮助学习系统感知物理世界。已完成的工作包括抗噪的 Hadamard 测量设计、面向光学相控阵的鬼成像算法，以及免成像分割：在 The Lift Spectrum 中，我们的 STSF + TPLS 在采样率降至 0.78% 时精度几乎不变；在 20 dB 噪声下，前景 mIoU 比最强的干净数据训练先重建再分割基线高达 21.7 个百分点。\n\n目前我在探索采集条件感知学习，以及面向光学信号的预训练多模态模型。长期目标是让 AI 系统与具身机器人通过感知真正理解物理世界。欢迎计算成像、物理驱动机器学习与多模态感知方向的科研合作与实习交流。",
+    "orcid_bio": "I am a PhD student at Xi'an Jiaotong University and a visiting PhD student at Politecnico di Milano. A single-pixel camera does not record an image; it records one number per illumination pattern. I design these measurements and train networks that act on the raw signal, so that perception does not wait for a reconstruction. The results hold where conventional pipelines struggle: through scattering, under measurement noise and below 1% sampling. At Politecnico di Milano I am now exploring time-domain diffuse optics, where the signal is the arrival time of photons that have travelled through tissue. The long-term aim is sensing that lets AI systems and embodied robots understand the physical world through what they measure.",
+    "linkedin_about": "I am a PhD student at Xi'an Jiaotong University and a visiting PhD student at Politecnico di Milano. A single-pixel camera does not record an image; it records one number per illumination pattern. I design these measurements and train networks that act on the raw signal, so that perception does not wait for a reconstruction. The results hold where conventional pipelines struggle: through scattering, under measurement noise and below 1% sampling. At Politecnico di Milano I am now exploring time-domain diffuse optics, where the signal is the arrival time of photons that have travelled through tissue. The long-term aim is sensing that lets AI systems and embodied robots understand the physical world through what they measure.\n\nI welcome research collaborations and research internships in computational imaging, image-free sensing and machine perception.",
+    "linkedin_about_zh": "我是西安交通大学博士研究生，目前在米兰理工大学访问。单像素相机不记录图像，它对每个照明图案只记录一个数。我设计这些测量，并训练直接作用于原始信号的网络，让感知不必等待重建。这些方法在传统流程吃力的地方依然有效：穿过散射介质、存在测量噪声、采样率低于 1%。在米兰理工，我正在探索时域漫射光学，这里的信号是穿过组织的光子的到达时间。长期目标是让 AI 系统与具身机器人通过它们的测量真正理解物理世界。\n\n欢迎计算成像、免成像感知与机器感知方向的科研合作与研究实习交流。",
     "linkedin_featured_lift": "Segmenting directly from single-pixel measurements beats the strongest clean-trained reconstruct-then-segment baseline by 3.1–21.7 foreground-mIoU points at 20 dB noise.",
-    "researchgate_activity": "PhD student at Xi'an Jiaotong University · open to collaborations in computational imaging and physics-aware learning",
+    "researchgate_activity": "PhD student at Xi'an Jiaotong University · open to collaborations in computational imaging and image-free sensing",
     "openreview_expertise": [
-      "Computational Imaging, Single-Pixel Sensing, Inverse Problems",
-      "Physics-Aware Machine Learning, Multimodal Learning"
-    ]
+      "Computational Imaging, Single-Pixel Imaging, Image-Free Sensing",
+      "Inverse Problems, Machine Perception"
+    ],
+    "github_company": "Xi'an Jiaotong University · Visiting at Politecnico di Milano"
   },
   "selected_project_ids": [
     "lift",
@@ -609,6 +612,20 @@
     {
       "label": "Device modeling",
       "text": "Electro-optic phased-array geometry modeling and optimization for beam steering"
+    }
+  ],
+  "service": [
+    {
+      "role": "Reviewer",
+      "venues": [
+        "IEEE Transactions on Image Processing",
+        "IEEE Transactions on Computational Imaging",
+        "Optics Express",
+        "Optics Letters"
+      ],
+      "count": 13,
+      "years": "2025–2026",
+      "source": "ORCID peer-review records verified by Optica Publishing Group and Web of Science (read 2026-10-12)"
     }
   ]
 }
