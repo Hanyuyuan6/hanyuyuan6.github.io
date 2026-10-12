@@ -2,7 +2,7 @@
  "reviewed_on": "2026-10-12",
  "reviewer": "Claude (Opus 5.5)",
  "method": "pdftoppm at 100 dpi; every page of both public PDFs and both private Chinese PDFs inspected at full page on 2026-10-12. The build fails on orphans, split number-unit pairs and line-initial CJK punctuation (typography_issues); all four variants pass. Latest change, a professional copy edit (summaries, current-research line, Lift and SHSI bullets; one verb, \"operate directly on\", across all summaries): the changed pages (English academic page 1, English internship page 1, both pages of the Chinese academic CV, Chinese internship page 1) were inspected at full page: no clipping, overlap, orphan, missing glyph or abnormal break; English academic page 2 renders byte-identical to the page reviewed before. The Chinese current-research line breaks after its first clause by design (build_cv.py replaces the first \"；\" with a line break).",
- "source_fingerprint": "cf6e70f93e81e7904199ce5354f882ec4ae4d745eeb3181655d2225f75967384",
+ "source_fingerprint": "fd9b8199de277852a7d85e4de0da02899ac6b4c480a8b3af70e25db1ab4e0872",
  "pdf_sha256": {
   "Yuyuan_Han_Academic_CV.pdf": "782c23d38734e2b6dff87c52d602fc1cd70c7606e067144f38fabf13b12ea0cb",
   "Yuyuan_Han_Internship_Resume.pdf": "c301f7050055752301b8f0fc1ac0606dbc39172ff0312a715d2eb512a049c7aa"

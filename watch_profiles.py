@@ -114,7 +114,7 @@ def manual_checklist(profile: dict) -> list[str]:
     affiliation = f'{person["position"]}, {person["institution"]}; {person["visiting_role"]}, {person["visiting_institution"]}'
     return [
         f'- Google Scholar: affiliation "{affiliation}"; interests {copy["keywords"]}; homepage {person["homepage"]}.',
-        f'- LinkedIn: headline "{copy["linkedin_headline"]}"; About = `platform_copy.linkedin_about` (and `_zh`); skills lead with {copy["keywords"]}; featured links use `linkedin_featured_*`.',
+        f'- LinkedIn: headline "{copy["linkedin_headline"]}" (Chinese profile: "{copy["linkedin_headline_zh"]}"); About = `platform_copy.linkedin_about` (and `_zh`); Politecnico di Milano under both Experience (`linkedin_experience_polimi`, and `_zh`) and Education, translated on the English profile; skills lead with {copy["keywords"]}; featured links use `linkedin_featured_*`.',
         f'- ResearchGate: About = `platform_copy.researchgate_bio`; current activity "{copy["researchgate_activity"]}"; skills include {copy["keywords"]}.',
         f'- OpenReview: expertise {copy["openreview_expertise"]}; emails include {person.get("institutional_email")}.',
         '- Web of Science: primary organization Xi\'an Jiaotong University; 8 Core Collection works.',

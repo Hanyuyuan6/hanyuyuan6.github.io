@@ -163,6 +163,9 @@ def validate(root):
     require(copy['long_bio'] == copy['orcid_bio'] == f"{identity} {narrative['bio']}", 'ORCID biography is the identity sentence plus the biography')
     require(copy['linkedin_about'] == f"{copy['long_bio']}\n\n{narrative['welcome']}", 'LinkedIn About is the long bio plus the welcome line')
     require(copy['github_bio'].startswith(narrative['hero']) and copy['linkedin_headline'].endswith(narrative['hero'].rstrip('.')), 'GitHub bio and LinkedIn headline carry the hero line')
+    visit, visit_zh = profile['appointments'][0], json.loads((root / 'cv-variants.json').read_text(encoding='utf-8'))['zh']['appointment']
+    require(visit['department'] in copy['linkedin_experience_polimi'] and visit['host'] in copy['linkedin_experience_polimi'], 'LinkedIn experience names the department and supervisor of record')
+    require(visit_zh['department'] in copy['linkedin_experience_polimi_zh'] and visit['host'] in copy['linkedin_experience_polimi_zh'] and visit_zh['institution'] + visit_zh['role'] in copy['linkedin_headline_zh'], 'Chinese LinkedIn copy uses the Chinese appointment of record')
 
     expected = set(manifest['repository_files'])
     actual = set()

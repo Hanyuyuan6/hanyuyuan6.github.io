@@ -527,7 +527,9 @@
       "Inverse Problems, Machine Perception"
     ],
     "github_company": "Xi'an Jiaotong University · Visiting at Politecnico di Milano",
-    "linkedin_headline_zh": "西安交通大学博士研究生｜米兰理工大学访问博士生｜单像素成像与免成像感知"
+    "linkedin_headline_zh": "西安交通大学博士研究生｜米兰理工大学访问博士研究生｜单像素成像与免成像感知",
+    "linkedin_experience_polimi": "Department of Physics, supervised by Antonio Pifferi. Planned research: time-domain diffuse optical tomography, from simulation to phantoms.",
+    "linkedin_experience_polimi_zh": "物理系，合作导师：Antonio Pifferi。计划研究：时域漫射光学层析成像，从仿真推进到仿体实验。"
   },
   "selected_project_ids": [
     "lift",
