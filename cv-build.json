@@ -1,11 +1,11 @@
 {
   "schema_version": 2,
-  "built_at": "2026-10-12T14:11:19.365246+00:00",
-  "source_fingerprint": "db6eb4e05313f4192e6fc6bb1dd76c7bbe094735b1b4f83fe40a2a1f9dfbd13d",
+  "built_at": "2026-10-12T14:29:13.357082+00:00",
+  "source_fingerprint": "5e7b9fa6ac016a94a91388911b2ff996b745e5af109bf6b6482fa5148111b463",
   "inputs": {
     "profile": {
       "path": "profile.json",
-      "sha256": "165493693a3013387159e87fe368a4065073f71ed882658ac7377e1c023c9939"
+      "sha256": "5bc177c5276d2f6dadf23de8024250e23f0478a1121008786f7d5a065925c05a"
     },
     "template": {
       "path": "build_cv.py",
@@ -13,7 +13,7 @@
     },
     "variants": {
       "path": "cv-variants.json",
-      "sha256": "5c44eb691adb0952002535fc7a83727e17c536b1f546a91a506db62a1282a547"
+      "sha256": "e4f897ebb2b7826d9d8104ff2a8fe74eb2469aa4774daf342a03007a4073f273"
     },
     "theme": {
       "path": "theme.json",
@@ -70,17 +70,17 @@
       },
       "pdf": {
         "path": "Yuyuan_Han_Academic_CV.pdf",
-        "sha256": "f6ef9431e4b029e68586e844411a2039c26874c5170a92a26f9c992e99edb39f",
-        "bytes": 59494
+        "sha256": "e27a89b8769e1d26b5b8cae9fd177005680ac9c76fde4bc27f741591cf5841ac",
+        "bytes": 59539
       },
       "html": {
         "path": "Yuyuan_Han_Academic_CV.html",
-        "sha256": "3a2215c4353abb90184371965aa9896e1e06398e83a4935f80492589db88ae6e",
-        "bytes": 15292
+        "sha256": "022e629f5579435300634474d33dc0dd5d2a0da28febc403f5a3957a448511b7",
+        "bytes": 15364
       },
       "checks": {
         "page_count": 2,
-        "extracted_characters": 5676,
+        "extracted_characters": 5748,
         "embedded_fonts": [
           "/AAAAAA+NotoSans-Bold",
           "/AAAAAA+NotoSans-Italic",
@@ -390,7 +390,7 @@
             "source": "narrative.resume_summary",
             "top": 692.65,
             "bottom": 661.65,
-            "text": "I design single-pixel optical measurements and train networks that act on the raw signal rather than on a reconstructed image."
+            "text": "Toward robot AI that reads the physics in raw sensor data, I design single-pixel optical measurements and train networks that act on the measurements themselves rather than on a reconstructed image."
           },
           {
             "page": 1,
@@ -811,17 +811,17 @@
       },
       "pdf": {
         "path": "Yuyuan_Han_Internship_Resume.pdf",
-        "sha256": "05781101c4ca094ba74502db7d15006fc54785ff64566612fbda42e36e26ae75",
-        "bytes": 35718
+        "sha256": "83873335742ba18fc7cc1ed14bcf41bb131d3f0426386fef7c4688c5d3bca4f9",
+        "bytes": 35758
       },
       "html": {
         "path": "Yuyuan_Han_Internship_Resume.html",
-        "sha256": "221e17c19b67f2a82bfbd9cae0ac6315927f3a9a20922aba591d415e6d252e9e",
-        "bytes": 9282
+        "sha256": "6ac09a0cafecb9d9cf01e96f603a37f17ba93b79cf42c618e172baf00bc1c372",
+        "bytes": 9339
       },
       "checks": {
         "page_count": 1,
-        "extracted_characters": 2512,
+        "extracted_characters": 2569,
         "embedded_fonts": [
           "/AAAAAA+NotoSans-Bold",
           "/AAAAAA+NotoSans-Regular"
@@ -969,7 +969,7 @@
             "source": "narrative.internship_summary",
             "top": 694.65,
             "bottom": 662.65,
-            "text": "PhD researcher in single-pixel imaging and image-free sensing: designs optical measurements and trains networks that act directly on the raw signal."
+            "text": "PhD researcher in single-pixel imaging and image-free sensing, working toward robot AI that reads the physics in raw sensor data: designs optical measurements and trains networks that act directly on them."
           },
           {
             "page": 1,
