@@ -1,11 +1,11 @@
 {
   "schema_version": 2,
-  "built_at": "2026-10-12T14:03:41.441117+00:00",
-  "source_fingerprint": "a17faa7ad2cfd9cf5331e6be208a7c2d237228a4692bf48b0d9aca2ee62f2fae",
+  "built_at": "2026-10-12T14:07:34.413227+00:00",
+  "source_fingerprint": "baed77974463d73ea928937731ad627aa941e6199de532ebf9bbd49d2db63c7b",
   "inputs": {
     "profile": {
       "path": "profile.json",
-      "sha256": "dc6ca0db8d481ba720157dd7de1d7defd83cafeb9d75b42fba89fef31caa2b0c"
+      "sha256": "8eeb495ca935c97df21e8cc7f0422d0d52278004e33a2482e65ddb1d7298d8b4"
     },
     "template": {
       "path": "build_cv.py",
@@ -70,17 +70,17 @@
       },
       "pdf": {
         "path": "Yuyuan_Han_Academic_CV.pdf",
-        "sha256": "a93aff51fe40abcfb2358c13e740375214b1576df6ab1f98f54dd10d58d25419",
-        "bytes": 59447
+        "sha256": "766dc3b5307765d9f7630d409a10366f8ccbf66f7ae538add5727821e92d4de6",
+        "bytes": 59448
       },
       "html": {
         "path": "Yuyuan_Han_Academic_CV.html",
-        "sha256": "d1e92ac9ae15c3f39bab22f1d749f323994cc0d46fb80e99fb544d549a4e6fd8",
-        "bytes": 15225
+        "sha256": "6c37a4d440ff16facceb7817806efbfd0e8bfedd74a2a3ff60156f8087a80100",
+        "bytes": 15226
       },
       "checks": {
         "page_count": 2,
-        "extracted_characters": 5609,
+        "extracted_characters": 5610,
         "embedded_fonts": [
           "/AAAAAA+NotoSans-Bold",
           "/AAAAAA+NotoSans-Italic",
@@ -750,7 +750,7 @@
             "source": "software[5]",
             "top": 155.69,
             "bottom": 125.69,
-            "text": "remote-gpu-trainer · Open-source agent skill for Claude Code and Codex that runs, verifies and reports GPU experiments (60+ stars)."
+            "text": "remote-gpu-trainer · Open-source agent skill for Claude Code and Codex that runs, verifies and delivers GPU experiments (60+ stars)."
           }
         ]
       },
@@ -816,7 +816,7 @@
       },
       "html": {
         "path": "Yuyuan_Han_Internship_Resume.html",
-        "sha256": "77b0d230fb9d202013a5422b656325d01af08d318963c4a59e4258fdc2734447",
+        "sha256": "d5d265d433cefa5424d88bdeabb3dd59e594afb2fdf9de6cfaf5496cdb9f29c3",
         "bytes": 9282
       },
       "checks": {

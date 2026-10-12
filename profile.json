@@ -454,7 +454,7 @@
     {
       "name": "remote-gpu-trainer",
       "url": "https://github.com/Hanyuyuan6/remote-gpu-trainer",
-      "description": "Open-source agent skill for Claude Code and Codex that runs, verifies and reports GPU experiments (60+ stars)."
+      "description": "Open-source agent skill for Claude Code and Codex that runs, verifies and delivers GPU experiments (60+ stars)."
     }
   ],
   "skills": [
