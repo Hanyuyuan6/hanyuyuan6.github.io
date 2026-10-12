@@ -1,29 +1,29 @@
 {
  "reviewed_on": "2026-10-12",
  "reviewer": "Claude (Opus 5.5)",
- "method": "pdftoppm at 100 dpi; every page of both public PDFs and both private Chinese PDFs inspected at full page after the 2026-10-12 third-round copy (unified narrative, Award & Service with 13 verified reviews, SPIFS-qualified Lift claim, corrected Comparison count). The build now fails on orphans, split number-unit pairs and line-initial CJK punctuation (typography_issues); all four variants pass. Checked by eye: no clipping, overlap, missing glyphs or abnormal page breaks; education order; Supervisor label. Later on 2026-10-12: PDF Subject and Keywords now come from profile.json (all page renders byte-identical); the internship summary was rewritten with a subject (\"designs optical measurements and trains networks…\") and the Chinese current-research line no longer says 学习. The two changed pages (internship EN and ZH page 1) and the changed Chinese academic page 1 were re-inspected at full page: no clipping, overlap, orphan or abnormal break; all other pages are byte-identical renders. The remote-gpu-trainer entry now says \"delivers\" as the repository does; the changed academic page 2 was re-inspected at full page. The STSF-TPLS code line now names its lift and loss schedule (English and Chinese academic CVs, page 2); both changed pages were re-inspected. The summaries now open with the robot-AI vision (all four variants, page 1); every changed page was re-inspected at full page: two-line summaries, no orphan, overflow or abnormal break. The CV summaries were then returned to present work only; all six page renders are byte-identical to the renders reviewed before the vision line was tried.",
- "source_fingerprint": "78d8e1d826f0085a38598c6de6539d6f680565f977a9c0ff5f4dbce651a72e6f",
+ "method": "pdftoppm at 100 dpi; every page of both public PDFs and both private Chinese PDFs inspected at full page on 2026-10-12. The build fails on orphans, split number-unit pairs and line-initial CJK punctuation (typography_issues); all four variants pass. Latest change, a professional copy edit (summaries, current-research line, Lift and SHSI bullets; one verb, \"operate directly on\", across all summaries): the changed pages (English academic page 1, English internship page 1, both pages of the Chinese academic CV, Chinese internship page 1) were inspected at full page: no clipping, overlap, orphan, missing glyph or abnormal break; English academic page 2 renders byte-identical to the page reviewed before. The Chinese current-research line breaks after its first clause by design (build_cv.py replaces the first \"；\" with a line break).",
+ "source_fingerprint": "abf413f95e1f4db85669dd6c2e257c8a7d15f388a5f09eb426a613d6b08bd760",
  "pdf_sha256": {
-  "Yuyuan_Han_Academic_CV.pdf": "f6ef9431e4b029e68586e844411a2039c26874c5170a92a26f9c992e99edb39f",
-  "Yuyuan_Han_Internship_Resume.pdf": "05781101c4ca094ba74502db7d15006fc54785ff64566612fbda42e36e26ae75"
+  "Yuyuan_Han_Academic_CV.pdf": "782c23d38734e2b6dff87c52d602fc1cd70c7606e067144f38fabf13b12ea0cb",
+  "Yuyuan_Han_Internship_Resume.pdf": "c301f7050055752301b8f0fc1ac0606dbc39172ff0312a715d2eb512a049c7aa"
  },
  "html_visual_qa": "not separately reviewed; HTML CVs are unlinked companions of the PDFs",
- "reviewed_at": "2026-10-12T14:42:00.686865+00:00",
+ "reviewed_at": "2026-10-12T15:27:23.426729+00:00",
  "reviewed_pages": [
   {
    "id": "academic-en-page-1",
-   "render_sha256": "c81f5fdeecd682364b688bc7d531e9dfb57246fb01d6245586cebbc30ad3dde1",
-   "pdf_sha256": "f6ef9431e4b029e68586e844411a2039c26874c5170a92a26f9c992e99edb39f"
+   "render_sha256": "281b18170e6e49efaa84e4b09a863428dbded634be69146e7d5eef3c40ec0c51",
+   "pdf_sha256": "782c23d38734e2b6dff87c52d602fc1cd70c7606e067144f38fabf13b12ea0cb"
   },
   {
    "id": "academic-en-page-2",
    "render_sha256": "cb9a4b4b5f0ccc89c34d31bb4dff6541290673d53aa43305d5e19e5395119762",
-   "pdf_sha256": "f6ef9431e4b029e68586e844411a2039c26874c5170a92a26f9c992e99edb39f"
+   "pdf_sha256": "782c23d38734e2b6dff87c52d602fc1cd70c7606e067144f38fabf13b12ea0cb"
   },
   {
    "id": "internship-en-page-1",
-   "render_sha256": "b13d8cb294e8293e44a879417e884599a1b11970fe94d62bad99168a1818313f",
-   "pdf_sha256": "05781101c4ca094ba74502db7d15006fc54785ff64566612fbda42e36e26ae75"
+   "render_sha256": "18199fcbeb661f0ff3fac37e59920d59f9f638546be4fb1316683bcabcfbde4e",
+   "pdf_sha256": "c301f7050055752301b8f0fc1ac0606dbc39172ff0312a715d2eb512a049c7aa"
   }
  ]
 }

@@ -15,18 +15,18 @@
     "visiting_institution": "Politecnico di Milano"
   },
   "narrative": {
-    "hero": "Teaching machines to understand raw measurements, not images.",
+    "hero": "Teaching machines to see from raw measurements, not images.",
     "field": "Computational imaging & robust image-free sensing",
-    "bio": "My long-term goal is for the AI in future robots to understand raw sensor data directly: the physical parameters, the equations and the world behind every signal. Today I work on the extreme case, a single-pixel camera that records one number per illumination pattern and never forms an image; I design those measurements and train networks that act on the raw signal. The results hold where conventional pipelines struggle: through scattering, under measurement noise and below 1% sampling. At Politecnico di Milano I plan to carry this into time-domain diffuse optics, where the signal is the arrival time of photons that have travelled through tissue and the parameters to recover are how strongly the tissue absorbs and scatters light.",
+    "bio": "I work on single-pixel imaging and image-free sensing: I design optical measurements and train networks that operate directly on the measurement sequence, without first reconstructing an image. A single-pixel camera illuminates a scene with structured patterns and records one value per pattern with a single detector; I study how much a machine can perceive from those values alone. The results hold where conventional approaches struggle: sparse Hadamard patterns keep imaging robust through scattering media, and image-free segmentation maintains near-constant accuracy down to 0.78% sampling. At Politecnico di Milano, I plan to work on time-domain diffuse optical tomography: 3D reconstruction inside scattering media from photon arrival times, from simulation to phantoms. My long-term aim is to enable robotic systems to infer physical parameters and interpret their surroundings directly from raw measurements, guided by physical models.",
     "direction": "",
-    "welcome": "I welcome research collaborations and research internships in computational imaging, image-free sensing and machine perception.",
-    "personal": "Outside the lab: basketball, the gym and travel.",
-    "resume_summary": "I design single-pixel optical measurements and train networks that act on the raw signal rather than on a reconstructed image.",
+    "welcome": "I am open to research collaborations and internships in computational imaging, image-free sensing and machine perception.",
+    "personal": "Outside the lab: basketball, fitness and travel.",
+    "resume_summary": "I design optical measurements for single-pixel imaging and train networks that operate directly on the measurements, without reconstructing an image.",
     "long_term": "",
-    "internship_summary": "PhD researcher in single-pixel imaging and image-free sensing: designs optical measurements and trains networks that act directly on the raw signal.",
-    "current_summary": "Acquisition-aware single-pixel sensing with optical-bench tests (manuscript in preparation); language tasks from raw single-pixel measurements (exploratory). Planned at Politecnico di Milano: time-domain diffuse optical tomography.",
+    "internship_summary": "PhD student in single-pixel imaging and image-free sensing: designs optical measurements and trains networks that operate directly on the measurements, without image reconstruction.",
+    "current_summary": "Acquisition-aware single-pixel sensing with optical-bench tests (manuscript in preparation); question answering on single-pixel measurements (exploratory). Planned at Politecnico di Milano: time-domain diffuse optical tomography.",
     "meta_description": "Yuyuan Han, PhD student at Xi'an Jiaotong University visiting Politecnico di Milano: single-pixel imaging and image-free sensing from raw measurements.",
-    "short_bio": "My long-term goal is for the AI in future robots to understand raw sensor data directly: the physical parameters, the equations and the world behind every signal. Today I work on the extreme case, a single-pixel camera that records one number per illumination pattern and never forms an image; I design those measurements and train networks that act on the raw signal."
+    "short_bio": "I work on single-pixel imaging and image-free sensing: I design optical measurements and train networks that operate directly on the measurement sequence, without first reconstructing an image. A single-pixel camera illuminates a scene with structured patterns and records one value per pattern with a single detector; I study how much a machine can perceive from those values alone."
   },
   "profiles": [
     {
@@ -94,10 +94,10 @@
       "id": "lift",
       "title": "The Lift Spectrum · Robust image-free sensing",
       "status": "Preprint",
-      "summary": "Image-free sensing moves the hard problem to the 1D-to-2D lift; how adaptive that lift is decides robustness.",
+      "summary": "Image-free sensing moves the hard problem to the 1D-to-2D lift; how adaptive that lift is determines robustness.",
       "bullets": [
-        "Showed that without reconstruction the 1D-to-2D lift is the design problem; mapped the lift spectrum.",
-        "Proposed STSF + TPLS: +3.2–9.9 pp over the prior image-free method (SPIFS); near-constant accuracy down to 0.78% sampling; up to +21.7 pp over clean-trained reconstruct-then-segment at 20 dB noise."
+        "Showed that, without reconstruction, the 1D-to-2D lift is the design problem; mapped the lift spectrum.",
+        "Proposed STSF + TPLS: +3.2–9.9 mIoU over the prior image-free method (SPIFS); near-constant accuracy down to 0.78% sampling; up to +21.7 mIoU over clean-trained reconstruct-then-segment at 20 dB noise."
       ],
       "role": "First author",
       "period": "2025–present",
@@ -105,9 +105,9 @@
       "code_url": "https://github.com/Hanyuyuan6/STSF-TPLS",
       "result": "",
       "highlights": [
-        "Accuracy holds down to 0.78% sampling",
-        "Up to +21.7 mIoU at 20 dB vs clean-trained reconstruct-then-segment",
-        "+3.2–9.9 mIoU vs the prior image-free method (SPIFS)",
+        "Near-constant accuracy down to 0.78% sampling",
+        "Up to +21.7 mIoU at 20 dB over clean-trained reconstruct-then-segment",
+        "+3.2–9.9 mIoU over the prior image-free method (SPIFS)",
         "Runs on a real DMD bench without fine-tuning"
       ]
     },
@@ -117,7 +117,7 @@
       "status": "Published",
       "summary": "Orthogonal Hadamard patterns with tunable sparsity make single-pixel imaging robust through scattering and noise.",
       "bullets": [
-        "Gave orthogonal Hadamard patterns tunable sparsity: noise-robust imaging through scattering, low-order matrices that save memory, no training or post-processing."
+        "Introduced tunable sparsity into orthogonal Hadamard patterns: noise-robust imaging through scattering, low-order matrices that save memory, no training or post-processing."
       ],
       "role": "First author",
       "period": "2024–2025",
@@ -134,7 +134,7 @@
       "id": "loop",
       "title": "LDGI · Optical phased-array imaging",
       "status": "Published",
-      "summary": "Line patterns from one-dimensional optical phased arrays break the noise symmetry ghost imaging relies on; LDGI overcomes it.",
+      "summary": "Line patterns from one-dimensional optical phased arrays break the noise symmetry that ghost-imaging denoising relies on; LDGI overcomes this limitation.",
       "bullets": [
         "Showed that line patterns from one-dimensional optical phased arrays break the noise symmetry of ghost-imaging denoising; proposed LDGI (orders-of-magnitude gains), validated optically."
       ],
@@ -154,10 +154,10 @@
     {
       "title": "Acquisition-aware sensing",
       "status": "Ongoing",
-      "description": "Networks that take how a signal was acquired as an input, tested on an optical bench. Manuscript in preparation."
+      "description": "Single-pixel sensing methods that account for acquisition conditions, tested in optical-bench experiments. Manuscript in preparation."
     },
     {
-      "title": "Language from raw measurements",
+      "title": "Question answering from measurements",
       "status": "Exploratory",
       "description": "Whether a frozen vision–language model can answer questions directly from single-pixel measurements."
     },
@@ -503,10 +503,10 @@
     }
   ],
   "platform_copy": {
-    "github_bio": "Teaching machines to understand raw measurements, not images. Single-pixel imaging & image-free sensing.",
-    "linkedin_headline": "PhD Student at Xi'an Jiaotong University | Visiting PhD Student at Politecnico di Milano | Teaching machines to understand raw measurements, not images",
-    "researchgate_bio": "My long-term goal is for the AI in future robots to understand raw sensor data directly: the physical parameters, the equations and the world behind every signal. Today I work on the extreme case, a single-pixel camera that records one number per illumination pattern and never forms an image; I design those measurements and train networks that act on the raw signal. I am a PhD student at Xi'an Jiaotong University and a visiting PhD student at Politecnico di Milano.",
-    "long_bio": "I am a PhD student at Xi'an Jiaotong University and a visiting PhD student at Politecnico di Milano. My long-term goal is for the AI in future robots to understand raw sensor data directly: the physical parameters, the equations and the world behind every signal. Today I work on the extreme case, a single-pixel camera that records one number per illumination pattern and never forms an image; I design those measurements and train networks that act on the raw signal. The results hold where conventional pipelines struggle: through scattering, under measurement noise and below 1% sampling. At Politecnico di Milano I plan to carry this into time-domain diffuse optics, where the signal is the arrival time of photons that have travelled through tissue and the parameters to recover are how strongly the tissue absorbs and scatters light.",
+    "github_bio": "Teaching machines to see from raw measurements, not images. Single-pixel imaging & image-free sensing.",
+    "linkedin_headline": "PhD Student at Xi'an Jiaotong University | Visiting PhD Student at Politecnico di Milano | Teaching machines to see from raw measurements, not images",
+    "researchgate_bio": "I work on single-pixel imaging and image-free sensing: I design optical measurements and train networks that operate directly on the measurement sequence, without first reconstructing an image. A single-pixel camera illuminates a scene with structured patterns and records one value per pattern with a single detector; I study how much a machine can perceive from those values alone. I am a PhD student at Xi'an Jiaotong University and a visiting PhD student at Politecnico di Milano.",
+    "long_bio": "I am a PhD student at Xi'an Jiaotong University and a visiting PhD student at Politecnico di Milano. I work on single-pixel imaging and image-free sensing: I design optical measurements and train networks that operate directly on the measurement sequence, without first reconstructing an image. A single-pixel camera illuminates a scene with structured patterns and records one value per pattern with a single detector; I study how much a machine can perceive from those values alone. The results hold where conventional approaches struggle: sparse Hadamard patterns keep imaging robust through scattering media, and image-free segmentation maintains near-constant accuracy down to 0.78% sampling. At Politecnico di Milano, I plan to work on time-domain diffuse optical tomography: 3D reconstruction inside scattering media from photon arrival times, from simulation to phantoms. My long-term aim is to enable robotic systems to infer physical parameters and interpret their surroundings directly from raw measurements, guided by physical models.",
     "keywords": [
       "Computational Imaging",
       "Single-Pixel Imaging",
@@ -514,19 +514,20 @@
       "Inverse Problems",
       "Machine Perception"
     ],
-    "orcid_bio": "I am a PhD student at Xi'an Jiaotong University and a visiting PhD student at Politecnico di Milano. My long-term goal is for the AI in future robots to understand raw sensor data directly: the physical parameters, the equations and the world behind every signal. Today I work on the extreme case, a single-pixel camera that records one number per illumination pattern and never forms an image; I design those measurements and train networks that act on the raw signal. The results hold where conventional pipelines struggle: through scattering, under measurement noise and below 1% sampling. At Politecnico di Milano I plan to carry this into time-domain diffuse optics, where the signal is the arrival time of photons that have travelled through tissue and the parameters to recover are how strongly the tissue absorbs and scatters light.",
-    "linkedin_about": "I am a PhD student at Xi'an Jiaotong University and a visiting PhD student at Politecnico di Milano. My long-term goal is for the AI in future robots to understand raw sensor data directly: the physical parameters, the equations and the world behind every signal. Today I work on the extreme case, a single-pixel camera that records one number per illumination pattern and never forms an image; I design those measurements and train networks that act on the raw signal. The results hold where conventional pipelines struggle: through scattering, under measurement noise and below 1% sampling. At Politecnico di Milano I plan to carry this into time-domain diffuse optics, where the signal is the arrival time of photons that have travelled through tissue and the parameters to recover are how strongly the tissue absorbs and scatters light.\n\nI welcome research collaborations and research internships in computational imaging, image-free sensing and machine perception.",
-    "linkedin_about_zh": "我是西安交通大学博士研究生，目前在米兰理工大学访问。我的长期目标是让未来机器人的 AI 直接读懂原始传感器数据：读懂每个信号背后的物理参数、方程与世界。目前我从最极端的情形做起：单像素相机对每个照明图案只记录一个数，从不形成图像；我设计这些测量，并训练直接作用于原始信号的网络。这些方法在传统流程吃力的地方依然有效：穿过散射介质、存在测量噪声、采样率低于 1%。在米兰理工，我计划把这条路线延伸到时域漫射光学：信号是穿过组织的光子的到达时间，要恢复的参数是组织对光的吸收与散射强度。\n\n欢迎计算成像、免成像感知与机器感知方向的科研合作与研究实习交流。",
-    "linkedin_featured_lift": "Segmenting directly from single-pixel measurements beats the strongest clean-trained reconstruct-then-segment baseline by 3.1–21.7 foreground-mIoU points at 20 dB noise.",
+    "orcid_bio": "I am a PhD student at Xi'an Jiaotong University and a visiting PhD student at Politecnico di Milano. I work on single-pixel imaging and image-free sensing: I design optical measurements and train networks that operate directly on the measurement sequence, without first reconstructing an image. A single-pixel camera illuminates a scene with structured patterns and records one value per pattern with a single detector; I study how much a machine can perceive from those values alone. The results hold where conventional approaches struggle: sparse Hadamard patterns keep imaging robust through scattering media, and image-free segmentation maintains near-constant accuracy down to 0.78% sampling. At Politecnico di Milano, I plan to work on time-domain diffuse optical tomography: 3D reconstruction inside scattering media from photon arrival times, from simulation to phantoms. My long-term aim is to enable robotic systems to infer physical parameters and interpret their surroundings directly from raw measurements, guided by physical models.",
+    "linkedin_about": "I am a PhD student at Xi'an Jiaotong University and a visiting PhD student at Politecnico di Milano. I work on single-pixel imaging and image-free sensing: I design optical measurements and train networks that operate directly on the measurement sequence, without first reconstructing an image. A single-pixel camera illuminates a scene with structured patterns and records one value per pattern with a single detector; I study how much a machine can perceive from those values alone. The results hold where conventional approaches struggle: sparse Hadamard patterns keep imaging robust through scattering media, and image-free segmentation maintains near-constant accuracy down to 0.78% sampling. At Politecnico di Milano, I plan to work on time-domain diffuse optical tomography: 3D reconstruction inside scattering media from photon arrival times, from simulation to phantoms. My long-term aim is to enable robotic systems to infer physical parameters and interpret their surroundings directly from raw measurements, guided by physical models.\n\nI am open to research collaborations and internships in computational imaging, image-free sensing and machine perception.",
+    "linkedin_about_zh": "我是西安交通大学博士研究生，现于米兰理工大学物理系访问。我的研究方向是单像素成像与免成像感知：设计光学测量方案，并训练直接处理测量序列、无需先重建图像的网络。单像素相机用一系列结构光图案照明场景，由单个探测器为每个图案记录一个数值；我关心的是，机器仅凭这些数值能感知多少。这些结果在传统方法吃力的条件下依然成立：稀疏 Hadamard 图案在散射介质中保持稳健成像，免成像分割在采样率低至 0.78% 时准确率几乎不变。在米兰理工，我计划研究时域漫射光学层析成像：利用光子到达时间重建散射介质内部的三维信息，从仿真推进到仿体实验。我的长期目标是让机器人系统在物理模型指导下，直接从原始测量中推断物理参数、理解周围环境。\n\n欢迎计算成像、免成像感知与机器感知方向的科研合作与实习机会。",
+    "linkedin_featured_lift": "Segmentation directly from single-pixel measurements outperforms the strongest clean-trained reconstruct-then-segment baseline by 3.1–21.7 foreground-mIoU points at 20 dB noise.",
     "linkedin_featured_site_title": "Yuyuan Han · Computational imaging & robust image-free sensing",
-    "linkedin_featured_site": "Research, publications and CV: single-pixel imaging and image-free sensing from raw measurements.",
-    "linkedin_featured_resume": "One-page résumé (PDF): single-pixel imaging and image-free sensing, from optical measurement design to networks that act directly on the raw signal.",
+    "linkedin_featured_site": "Research, publications and CV in single-pixel imaging and image-free sensing.",
+    "linkedin_featured_resume": "One-page résumé (PDF): optical measurement design for single-pixel imaging and networks that operate directly on the measurements.",
     "researchgate_activity": "PhD student at Xi'an Jiaotong University · open to collaborations in computational imaging and image-free sensing",
     "openreview_expertise": [
       "Computational Imaging, Single-Pixel Imaging, Image-Free Sensing",
       "Inverse Problems, Machine Perception"
     ],
-    "github_company": "Xi'an Jiaotong University · Visiting at Politecnico di Milano"
+    "github_company": "Xi'an Jiaotong University · Visiting at Politecnico di Milano",
+    "linkedin_headline_zh": "西安交通大学博士研究生｜米兰理工大学访问博士生｜单像素成像与免成像感知"
   },
   "selected_project_ids": [
     "lift",

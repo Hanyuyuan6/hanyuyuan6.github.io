@@ -1,11 +1,11 @@
 {
   "schema_version": 2,
-  "built_at": "2026-10-12T14:46:59.257057+00:00",
-  "source_fingerprint": "d2a22599041a60c13d646af5873bbf11648849024746780756c7acd9e5706ad1",
+  "built_at": "2026-10-12T15:27:02.289706+00:00",
+  "source_fingerprint": "abf413f95e1f4db85669dd6c2e257c8a7d15f388a5f09eb426a613d6b08bd760",
   "inputs": {
     "profile": {
       "path": "profile.json",
-      "sha256": "13412f4495b9d398fb478d76da4336885dcbd0fe80942407488ca7a30ff051c9"
+      "sha256": "c2290e47475387d9b3381a60670b4a5984fb1a8f4e560329c3d0cef75c0e5d18"
     },
     "template": {
       "path": "build_cv.py",
@@ -13,7 +13,7 @@
     },
     "variants": {
       "path": "cv-variants.json",
-      "sha256": "5c44eb691adb0952002535fc7a83727e17c536b1f546a91a506db62a1282a547"
+      "sha256": "41551c4648c0c3c3ad4ff1cb5cad02cf9438ef20211453019dfc42472f0c3142"
     },
     "theme": {
       "path": "theme.json",
@@ -70,17 +70,17 @@
       },
       "pdf": {
         "path": "Yuyuan_Han_Academic_CV.pdf",
-        "sha256": "f6ef9431e4b029e68586e844411a2039c26874c5170a92a26f9c992e99edb39f",
-        "bytes": 59494
+        "sha256": "782c23d38734e2b6dff87c52d602fc1cd70c7606e067144f38fabf13b12ea0cb",
+        "bytes": 59482
       },
       "html": {
         "path": "Yuyuan_Han_Academic_CV.html",
-        "sha256": "6fba7201f51edff401e99c43e9be22f40ae9b03509127ba14476557db56465df",
-        "bytes": 15292
+        "sha256": "41858abc76c6d81e17efc35994fa4c91a5edcb633fa713970b9bdb6178223acc",
+        "bytes": 15330
       },
       "checks": {
         "page_count": 2,
-        "extracted_characters": 5676,
+        "extracted_characters": 5714,
         "embedded_fonts": [
           "/AAAAAA+NotoSans-Bold",
           "/AAAAAA+NotoSans-Italic",
@@ -390,7 +390,7 @@
             "source": "narrative.resume_summary",
             "top": 692.65,
             "bottom": 661.65,
-            "text": "I design single-pixel optical measurements and train networks that act on the raw signal rather than on a reconstructed image."
+            "text": "I design optical measurements for single-pixel imaging and train networks that operate directly on the measurements, without reconstructing an image."
           },
           {
             "page": 1,
@@ -478,7 +478,7 @@
             "source": "projects.lift.bullets[0]",
             "top": 469.25,
             "bottom": 454.25,
-            "text": "Showed that without reconstruction the 1D-to-2D lift is the design problem; mapped the lift spectrum."
+            "text": "Showed that, without reconstruction, the 1D-to-2D lift is the design problem; mapped the lift spectrum."
           },
           {
             "page": 1,
@@ -486,7 +486,7 @@
             "source": "projects.lift.bullets[1]",
             "top": 454.25,
             "bottom": 426.25,
-            "text": "Proposed STSF + TPLS: +3.2–9.9 pp over the prior image-free method (SPIFS); near-constant accuracy down to 0.78% sampling; up to +21.7 pp over clean-trained reconstruct-then-segment at 20 dB noise."
+            "text": "Proposed STSF + TPLS: +3.2–9.9 mIoU over the prior image-free method (SPIFS); near-constant accuracy down to 0.78% sampling; up to +21.7 mIoU over clean-trained reconstruct-then-segment at 20 dB noise."
           },
           {
             "page": 1,
@@ -510,7 +510,7 @@
             "source": "projects.shsi.bullets[0]",
             "top": 388.15,
             "bottom": 360.15,
-            "text": "Gave orthogonal Hadamard patterns tunable sparsity: noise-robust imaging through scattering, low-order matrices that save memory, no training or post-processing."
+            "text": "Introduced tunable sparsity into orthogonal Hadamard patterns: noise-robust imaging through scattering, low-order matrices that save memory, no training or post-processing."
           },
           {
             "page": 1,
@@ -550,7 +550,7 @@
             "source": "narrative.current_summary",
             "top": 252.05,
             "bottom": 219.05,
-            "text": "Acquisition-aware single-pixel sensing with optical-bench tests (manuscript in preparation); language tasks from raw single-pixel measurements (exploratory). Planned at Politecnico di Milano: time-domain diffuse optical tomography."
+            "text": "Acquisition-aware single-pixel sensing with optical-bench tests (manuscript in preparation); question answering on single-pixel measurements (exploratory). Planned at Politecnico di Milano: time-domain diffuse optical tomography."
           },
           {
             "page": 1,
@@ -811,17 +811,17 @@
       },
       "pdf": {
         "path": "Yuyuan_Han_Internship_Resume.pdf",
-        "sha256": "05781101c4ca094ba74502db7d15006fc54785ff64566612fbda42e36e26ae75",
-        "bytes": 35718
+        "sha256": "c301f7050055752301b8f0fc1ac0606dbc39172ff0312a715d2eb512a049c7aa",
+        "bytes": 35733
       },
       "html": {
         "path": "Yuyuan_Han_Internship_Resume.html",
-        "sha256": "17fddf4de149e5238e78a1d44d94906e5c3f45891aaf38479024a2e1c6a62e91",
-        "bytes": 9282
+        "sha256": "259d8e3d6de1a930a6b98e2d265eb8b0b07a267fac67d3c60cf3b959264305f2",
+        "bytes": 9330
       },
       "checks": {
         "page_count": 1,
-        "extracted_characters": 2512,
+        "extracted_characters": 2560,
         "embedded_fonts": [
           "/AAAAAA+NotoSans-Bold",
           "/AAAAAA+NotoSans-Regular"
@@ -969,7 +969,7 @@
             "source": "narrative.internship_summary",
             "top": 694.65,
             "bottom": 662.65,
-            "text": "PhD researcher in single-pixel imaging and image-free sensing: designs optical measurements and trains networks that act directly on the raw signal."
+            "text": "PhD student in single-pixel imaging and image-free sensing: designs optical measurements and trains networks that operate directly on the measurements, without image reconstruction."
           },
           {
             "page": 1,
@@ -1057,7 +1057,7 @@
             "source": "projects.lift.bullets[0]",
             "top": 472.25,
             "bottom": 456.75,
-            "text": "Showed that without reconstruction the 1D-to-2D lift is the design problem; mapped the lift spectrum."
+            "text": "Showed that, without reconstruction, the 1D-to-2D lift is the design problem; mapped the lift spectrum."
           },
           {
             "page": 1,
@@ -1065,7 +1065,7 @@
             "source": "projects.lift.bullets[1]",
             "top": 456.75,
             "bottom": 427.75,
-            "text": "Proposed STSF + TPLS: +3.2–9.9 pp over the prior image-free method (SPIFS); near-constant accuracy down to 0.78% sampling; up to +21.7 pp over clean-trained reconstruct-then-segment at 20 dB noise."
+            "text": "Proposed STSF + TPLS: +3.2–9.9 mIoU over the prior image-free method (SPIFS); near-constant accuracy down to 0.78% sampling; up to +21.7 mIoU over clean-trained reconstruct-then-segment at 20 dB noise."
           },
           {
             "page": 1,
@@ -1089,7 +1089,7 @@
             "source": "projects.shsi.bullets[0]",
             "top": 391.65,
             "bottom": 362.65,
-            "text": "Gave orthogonal Hadamard patterns tunable sparsity: noise-robust imaging through scattering, low-order matrices that save memory, no training or post-processing."
+            "text": "Introduced tunable sparsity into orthogonal Hadamard patterns: noise-robust imaging through scattering, low-order matrices that save memory, no training or post-processing."
           },
           {
             "page": 1,
@@ -1129,7 +1129,7 @@
             "source": "narrative.current_summary",
             "top": 261.55,
             "bottom": 214.05,
-            "text": "Acquisition-aware single-pixel sensing with optical-bench tests (manuscript in preparation); language tasks from raw single-pixel measurements (exploratory). Planned at Politecnico di Milano: time-domain diffuse optical tomography."
+            "text": "Acquisition-aware single-pixel sensing with optical-bench tests (manuscript in preparation); question answering on single-pixel measurements (exploratory). Planned at Politecnico di Milano: time-domain diffuse optical tomography."
           },
           {
             "page": 1,

@@ -155,6 +155,14 @@ def validate(root):
     require(len(profile['profiles']) == 7 and len({x['url'] for x in profile['profiles']}) == 7, 'Seven distinct academic profile links')
     require(len(profile['platform_copy']['github_bio']) <= 160, 'GitHub bio within 160 characters')
     require(len(profile['platform_copy']['researchgate_bio']) <= 500, 'ResearchGate bio within observed 500-character limit')
+    # Platform texts are compositions of the narrative, so a hand edit to one of them is drift.
+    copy, narrative, person = profile['platform_copy'], profile['narrative'], profile['person']
+    identity = f"I am a {person['position']} at {person['institution']} and a {person['visiting_role'][:1].lower() + person['visiting_role'][1:]} at {person['visiting_institution']}."
+    require(narrative['bio'].startswith(narrative['short_bio']), 'Biography opens with the short bio')
+    require(copy['researchgate_bio'] == f"{narrative['short_bio']} {identity}", 'ResearchGate bio is the short bio plus the identity sentence')
+    require(copy['long_bio'] == copy['orcid_bio'] == f"{identity} {narrative['bio']}", 'ORCID biography is the identity sentence plus the biography')
+    require(copy['linkedin_about'] == f"{copy['long_bio']}\n\n{narrative['welcome']}", 'LinkedIn About is the long bio plus the welcome line')
+    require(copy['github_bio'].startswith(narrative['hero']) and copy['linkedin_headline'].endswith(narrative['hero'].rstrip('.')), 'GitHub bio and LinkedIn headline carry the hero line')
 
     expected = set(manifest['repository_files'])
     actual = set()
