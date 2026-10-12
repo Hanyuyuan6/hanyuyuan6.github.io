@@ -1,11 +1,11 @@
 {
   "schema_version": 2,
-  "built_at": "2026-10-12T12:08:47.347066+00:00",
-  "source_fingerprint": "f16528536d310b70e5f45409ff23d2f31ea42e53b98104ec8ec4d0ff9699b400",
+  "built_at": "2026-10-12T12:29:01.957620+00:00",
+  "source_fingerprint": "836f17417db6104c1d716a5d4176e419c9a8acda65f491b68453b0a0fd63cb54",
   "inputs": {
     "profile": {
       "path": "profile.json",
-      "sha256": "0f4c35c103470530411cd5b7e3e3262ee892395e9428261a79049cf1791c2f94"
+      "sha256": "b3c59d6d133528eecfd90235763da6d0338ce42385136d704260868f73f86add"
     },
     "template": {
       "path": "build_cv.py",
@@ -13,7 +13,7 @@
     },
     "variants": {
       "path": "cv-variants.json",
-      "sha256": "8bdf03834f0cd962e2733a3a13df73674ab70ed06a79b2827367041f2504a783"
+      "sha256": "3a0a8a169006d57c881757461d360460427069f59fb955bfd00240b00e520671"
     },
     "theme": {
       "path": "theme.json",
@@ -70,17 +70,17 @@
       },
       "pdf": {
         "path": "Yuyuan_Han_Academic_CV.pdf",
-        "sha256": "940fccd69e4ec3a8834c9f8bf58e4e38f601fdd4272640a286dfd85e83ffed84",
-        "bytes": 59294
+        "sha256": "f9ba00cca7b81af070b69ac4de7a17e294fe197ca1d7e22d3fad08ce1ff9e8c5",
+        "bytes": 59199
       },
       "html": {
         "path": "Yuyuan_Han_Academic_CV.html",
-        "sha256": "7caa7e55b99ea1e58c7dce531434294fedd9a962a176b60260515cec09b97df8",
-        "bytes": 15106
+        "sha256": "31adaf72c03c53bc60f8c7710e2464510339648c1404ddfafe253c5ea880c9e9",
+        "bytes": 14968
       },
       "checks": {
         "page_count": 2,
-        "extracted_characters": 5561,
+        "extracted_characters": 5423,
         "embedded_fonts": [
           "/AAAAAA+NotoSans-Bold",
           "/AAAAAA+NotoSans-Italic",
@@ -382,7 +382,7 @@
       },
       "layout": {
         "page_count": 2,
-        "lowest_content_y": 74.05,
+        "lowest_content_y": 87.05,
         "positions": [
           {
             "page": 1,
@@ -477,119 +477,119 @@
             "kind": "bullet",
             "source": "projects.lift.bullets[0]",
             "top": 469.25,
-            "bottom": 441.25,
-            "text": "Showed that removing reconstruction moves the design problem to the 1D-to-2D lift; organized lifts into a spectrum from fixed-physics inverse to content-adaptive retrieval."
+            "bottom": 454.25,
+            "text": "Showed that without reconstruction the 1D-to-2D lift is the design problem; mapped the lift spectrum."
           },
           {
             "page": 1,
             "kind": "bullet",
             "source": "projects.lift.bullets[1]",
-            "top": 441.25,
-            "bottom": 413.25,
-            "text": "Proposed STSF + TPLS: +3.2–9.9 pp mIoU over the prior image-free method, near-constant accuracy down to 0.78% sampling, and up to +21.7 pp over clean-trained reconstruct-then-segment at 20 dB noise."
+            "top": 454.25,
+            "bottom": 426.25,
+            "text": "Proposed STSF + TPLS: +3.2–9.9 pp over prior image-free methods; near-constant accuracy down to 0.78% sampling; up to +21.7 pp over clean-trained reconstruct-then-segment at 20 dB noise."
           },
           {
             "page": 1,
             "kind": "project",
             "source": "projects.shsi",
-            "top": 405.25,
-            "bottom": 390.15,
+            "top": 418.25,
+            "bottom": 403.15,
             "text": "Sparse Hadamard single-pixel imaging"
           },
           {
             "page": 1,
             "kind": "detail",
             "source": "projects.shsi.role",
-            "top": 390.15,
-            "bottom": 375.15,
+            "top": 403.15,
+            "bottom": 388.15,
             "text": "Optics Express · 2025 · Paper · Code"
           },
           {
             "page": 1,
             "kind": "bullet",
             "source": "projects.shsi.bullets[0]",
-            "top": 375.15,
-            "bottom": 347.15,
-            "text": "Gave orthogonal Hadamard patterns tunable sparsity (two acquisition modes, full theory): noise-robust imaging through scattering, low-order matrices that save memory, and no training or post-processing."
+            "top": 388.15,
+            "bottom": 360.15,
+            "text": "Gave orthogonal Hadamard patterns tunable sparsity: noise-robust imaging through scattering, low-order matrices that save memory, no training or post-processing."
           },
           {
             "page": 1,
             "kind": "project",
             "source": "projects.loop",
-            "top": 339.15,
-            "bottom": 324.05,
+            "top": 352.15,
+            "bottom": 337.05,
             "text": "LDGI · Optical phased-array imaging"
           },
           {
             "page": 1,
             "kind": "detail",
             "source": "projects.loop.role",
-            "top": 324.05,
-            "bottom": 309.05,
+            "top": 337.05,
+            "bottom": 322.05,
             "text": "Optics Communications · 2025 · Paper · Code"
           },
           {
             "page": 1,
             "kind": "bullet",
             "source": "projects.loop.bullets[0]",
-            "top": 309.05,
-            "bottom": 281.05,
-            "text": "Showed that line patterns from one-dimensional optical phased arrays break the noise symmetry assumed by ghost-imaging denoising; proposed LDGI (orders-of-magnitude gains) and validated it optically."
+            "top": 322.05,
+            "bottom": 294.05,
+            "text": "Showed that line patterns from one-dimensional optical phased arrays break the noise symmetry of ghost-imaging denoising; proposed LDGI (orders-of-magnitude gains), validated optically."
           },
           {
             "page": 1,
             "kind": "section",
             "source": "",
-            "top": 273.05,
-            "bottom": 239.05,
+            "top": 286.05,
+            "bottom": 252.05,
             "text": "Current Research"
           },
           {
             "page": 1,
             "kind": "body",
             "source": "narrative.current_summary",
-            "top": 239.05,
-            "bottom": 206.05,
+            "top": 252.05,
+            "bottom": 219.05,
             "text": "Developing acquisition-aware models and adapting pretrained multimodal models to bucket-detector signals. Planned visiting research: time-domain diffuse optics and 3D reconstruction."
           },
           {
             "page": 1,
             "kind": "section",
             "source": "",
-            "top": 206.05,
-            "bottom": 172.05,
+            "top": 219.05,
+            "bottom": 185.05,
             "text": "Additional Experience"
           },
           {
             "page": 1,
             "kind": "body",
             "source": "research_background.electro_optic",
-            "top": 172.05,
-            "bottom": 154.05,
+            "top": 185.05,
+            "bottom": 167.05,
             "text": "Photonic device modeling · Modeled and optimized electro-optic phased-array geometries for beam steering."
           },
           {
             "page": 1,
             "kind": "body",
             "source": "research_background.optical_systems",
-            "top": 154.05,
-            "bottom": 123.05,
+            "top": 167.05,
+            "bottom": 136.05,
             "text": "Optical system integration · Led mechanical design, optical alignment and system integration; participated in underwater field tests."
           },
           {
             "page": 1,
             "kind": "section",
             "source": "",
-            "top": 123.05,
-            "bottom": 89.05,
+            "top": 136.05,
+            "bottom": 102.05,
             "text": "Award"
           },
           {
             "page": 1,
             "kind": "body",
             "source": "awards[0]",
-            "top": 89.05,
-            "bottom": 74.05,
+            "top": 102.05,
+            "bottom": 87.05,
             "text": "2024 · Second Prize, National Post-Graduate Mathematical Contest in Modeling · Code"
           },
           {
@@ -802,17 +802,17 @@
       },
       "pdf": {
         "path": "Yuyuan_Han_Internship_Resume.pdf",
-        "sha256": "9b07575d29d12b436d132cca37064955560036e3306ddbe9fc4755f431ac4fb0",
-        "bytes": 35584
+        "sha256": "1bff29effff9eeaf73b18e1906649ec2e575097d5d0da0c13f560149c9e81e52",
+        "bytes": 35462
       },
       "html": {
         "path": "Yuyuan_Han_Internship_Resume.html",
-        "sha256": "68d8573af80407a43398cce430476c381ffd666824e7c64d03b8866111ca18d1",
-        "bytes": 9126
+        "sha256": "8bf225111b8e2572d7cc3ead13007e9853153dc3d71d9985e136550d370eefa1",
+        "bytes": 8988
       },
       "checks": {
         "page_count": 1,
-        "extracted_characters": 2427,
+        "extracted_characters": 2289,
         "embedded_fonts": [
           "/AAAAAA+NotoSans-Bold",
           "/AAAAAA+NotoSans-Regular"
@@ -952,7 +952,7 @@
       },
       "layout": {
         "page_count": 1,
-        "lowest_content_y": 79.55,
+        "lowest_content_y": 93.05,
         "positions": [
           {
             "page": 1,
@@ -1047,127 +1047,127 @@
             "kind": "bullet",
             "source": "projects.lift.bullets[0]",
             "top": 485.75,
-            "bottom": 456.75,
-            "text": "Showed that removing reconstruction moves the design problem to the 1D-to-2D lift; organized lifts into a spectrum from fixed-physics inverse to content-adaptive retrieval."
+            "bottom": 470.25,
+            "text": "Showed that without reconstruction the 1D-to-2D lift is the design problem; mapped the lift spectrum."
           },
           {
             "page": 1,
             "kind": "bullet",
             "source": "projects.lift.bullets[1]",
-            "top": 456.75,
-            "bottom": 427.75,
-            "text": "Proposed STSF + TPLS: +3.2–9.9 pp mIoU over the prior image-free method, near-constant accuracy down to 0.78% sampling, and up to +21.7 pp over clean-trained reconstruct-then-segment at 20 dB noise."
+            "top": 470.25,
+            "bottom": 441.25,
+            "text": "Proposed STSF + TPLS: +3.2–9.9 pp over prior image-free methods; near-constant accuracy down to 0.78% sampling; up to +21.7 pp over clean-trained reconstruct-then-segment at 20 dB noise."
           },
           {
             "page": 1,
             "kind": "project",
             "source": "projects.shsi",
-            "top": 422.75,
-            "bottom": 407.15,
+            "top": 436.25,
+            "bottom": 420.65,
             "text": "Sparse Hadamard single-pixel imaging"
           },
           {
             "page": 1,
             "kind": "detail",
             "source": "projects.shsi.role",
-            "top": 407.15,
-            "bottom": 391.65,
+            "top": 420.65,
+            "bottom": 405.15,
             "text": "Optics Express · 2025 · Paper · Code"
           },
           {
             "page": 1,
             "kind": "bullet",
             "source": "projects.shsi.bullets[0]",
-            "top": 391.65,
-            "bottom": 362.65,
-            "text": "Gave orthogonal Hadamard patterns tunable sparsity (two acquisition modes, full theory): noise-robust imaging through scattering, low-order matrices that save memory, and no training or post-processing."
+            "top": 405.15,
+            "bottom": 376.15,
+            "text": "Gave orthogonal Hadamard patterns tunable sparsity: noise-robust imaging through scattering, low-order matrices that save memory, no training or post-processing."
           },
           {
             "page": 1,
             "kind": "project",
             "source": "projects.loop",
-            "top": 357.65,
-            "bottom": 342.05,
+            "top": 371.15,
+            "bottom": 355.55,
             "text": "LDGI · Optical phased-array imaging"
           },
           {
             "page": 1,
             "kind": "detail",
             "source": "projects.loop.role",
-            "top": 342.05,
-            "bottom": 326.55,
+            "top": 355.55,
+            "bottom": 340.05,
             "text": "Optics Communications · 2025 · Paper · Code"
           },
           {
             "page": 1,
             "kind": "bullet",
             "source": "projects.loop.bullets[0]",
-            "top": 326.55,
-            "bottom": 297.55,
-            "text": "Showed that line patterns from one-dimensional optical phased arrays break the noise symmetry assumed by ghost-imaging denoising; proposed LDGI (orders-of-magnitude gains) and validated it optically."
+            "top": 340.05,
+            "bottom": 311.05,
+            "text": "Showed that line patterns from one-dimensional optical phased arrays break the noise symmetry of ghost-imaging denoising; proposed LDGI (orders-of-magnitude gains), validated optically."
           },
           {
             "page": 1,
             "kind": "section",
             "source": "",
-            "top": 292.55,
-            "bottom": 261.55,
+            "top": 306.05,
+            "bottom": 275.05,
             "text": "Current Research"
           },
           {
             "page": 1,
             "kind": "body",
             "source": "narrative.current_summary",
-            "top": 261.55,
-            "bottom": 227.55,
+            "top": 275.05,
+            "bottom": 241.05,
             "text": "Developing acquisition-aware models and adapting pretrained multimodal models to bucket-detector signals. Planned visiting research: time-domain diffuse optics and 3D reconstruction."
           },
           {
             "page": 1,
             "kind": "section",
             "source": "",
-            "top": 227.55,
-            "bottom": 196.55,
+            "top": 241.05,
+            "bottom": 210.05,
             "text": "Open Source & Tools"
           },
           {
             "page": 1,
             "kind": "body",
             "source": "internship_technical[0]",
-            "top": 196.55,
-            "bottom": 168.55,
+            "top": 210.05,
+            "bottom": 182.05,
             "text": "Open source · remote-gpu-trainer, an agent skill for Claude Code and Codex that runs, verifies and delivers GPU experiments (60+ GitHub stars)"
           },
           {
             "page": 1,
             "kind": "body",
             "source": "internship_technical[1]",
-            "top": 168.55,
-            "bottom": 140.55,
+            "top": 182.05,
+            "bottom": 154.05,
             "text": "Tools & lab · PyTorch, MATLAB, COMSOL; DMD/SLM illumination, single-pixel detection, optical alignment and system integration"
           },
           {
             "page": 1,
             "kind": "body",
             "source": "internship_technical[2]",
-            "top": 140.55,
-            "bottom": 126.05,
+            "top": 154.05,
+            "bottom": 139.55,
             "text": "Device modeling · Electro-optic phased-array geometry modeling and optimization for beam steering"
           },
           {
             "page": 1,
             "kind": "section",
             "source": "",
-            "top": 126.05,
-            "bottom": 95.05,
+            "top": 139.55,
+            "bottom": 108.55,
             "text": "Award"
           },
           {
             "page": 1,
             "kind": "body",
             "source": "awards[0]",
-            "top": 95.05,
-            "bottom": 79.55,
+            "top": 108.55,
+            "bottom": 93.05,
             "text": "2024 · Second Prize, National Post-Graduate Mathematical Contest in Modeling · Code"
           }
         ]
