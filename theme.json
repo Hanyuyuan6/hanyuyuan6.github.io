@@ -2,10 +2,13 @@
   "selected": "harbor",
   "dark": "night",
   "mark": {
-    "tile": "#0b1220",
-    "tile_to": "#132438",
-    "ink": "#eef3f8",
-    "pixel": "#ffd166"
+    "tile": "#0b0a10",
+    "tile_to": "#1a1426",
+    "light": "#8b5cf6",
+    "light_to": "#c4b5fd",
+    "signal": "#f3efff",
+    "signal_to": "#8b5cf6",
+    "pixel": "#f5c33b"
   },
   "palettes": {
     "harbor": {
