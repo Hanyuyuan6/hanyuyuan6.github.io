@@ -49,6 +49,15 @@ def png_dimensions(data):
     return int.from_bytes(data[16:20], 'big'), int.from_bytes(data[20:24], 'big')
 
 
+def preview_error(original_path, preview_path):
+    """Mean absolute RGB difference between a preview and the whole original scaled to its size."""
+    from PIL import Image, ImageChops, ImageStat
+    with Image.open(original_path) as original, Image.open(preview_path) as preview:
+        shown = preview.convert('RGB')
+        expected = original.convert('RGB').resize(shown.size, Image.LANCZOS)
+    return sum(ImageStat.Stat(ImageChops.difference(shown, expected)).mean) / 3
+
+
 def webp_dimensions(data):
     """Read WebP canvas/frame dimensions without an imaging dependency."""
     if len(data) < 20 or data[:4] != b'RIFF' or data[8:12] != b'WEBP':
@@ -292,9 +301,11 @@ def validate(root):
 
         require(len(figures) == 3 and len({f['id'] for f in figures}) == 3 and {f['id'] for f in figures} == expected_figure_ids, 'Every selected paper has exactly one reviewed figure')
         require(isinstance(portrait, dict), 'Reviewed portrait metadata is present')
-        # No long captions (owner, round 2): a preview may carry only its panel label and a link.
+        # No long captions (owner, round 2): a preview carries only its figure number and a link.
         captions = re.findall(r'<figcaption[^>]*>(.*?)</figcaption>', home_text, re.S)
-        require(len(captions) == len(figures) and all(re.fullmatch(r'Fig\. \d+ \([a-z](?:–[a-z])?\) · <a href="[^"]+">Full figure</a>', c) for c in captions), 'Figure captions are only a panel label and a full-figure link')
+        require(len(captions) == len(figures) and all(re.fullmatch(r'Fig\. \d+ · <a href="[^"]+">Full size</a>', c) for c in captions), 'Figure captions are only a figure number and a full-size link')
+        # No partial thumbnails (owner, 2026-10-12): every preview shows the whole figure.
+        require(all('teaser' not in f and 'crop' not in json.dumps(f) for f in figures), 'Figure records define no preview crop')
         require(len(home.images) == 4, 'Homepage renders one portrait and three research figures')
         records = [('figure ' + f['id'], f, False) for f in figures]
         if isinstance(portrait, dict):
@@ -327,26 +338,29 @@ def validate(root):
             if len(matched) != 1:
                 continue
             image = matched[0][0]
-            expected_alt = record.get('alt') if is_portrait else record.get('teaser', {}).get('alt')
+            expected_alt = record.get('alt')
             require(bool(expected_alt) and image.get('alt', '').strip() == expected_alt.strip(), f'Preview alt text matches the reviewed record: {label}')
             if not is_portrait:
-                caption = f'<figcaption class="figure-caption">{escape(record["teaser"]["panels"], quote=True)} · <a href="{escape(relative, quote=True)}">Full figure</a></figcaption>'
-                require(caption in home_text, f'Preview names the panels it shows and links the full figure: {label}')
+                number = re.match(r'Fig\. \d+', record.get('figure', ''))
+                caption = f'<figcaption class="figure-caption">{escape(number.group(0) if number else "?", quote=True)} · <a href="{escape(relative, quote=True)}">Full size</a></figcaption>'
+                require(caption in home_text, f'Preview names its figure and links the full-size original: {label}')
             candidates = [part.strip().rsplit(' ', 1) for part in image.get('srcset', '').split(',') if part.strip()]
             require(len(candidates) >= 2 and image.get('sizes'), f'Preview is responsive (srcset and sizes): {label}')
-            crop = record.get('teaser', {}).get('crop') if not is_portrait else [0, 0, record['width'], record['height']]
             for candidate, descriptor in candidates:
                 file = root / 'dist' / candidate
                 ok = file.is_file() and descriptor.endswith('w')
                 if ok:
                     width, height = webp_dimensions(file.read_bytes())
-                    ok = width == int(descriptor[:-1]) and abs(width / height - (crop[2] - crop[0]) / (crop[3] - crop[1])) < 0.01 and file.stat().st_size <= 220_000
-                require(ok, f'Preview candidate exists, matches its width and aspect, under 220 kB: {candidate}')
+                    ok = width == int(descriptor[:-1]) and abs(width / height - record['width'] / record['height']) < 0.01 and file.stat().st_size <= 220_000
+                require(ok, f'Preview candidate exists, keeps the whole original’s aspect and is under 220 kB: {candidate}')
             default = root / 'dist' / image.get('src', '')
             if default.is_file():
                 width, height = webp_dimensions(default.read_bytes())
                 require((image.get('width'), image.get('height')) == (str(width), str(height)), f'HTML declares the preview’s intrinsic size: {label}')
                 first_view_bytes += default.stat().st_size
+                if not is_portrait and source.is_file():
+                    # Same aspect is not enough: the pixels must be the whole original, downscaled.
+                    require(preview_error(source, default) <= 6.0, f'Preview is the whole original, downscaled (no crop or padding): {label}')
             else:
                 require(False, f'Default preview exists: {label}')
         require(first_view_bytes <= IMAGE_BUDGET, f'First-view image payload {first_view_bytes} bytes within {IMAGE_BUDGET}')

@@ -263,19 +263,16 @@ def save_webp(image: Image.Image, path: Path) -> None:
 
 
 def derive_images(figure_records: dict[str, Any], source_dir: Path, output_dir: Path) -> dict[str, Any]:
-    """Responsive, legible previews cut from the reviewed originals (never edited)."""
+    """Responsive previews of the whole reviewed originals (never cropped or edited)."""
     derived: dict[str, Any] = {"figures": {}, "portrait": []}
     for record in figure_records["figures"]:
-        x0, y0, x1, y1 = record["teaser"]["crop"]
         with Image.open(source_dir / record["path"]) as original:
-            if not (0 <= x0 < x1 <= original.width and 0 <= y0 < y1 <= original.height):
-                raise ValueError(f"Teaser crop lies outside {record['path']}")
-            crop = original.convert("RGB").crop((x0, y0, x1, y1))
+            whole = original.convert("RGB")
         variants = []
-        for width in sorted({min(w, crop.width) for w in figure_records["teaser_widths"]}):
-            height = round(crop.height * width / crop.width)
+        for width in sorted({min(w, whole.width) for w in figure_records["preview_widths"]}):
+            height = round(whole.height * width / whole.width)
             relative = PurePosixPath(f"assets/research/{record['id']}-{width}.webp")
-            save_webp(crop.resize((width, height), Image.LANCZOS), output_dir / relative)
+            save_webp(whole.resize((width, height), Image.LANCZOS), output_dir / relative)
             variants.append({"path": str(relative), "width": width, "height": height})
         derived["figures"][record["id"]] = variants
     portrait = figure_records["portrait"]
@@ -286,6 +283,14 @@ def derive_images(figure_records: dict[str, Any], source_dir: Path, output_dir: 
             save_webp(image.resize((width, width), Image.LANCZOS), output_dir / relative)
             derived["portrait"].append({"path": str(relative), "width": width, "height": width})
     return derived
+
+
+def figure_number(figure: dict[str, Any]) -> str:
+    """'Fig. 1 (a–i)' -> 'Fig. 1': the preview shows every panel, so the caption names only the figure."""
+    match = re.match(r"Fig\. \d+", figure["figure"])
+    if match is None:
+        raise ValueError(f"Figure label must start with 'Fig. N': {figure['figure']}")
+    return match.group(0)
 
 
 def srcset(variants: list[dict[str, Any]]) -> str:
@@ -474,14 +479,14 @@ def selected_research(
         figure_html = (
             '<figure class="research-figure">'
             f'<a class="figure-link" href="{e(figure["path"])}" '
-            f'aria-label="Open the complete {e(figure["figure"])} of {e(title)}">'
+            f'aria-label="Open {e(figure["figure"])} of {e(title)} at full size">'
             f'<img src="{e(default["path"])}" srcset="{srcset(variants)}" '
-            'sizes="(max-width: 640px) calc(100vw - 32px), 280px" '
-            f'alt="{e(figure["teaser"]["alt"])}" width="{default["width"]}" height="{default["height"]}" '
+            'sizes="(max-width: 640px) calc(100vw - 32px), 300px" '
+            f'alt="{e(figure["alt"])}" width="{default["width"]}" height="{default["height"]}" '
             f'loading="{"eager" if index == 1 else "lazy"}" decoding="async"></a>'
-            # The preview is a legible crop; say so, and link the complete figure.
-            f'<figcaption class="figure-caption">{e(figure["teaser"]["panels"])} · '
-            f'<a href="{e(figure["path"])}">Full figure</a></figcaption></figure>'
+            # The preview is the whole figure (owner, 2026-10-12: no partial thumbnails).
+            f'<figcaption class="figure-caption">{e(figure_number(figure))} · '
+            f'<a href="{e(figure["path"])}">Full size</a></figcaption></figure>'
         )
         entries.append(
             f'<article class="research-entry" id="research-{e(entry_id)}">'

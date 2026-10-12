@@ -11,7 +11,7 @@ Source for <https://hanyuyuan6.github.io/>: a static, research-first homepage pl
 | `theme.json` | The one colour source: five light palettes (`selected` picks one) and the automatic dark palette, used by the site, icons, social card and CVs |
 | `build_site.py` | Builds `dist/`: homepage, 404 page, sitemap, robots.txt, YH monogram icons, social card, `publications.bib` and responsive figure previews |
 | `build_cv.py`, `cv-variants.json` | Builds the CVs (same content model, variant-specific selection) |
-| `research-figures.json` | Reviewed paper figures: source, hash, preview crop and alt text |
+| `research-figures.json` | Reviewed paper figures: source, hash and alt text (previews show the whole figure) |
 | `fonts/` | Noto Sans 2.015 (SIL Open Font License 1.1, see `fonts/OFL.txt`) for reproducible PDFs |
 | `check.py` | Content, link, image, metadata and allowlist checks on the built site and PDFs |
 | `check_layout.py` | Renders the site in Chromium at 1440/1024/390 px (and 1440 px dark) and checks spacing, overflow, image sharpness and BibTeX-toggle alignment |
@@ -39,7 +39,7 @@ When a CV's content changes, `check.py` stops until the new pages have been look
 ## Common updates
 
 1. **New paper.** Add one record to `profile.json` → `publications` with the full ordered author list, venue, volume/issue/pages, year, DOI and link; mark arXiv versions `Preprint`. Optionally add a News item. Rebuild, review the CV pages, commit.
-2. **New selected work.** Add a project to `projects`, list it in `selected_project_ids`, and add its figure to `research-figures.json` with a SHA-256 hash and a `teaser.crop` box; previews are generated automatically.
+2. **New selected work.** Add a project to `projects`, list it in `selected_project_ids`, and add its figure to `research-figures.json` with a SHA-256 hash; whole-figure previews are generated automatically (crops are refused by `check.py`).
 3. **End of the visiting period.** Update `person`, `appointments` and `directions` together, then rebuild.
 4. **Change the colours.** Set `selected` in `theme.json` to `harbor`, `paper`, `classic`, `graphite` or `ivory` (or `dark` to `null` to drop dark mode), run `python build.py --public-only`, review the CV pages and commit. `check.py` holds every palette to WCAG AA contrast.
 
