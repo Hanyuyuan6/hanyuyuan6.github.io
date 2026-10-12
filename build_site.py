@@ -663,7 +663,7 @@ def build(profile: dict[str, Any], output_dir: Path, *, source_dir: Path | None 
     direction = str(narrative.get("long_term") or narrative.get("direction", "") or "").strip()
     welcome = str(narrative.get("welcome", "") or "").strip()
     updated = date.fromisoformat(str(profile.get("updated", "2026-10-11"))).strftime("%B %Y")
-    title = f'{person["name"]} · Computational imaging & physics-aware learning'
+    title = f'{person["name"]} · {narrative["field"]}'
     structured = {
         "@context": "https://schema.org",
         "@type": "Person",
@@ -692,7 +692,7 @@ def build(profile: dict[str, Any], output_dir: Path, *, source_dir: Path | None 
         "PORTRAIT": portrait_image(portrait, derived["portrait"], str(person["name"])),
         "IDENTITY": institution,
         "VISITING_IDENTITY": visiting_html,
-        "FIELD": e(narrative.get("field", "Computational imaging · Physics-aware learning")),
+        "FIELD": e(narrative["field"]),
         "HERO": e(narrative["hero"]),
         "BIO": e(narrative["bio"]),
         "RESEARCH_BACKGROUND": "".join(f'<p><strong>{e(row["title"])}</strong> · {e(row["summary"])}</p>' for row in sequence(profile, "research_background")),

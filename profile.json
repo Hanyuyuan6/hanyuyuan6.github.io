@@ -22,7 +22,7 @@
     "welcome": "I welcome research collaborations and research internships in computational imaging, image-free sensing and machine perception.",
     "resume_summary": "I design single-pixel optical measurements and train networks that act on the raw signal rather than on a reconstructed image.",
     "long_term": "",
-    "internship_summary": "PhD researcher in single-pixel imaging and image-free sensing: optical measurement design and learning on raw signals.",
+    "internship_summary": "PhD researcher in single-pixel imaging and image-free sensing: designs optical measurements and trains networks that act directly on the raw signal.",
     "current_summary": "Acquisition-aware single-pixel sensing with optical-bench tests (manuscript in preparation); language tasks from raw single-pixel measurements (exploratory). Planned at Politecnico di Milano: time-domain diffuse optical tomography.",
     "meta_description": "Yuyuan Han, PhD student at Xi'an Jiaotong University visiting Politecnico di Milano: single-pixel imaging and image-free sensing from raw measurements.",
     "short_bio": "A single-pixel camera does not record an image; it records one number per illumination pattern. I design these measurements and train networks that act on the raw signal, so that perception does not wait for a reconstruction."
@@ -147,20 +147,6 @@
         "Noise-symmetry metric κs",
         "Validated optically"
       ]
-    },
-    {
-      "id": "acquisition",
-      "title": "Acquisition-aware learning and multimodal measurement interfaces",
-      "status": "Research in progress",
-      "summary": "Developing models that account for measurement conditions, and adapting pretrained multimodal models to bucket-detector signals.",
-      "bullets": [
-        "Developing acquisition-aware models for reconstruction and perception across changing measurement budgets and acquisition conditions.",
-        "Adapting pretrained multimodal models to detector signals, with current work on fine-tuning for direct interpretation of bucket measurements."
-      ],
-      "role": "Research development",
-      "period": "Current",
-      "publication_id": null,
-      "code_url": null
     }
   ],
   "directions": [

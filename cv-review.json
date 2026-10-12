@@ -1,29 +1,29 @@
 {
  "reviewed_on": "2026-10-12",
  "reviewer": "Claude (Opus 5.5)",
- "method": "pdftoppm at 100 dpi; every page of both public PDFs and both private Chinese PDFs inspected at full page after the 2026-10-12 third-round copy (unified narrative, Award & Service with 13 verified reviews, SPIFS-qualified Lift claim, corrected Comparison count). The build now fails on orphans, split number-unit pairs and line-initial CJK punctuation (typography_issues); all four variants pass. Checked by eye: no clipping, overlap, missing glyphs or abnormal page breaks; education order; Supervisor label.",
- "source_fingerprint": "cf694fdfd9bf2723f96f20213ece9f30f1893e796c08d3520661a7f995a03ee0",
+ "method": "pdftoppm at 100 dpi; every page of both public PDFs and both private Chinese PDFs inspected at full page after the 2026-10-12 third-round copy (unified narrative, Award & Service with 13 verified reviews, SPIFS-qualified Lift claim, corrected Comparison count). The build now fails on orphans, split number-unit pairs and line-initial CJK punctuation (typography_issues); all four variants pass. Checked by eye: no clipping, overlap, missing glyphs or abnormal page breaks; education order; Supervisor label. Later on 2026-10-12: PDF Subject and Keywords now come from profile.json (all page renders byte-identical); the internship summary was rewritten with a subject (\"designs optical measurements and trains networks…\") and the Chinese current-research line no longer says 学习. The two changed pages (internship EN and ZH page 1) and the changed Chinese academic page 1 were re-inspected at full page: no clipping, overlap, orphan or abnormal break; all other pages are byte-identical renders.",
+ "source_fingerprint": "efb02be5aa83404a1db63cdbd6cae56d3becbf9e5e433812430f132884659a81",
  "pdf_sha256": {
-  "Yuyuan_Han_Academic_CV.pdf": "9d1b66cce84cb993f0453dc2a93cf5689f8572449ceb85893158874ac1bc8161",
-  "Yuyuan_Han_Internship_Resume.pdf": "bc203ec528fa0e40da75d8c61fe4ab96e8027107ee0dad8ce6441f5839f6812f"
+  "Yuyuan_Han_Academic_CV.pdf": "a93aff51fe40abcfb2358c13e740375214b1576df6ab1f98f54dd10d58d25419",
+  "Yuyuan_Han_Internship_Resume.pdf": "05781101c4ca094ba74502db7d15006fc54785ff64566612fbda42e36e26ae75"
  },
  "html_visual_qa": "not separately reviewed; HTML CVs are unlinked companions of the PDFs",
- "reviewed_at": "2026-10-12T13:36:12.886649+00:00",
+ "reviewed_at": "2026-10-12T13:54:49.902752+00:00",
  "reviewed_pages": [
   {
    "id": "academic-en-page-1",
    "render_sha256": "c81f5fdeecd682364b688bc7d531e9dfb57246fb01d6245586cebbc30ad3dde1",
-   "pdf_sha256": "9d1b66cce84cb993f0453dc2a93cf5689f8572449ceb85893158874ac1bc8161"
+   "pdf_sha256": "a93aff51fe40abcfb2358c13e740375214b1576df6ab1f98f54dd10d58d25419"
   },
   {
    "id": "academic-en-page-2",
    "render_sha256": "a66b9e27587ee988b01549e84562f0f2615c77f89118476ce68407f5151a1f80",
-   "pdf_sha256": "9d1b66cce84cb993f0453dc2a93cf5689f8572449ceb85893158874ac1bc8161"
+   "pdf_sha256": "a93aff51fe40abcfb2358c13e740375214b1576df6ab1f98f54dd10d58d25419"
   },
   {
    "id": "internship-en-page-1",
-   "render_sha256": "fdd8f4847b435e002364f441730788bf2a3c3844356e9e300e6f31267e4c2cf6",
-   "pdf_sha256": "bc203ec528fa0e40da75d8c61fe4ab96e8027107ee0dad8ce6441f5839f6812f"
+   "render_sha256": "b13d8cb294e8293e44a879417e884599a1b11970fe94d62bad99168a1818313f",
+   "pdf_sha256": "05781101c4ca094ba74502db7d15006fc54785ff64566612fbda42e36e26ae75"
   }
  ]
 }

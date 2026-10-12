@@ -1,19 +1,19 @@
 {
   "schema_version": 2,
-  "built_at": "2026-10-12T13:35:49.353597+00:00",
-  "source_fingerprint": "cf694fdfd9bf2723f96f20213ece9f30f1893e796c08d3520661a7f995a03ee0",
+  "built_at": "2026-10-12T13:54:26.353249+00:00",
+  "source_fingerprint": "efb02be5aa83404a1db63cdbd6cae56d3becbf9e5e433812430f132884659a81",
   "inputs": {
     "profile": {
       "path": "profile.json",
-      "sha256": "9918df1e9bc2a2d368786a3da508c7f1deaa8968b8dd83a41d1c1adced72f3c7"
+      "sha256": "dc6ca0db8d481ba720157dd7de1d7defd83cafeb9d75b42fba89fef31caa2b0c"
     },
     "template": {
       "path": "build_cv.py",
-      "sha256": "edbec3042ac3a88c76584b98466ffb6321f9cd67150d05c18c1498d03819443f"
+      "sha256": "3a0de82d0a5c3336a75d19128d76ee5578711d7d39ec3b6f33ce84ca33de2e97"
     },
     "variants": {
       "path": "cv-variants.json",
-      "sha256": "bf1caafbb86bc163a80154f3b184033da0136fe47449106f518623ce23ed76e6"
+      "sha256": "e43c79d7be08cebb1070455b2908d98eb39ff0dd56e52ebc66711cc2cee69ee7"
     },
     "theme": {
       "path": "theme.json",
@@ -61,21 +61,21 @@
         "Author": "Yuyuan Han",
         "CreationDate": "D:20261012000000+00'00'",
         "Creator": "Yuyuan Han",
-        "Keywords": "",
+        "Keywords": "Computational Imaging, Single-Pixel Imaging, Image-Free Sensing, Inverse Problems, Machine Perception",
         "ModDate": "D:20261012000000+00'00'",
         "Producer": "",
-        "Subject": "Computational imaging, physics-aware learning and image-free perception",
+        "Subject": "Computational imaging & robust image-free sensing",
         "Title": "Yuyuan Han | Academic CV",
         "Trapped": "/False"
       },
       "pdf": {
         "path": "Yuyuan_Han_Academic_CV.pdf",
-        "sha256": "9d1b66cce84cb993f0453dc2a93cf5689f8572449ceb85893158874ac1bc8161",
-        "bytes": 59368
+        "sha256": "a93aff51fe40abcfb2358c13e740375214b1576df6ab1f98f54dd10d58d25419",
+        "bytes": 59447
       },
       "html": {
         "path": "Yuyuan_Han_Academic_CV.html",
-        "sha256": "02829c05ce51c84c3d9eccc4f3ee4a664aac582f93af7964136ef1f2f09ee02f",
+        "sha256": "59414727303d3ed62a98b777d6f43575b789b862052a573a4fcf2991ff93f01e",
         "bytes": 15225
       },
       "checks": {
@@ -802,26 +802,26 @@
         "Author": "Yuyuan Han",
         "CreationDate": "D:20261012000000+00'00'",
         "Creator": "Yuyuan Han",
-        "Keywords": "",
+        "Keywords": "Computational Imaging, Single-Pixel Imaging, Image-Free Sensing, Inverse Problems, Machine Perception",
         "ModDate": "D:20261012000000+00'00'",
         "Producer": "",
-        "Subject": "Computational imaging, physics-aware learning and image-free perception",
+        "Subject": "Computational imaging & robust image-free sensing",
         "Title": "Yuyuan Han | Research Internship Résumé",
         "Trapped": "/False"
       },
       "pdf": {
         "path": "Yuyuan_Han_Internship_Resume.pdf",
-        "sha256": "bc203ec528fa0e40da75d8c61fe4ab96e8027107ee0dad8ce6441f5839f6812f",
-        "bytes": 35617
+        "sha256": "05781101c4ca094ba74502db7d15006fc54785ff64566612fbda42e36e26ae75",
+        "bytes": 35718
       },
       "html": {
         "path": "Yuyuan_Han_Internship_Resume.html",
-        "sha256": "4476c4ff6ed049160d1637362c67f639a64f48f5982b046f286bb696eed71be0",
-        "bytes": 9252
+        "sha256": "7262ca36e914fb25c3d859b72bfc15fe667ddf4c861d305344905991406f8efe",
+        "bytes": 9282
       },
       "checks": {
         "page_count": 1,
-        "extracted_characters": 2482,
+        "extracted_characters": 2512,
         "embedded_fonts": [
           "/AAAAAA+NotoSans-Bold",
           "/AAAAAA+NotoSans-Regular"
@@ -969,7 +969,7 @@
             "source": "narrative.internship_summary",
             "top": 694.65,
             "bottom": 662.65,
-            "text": "PhD researcher in single-pixel imaging and image-free sensing: optical measurement design and learning on raw signals."
+            "text": "PhD researcher in single-pixel imaging and image-free sensing: designs optical measurements and trains networks that act directly on the raw signal."
           },
           {
             "page": 1,
