@@ -24,6 +24,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 SOURCE_DIR = Path(__file__).resolve().parent
 SITE_URL = "https://hanyuyuan6.github.io/"
+FIGURE_HEIGHT = 200  # px; desktop height of research previews, the same value as --fig-h in style.css
 TOKENS = re.compile(r"@@([A-Z_]+)@@")
 THEME_KEYS = ("bg", "ink", "muted", "link", "hover", "line", "tint", "wash", "accent")
 # The mark: a Y whose two arms carry light into one gold pixel, the single detector a
@@ -476,27 +477,31 @@ def selected_research(
         figure = figures[publication_id]
         variants = previews[publication_id]
         default = next(v for v in variants if v["width"] == 640)
+        # Figures share one height and take their own width, so the three rows keep one rhythm.
+        aspect = figure["width"] / figure["height"]
         figure_html = (
             '<figure class="research-figure">'
             f'<a class="figure-link" href="{e(figure["path"])}" '
             f'aria-label="Open {e(figure["figure"])} of {e(title)} at full size">'
             f'<img src="{e(default["path"])}" srcset="{srcset(variants)}" '
-            'sizes="(max-width: 640px) calc(100vw - 32px), 300px" '
+            f'sizes="(max-width: 640px) calc(100vw - 32px), {round(FIGURE_HEIGHT * aspect)}px" '
             f'alt="{e(figure["alt"])}" width="{default["width"]}" height="{default["height"]}" '
             f'loading="{"eager" if index == 1 else "lazy"}" decoding="async"></a>'
             # The preview is the whole figure (owner, 2026-10-12: no partial thumbnails).
             f'<figcaption class="figure-caption">{e(figure_number(figure))} · '
             f'<a href="{e(figure["path"])}">Full size</a></figcaption></figure>'
         )
+        # Key-result chips run in a full-width row under the figure and text (owner, 2026-10-12:
+        # "这里空这么大一节"), so a long chip list no longer leaves a hole under a short figure.
         entries.append(
-            f'<article class="research-entry" id="research-{e(entry_id)}">'
+            f'<article class="research-entry" id="research-{e(entry_id)}" style="--ar: {aspect:.4f}">'
             f'{figure_html}<div class="work-body">'
             f'<h3>{link(title, publication["url"])}</h3>'
             f'<p class="authors">{author_list(publication, person)}</p>'
             f'<p class="work-meta">{venue_line(publication, full=False)}</p>'
             f'<p class="work-summary">{e(str(project.get("summary", "")).strip())}</p>'
-            f'{highlights(project)}'
-            f'{publication_links(publication, project)}</div></article>'
+            f'{publication_links(publication, project)}</div>'
+            f'{highlights(project)}</article>'
         )
     return "\n".join(entries), selected_ids
 

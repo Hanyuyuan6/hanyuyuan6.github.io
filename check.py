@@ -323,6 +323,21 @@ def validate(root):
         require(len(captions) == len(figures) and all(re.fullmatch(r'Fig\. \d+ · <a href="[^"]+">Full size</a>', c) for c in captions), 'Figure captions are only a figure number and a full-size link')
         # No partial thumbnails (owner, 2026-10-12): every preview shows the whole figure.
         require(all('teaser' not in f and 'crop' not in json.dumps(f) for f in figures), 'Figure records define no preview crop')
+        # No hole under a short figure (owner, 2026-10-12): figures share one height, take their own
+        # width from --ar, and the key-result chips run in a full-width row after the text.
+        articles = re.findall(r'<article class="research-entry"[^>]*>.*?</article>', home_text, re.S)
+        by_path = {f['path']: f for f in figures}
+        layout_ok = len(articles) == len(figures)
+        for article in articles:
+            ar = re.search(r'style="--ar: ([0-9.]+)"', article)
+            src = re.search(r'<a class="figure-link" href="([^"]+)"', article)
+            record = by_path.get(src.group(1)) if src else None
+            layout_ok &= bool(ar and record and abs(float(ar.group(1)) - record['width'] / record['height']) < 0.001)
+            layout_ok &= article.find('<ul class="highlights"') > article.find('</div><ul class="highlights"') >= 0
+        require(layout_ok, 'Selected works: figure width follows its aspect; key results run full width after the text')
+        css_height = re.search(r'--fig-h: (\d+)px', (root / 'style.css').read_text(encoding='utf-8'))
+        py_height = re.search(r'^FIGURE_HEIGHT = (\d+)', (root / 'build_site.py').read_text(encoding='utf-8'), re.M)
+        require(bool(css_height and py_height) and css_height.group(1) == py_height.group(1), 'Preview height is one value in style.css and build_site.py')
         require(len(home.images) == 4, 'Homepage renders one portrait and three research figures')
         records = [('figure ' + f['id'], f, False) for f in figures]
         if isinstance(portrait, dict):

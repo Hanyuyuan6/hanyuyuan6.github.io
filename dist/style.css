@@ -89,9 +89,12 @@ h2 { font-size: 22px; line-height: 1.3; font-weight: 600; letter-spacing: -.2px;
 .news-list time { color: var(--muted); font-size: 14px; font-variant-numeric: tabular-nums; white-space: nowrap; }
 
 /* Selected research */
-.research-entry { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 28px; align-items: start; min-width: 0; padding: 0 0 26px; margin-bottom: 26px; border-bottom: 1px solid var(--line); }
+/* One figure height for all rows; each figure takes its own width (--ar is set per entry), the text
+   sits centred beside it, and the key-result chips run full width underneath. */
+.research-entry { --fig-h: 200px; display: grid; grid-template-columns: min(calc(var(--fig-h) * var(--ar, 1.5)), 46%) minmax(0, 1fr); gap: 14px 28px; align-items: center; min-width: 0; padding: 0 0 26px; margin-bottom: 26px; border-bottom: 1px solid var(--line); }
+.research-entry > .highlights { grid-column: 1 / -1; align-self: start; margin: 0; }
 .research-entry:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: 0; }
-.research-figure { width: 100%; min-width: 0; margin-top: 4px; }
+.research-figure { width: 100%; min-width: 0; }
 .figure-link { display: block; border: 1px solid var(--line); background: #fff; }
 .figure-link:hover { border-color: var(--muted); }
 .research-figure img { display: block; width: 100%; height: auto; }
@@ -166,7 +169,7 @@ h2 { font-size: 22px; line-height: 1.3; font-weight: 600; letter-spacing: -.2px;
 .not-found p { margin-top: 12px; color: var(--muted); }
 
 @media (max-width: 760px) {
-  .research-entry { grid-template-columns: 220px minmax(0, 1fr); gap: 22px; }
+  .research-entry { --fig-h: 160px; column-gap: 22px; }
 }
 @media (max-width: 700px) {
   .page-shell { width: calc(100% - 40px); }
@@ -183,7 +186,7 @@ h2 { font-size: 22px; line-height: 1.3; font-weight: 600; letter-spacing: -.2px;
   .portrait { grid-row: 1; }
   .intro-copy { grid-column: 1 / -1; }
   .intro-statement { margin-top: 20px; }
-  .research-entry { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .research-entry { grid-template-columns: minmax(0, 1fr); gap: 14px; align-items: start; }
   .research-figure { max-width: 420px; margin: 0; }
 }
 @media (max-width: 560px) {
