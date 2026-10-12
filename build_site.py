@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Build the public academic website from the shared, reviewed profile.
 
-Only the Python standard library is required. This builder writes index.html,
-style.css and reviewed images, preserving separately generated CVs.
+Requires Pillow for derived images. This builder writes index.html, 404.html,
+style.css, robots.txt, sitemap.xml, icons, a social card, responsive previews
+and the reviewed full-size images, preserving separately generated CVs.
 """
 
 from __future__ import annotations
@@ -18,9 +19,17 @@ import shutil
 from typing import Any
 from urllib.parse import urlsplit
 
+from PIL import Image, ImageDraw, ImageFont
+
 
 SOURCE_DIR = Path(__file__).resolve().parent
+SITE_URL = "https://hanyuyuan6.github.io/"
 TOKENS = re.compile(r"@@([A-Z_]+)@@")
+INK, MUTED, LINK, RULE = "#20252b", "#5d6570", "#205b87", "#dce1e6"
+# A 4×4 Walsh–Hadamard basis pattern (outer product of rows 1 and 2 of H4):
+# the measurement that single-pixel imaging is built on, used as the site icon.
+HADAMARD = [[1 if r * c > 0 else 0 for c in (1, 1, -1, -1)] for r in (1, -1, 1, -1)]
+MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
 
 def e(value: Any) -> str:
@@ -102,25 +111,60 @@ def author_list(publication: dict[str, Any], person: dict[str, Any]) -> str:
     )
 
 
-def venue_line(publication: dict[str, Any]) -> str:
+def is_preprint(publication: dict[str, Any]) -> bool:
+    return str(publication.get("status", "")).casefold() == "preprint"
+
+
+def venue_line(publication: dict[str, Any], *, full: bool = True) -> str:
     venue = str(publication.get("venue", "")).strip()
-    parts = [f'<cite>{e(venue)}</cite>'] if venue else []
-    volume = str(publication.get("volume", "") or "").strip()
-    issue = str(publication.get("issue", "") or "").strip()
-    if volume:
-        parts.append(e(volume) + (f"({e(issue)})" if issue else ""))
-    pages = str(publication.get("pages", "") or "").strip()
-    if pages:
-        parts.append(e(pages))
+    label = f"<cite>{e(venue)}</cite>" + (" preprint" if is_preprint(publication) else "")
+    parts = [label] if venue else []
+    if full:
+        volume = str(publication.get("volume", "") or "").strip()
+        issue = str(publication.get("issue", "") or "").strip()
+        if volume:
+            parts.append(e(volume) + (f"({e(issue)})" if issue else ""))
+        pages = str(publication.get("pages", "") or "").strip()
+        if pages:
+            parts.append(e(pages))
     year = str(publication.get("year", "") or "").strip()
     if year:
         parts.append(e(year))
     return " · ".join(parts)
 
 
-def publication_links(
-    publication: dict[str, Any], project: dict[str, Any] | None = None
-) -> str:
+def family_given(name: str) -> tuple[str, str]:
+    parts = name.split()
+    return parts[-1], " ".join(parts[:-1])
+
+
+def bibtex(publication: dict[str, Any]) -> str:
+    """A BibTeX record built only from the verified profile metadata."""
+    authors = [family_given(str(name)) for name in publication["authors"]]
+    stop = {"a", "an", "the", "on", "of", "for", "with", "how", "in"}
+    first_word = next(w for w in re.findall(r"[A-Za-z]+", publication["title"]) if w.lower() not in stop)
+    key = f"{authors[0][0].lower()}{publication['year']}{first_word.lower()}"
+
+    def tex(value: Any) -> str:
+        return str(value).replace("\\", "").replace("&", r"\&").replace("%", r"\%").replace("–", "--")
+
+    fields = [("title", "{" + tex(publication["title"]) + "}"), ("author", " and ".join(f"{f}, {g}" for f, g in authors))]
+    if is_preprint(publication):
+        kind = "misc"
+        fields += [("year", publication["year"]), ("eprint", publication.get("arxiv_id", "")), ("archivePrefix", "arXiv")]
+    else:
+        kind = "article"
+        fields.append(("journal", tex(publication["venue"])))
+        for name, value in (("volume", publication.get("volume")), ("number", publication.get("issue")), ("pages", publication.get("pages"))):
+            if value:
+                fields.append((name, tex(value)))
+        fields.append(("year", publication["year"]))
+    fields.append(("doi", publication["doi"]))
+    body = ",\n".join(f"  {name} = {{{value}}}" for name, value in fields if value != "")
+    return f"@{kind}{{{key},\n{body}\n}}"
+
+
+def publication_links(publication: dict[str, Any], project: dict[str, Any] | None = None) -> str:
     links = []
     paper_url = publication.get("url")
     doi = str(publication.get("doi", "") or "").strip()
@@ -131,23 +175,11 @@ def publication_links(
     code_url = (project or {}).get("code_url") or publication.get("code_url")
     if code_url:
         links.append(f'<a href="{e(url(code_url))}" aria-label="Code: {e(publication["title"])}">Code</a>')
-    return '<span class="resource-links">' + "".join(links) + "</span>" if links else ""
-
-
-def citation(
-    publication: dict[str, Any],
-    person: dict[str, Any],
-    *,
-    project: dict[str, Any] | None = None,
-) -> str:
-    identifier = slug(publication["id"])
-    return (
-        f'<div class="publication work-citation" id="publication-{e(identifier)}" '
-        f'data-publication-id="{e(publication["id"])}">'
-        f'<p class="authors">{author_list(publication, person)}</p>'
-        f'<div class="citation-tail"><p class="venue">{venue_line(publication)}</p>'
-        f'{publication_links(publication, project)}</div></div>'
+    links.append(
+        f'<details class="bibtex"><summary aria-label="BibTeX for {e(publication["title"])}">BibTeX</summary>'
+        f'<pre>{e(bibtex(publication))}</pre></details>'
     )
+    return '<div class="resource-links">' + "".join(links) + "</div>"
 
 
 def reviewed_asset(record: dict[str, Any], source_dir: Path, *, portrait: bool = False) -> PurePosixPath:
@@ -175,13 +207,104 @@ def reviewed_asset(record: dict[str, Any], source_dir: Path, *, portrait: bool =
     return path
 
 
-def portrait_image(record: dict[str, Any], name: str) -> str:
+def save_webp(image: Image.Image, path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    image.save(path, "WEBP", quality=82, method=6)
+
+
+def derive_images(figure_records: dict[str, Any], source_dir: Path, output_dir: Path) -> dict[str, Any]:
+    """Responsive, legible previews cut from the reviewed originals (never edited)."""
+    derived: dict[str, Any] = {"figures": {}, "portrait": []}
+    for record in figure_records["figures"]:
+        x0, y0, x1, y1 = record["teaser"]["crop"]
+        with Image.open(source_dir / record["path"]) as original:
+            if not (0 <= x0 < x1 <= original.width and 0 <= y0 < y1 <= original.height):
+                raise ValueError(f"Teaser crop lies outside {record['path']}")
+            crop = original.convert("RGB").crop((x0, y0, x1, y1))
+        variants = []
+        for width in sorted({min(w, crop.width) for w in figure_records["teaser_widths"]}):
+            height = round(crop.height * width / crop.width)
+            relative = PurePosixPath(f"assets/research/{record['id']}-{width}.webp")
+            save_webp(crop.resize((width, height), Image.LANCZOS), output_dir / relative)
+            variants.append({"path": str(relative), "width": width, "height": height})
+        derived["figures"][record["id"]] = variants
+    portrait = figure_records["portrait"]
+    with Image.open(source_dir / portrait["path"]) as original:
+        image = original.convert("RGB")
+        for width in portrait["widths"]:
+            relative = PurePosixPath(f"assets/portrait-{width}.webp")
+            save_webp(image.resize((width, width), Image.LANCZOS), output_dir / relative)
+            derived["portrait"].append({"path": str(relative), "width": width, "height": width})
+    return derived
+
+
+def srcset(variants: list[dict[str, Any]]) -> str:
+    return ", ".join(f'{e(v["path"])} {v["width"]}w' for v in variants)
+
+
+def hadamard_icon(size: int, padding: int = 0, background: str = "#ffffff") -> Image.Image:
+    cell = (size - 2 * padding) // 4
+    image = Image.new("RGB", (size, size), background)
+    draw = ImageDraw.Draw(image)
+    for r, row in enumerate(HADAMARD):
+        for c, on in enumerate(row):
+            if on:
+                x, y = padding + c * cell, padding + r * cell
+                draw.rectangle((x, y, x + cell - 1, y + cell - 1), fill=INK)
+    return image
+
+
+def write_icons(output_dir: Path) -> None:
+    cells = "".join(
+        f'<rect x="{c * 8}" y="{r * 8}" width="8" height="8"/>'
+        for r, row in enumerate(HADAMARD) for c, on in enumerate(row) if on
+    )
+    svg = (
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">'
+        '<rect width="32" height="32" rx="4" fill="#fff"/>'
+        f'<g fill="{INK}">{cells}</g></svg>\n'
+    )
+    (output_dir / "favicon.svg").write_text(svg, encoding="utf-8", newline="\n")
+    hadamard_icon(64).save(output_dir / "favicon.ico", sizes=[(16, 16), (32, 32), (48, 48)])
+    hadamard_icon(180, padding=26).save(output_dir / "apple-touch-icon.png", optimize=True)
+
+
+def social_card(profile: dict[str, Any], portrait_path: Path, source_dir: Path, output_dir: Path) -> None:
+    """A 1200×630 link-preview card (og:image) in the site's own type and colours."""
+    person, narrative = profile["person"], profile["narrative"]
+    fonts = source_dir / "fonts"
+    bold = ImageFont.truetype(str(fonts / "NotoSans-Bold.ttf"), 64)
+    regular = ImageFont.truetype(str(fonts / "NotoSans-Regular.ttf"), 28)
+    small = ImageFont.truetype(str(fonts / "NotoSans-Regular.ttf"), 24)
+    card = Image.new("RGB", (1200, 630), "#ffffff")
+    with Image.open(portrait_path) as portrait:
+        card.paste(portrait.convert("RGB").resize((300, 300), Image.LANCZOS), (84, 165))
+    draw = ImageDraw.Draw(card)
+    x, right = 432, 1116
+    lines = [
+        (person["name"], bold, INK, 172),
+        (narrative["field"], regular, INK, 266),
+        (f'{person["position"]} · {person["institution"]}', small, MUTED, 322),
+        (f'{person["visiting_role"]} · {person["visiting_institution"]}', small, MUTED, 358),
+        (person["homepage"].replace("https://", "").rstrip("/"), small, LINK, 426),
+    ]
+    for text, font, colour, y in lines:
+        if x + draw.textlength(text, font=font) > right:
+            raise ValueError(f"Social card text overflows its 84 px margin: {text!r}")
+        draw.text((x, y), text, font=font, fill=colour)
+    draw.line((x, 412, right, 412), fill=RULE, width=2)
+    card.save(output_dir / "social-card.png", optimize=True)
+
+
+def portrait_image(record: dict[str, Any], variants: list[dict[str, Any]], name: str) -> str:
+    default = next(v for v in variants if v["width"] == 320)
     return (
         '<figure class="portrait">'
         f'<a class="portrait-link" href="{e(record["path"])}" '
         f'aria-label="Open full-size portrait of {e(name)}">'
-        f'<img src="{e(record["path"])}" alt="{e(record["alt"])}" '
-        f'width="{record["width"]}" height="{record["height"]}" '
+        f'<img src="{e(default["path"])}" srcset="{srcset(variants)}" '
+        'sizes="(max-width: 380px) 88px, (max-width: 640px) 112px, 144px" '
+        f'alt="{e(record["alt"])}" width="{default["width"]}" height="{default["height"]}" '
         'loading="eager" fetchpriority="high" decoding="async"></a></figure>'
     )
 
@@ -191,6 +314,7 @@ def selected_research(
     publications: list[dict[str, Any]],
     person: dict[str, Any],
     figures: dict[str, dict[str, Any]],
+    previews: dict[str, list[dict[str, Any]]],
 ) -> tuple[str, set[str]]:
     by_id = {str(publication["id"]): publication for publication in publications}
     selected_ids: set[str] = set()
@@ -198,105 +322,87 @@ def selected_research(
     for index, project in enumerate(projects, start=1):
         publication_id = str(project.get("publication_id", ""))
         publication = by_id.get(publication_id)
-        if publication_id and publication is None:
+        if publication is None:
             raise ValueError(f"Selected research references an unknown publication: {publication_id}")
         if publication_id in selected_ids:
             raise ValueError(f"A publication was selected twice: {publication_id}")
-        if publication:
-            selected_ids.add(publication_id)
-        title = (publication or {}).get("title") or project.get("title", "")
+        selected_ids.add(publication_id)
+        title = publication["title"]
         entry_id = slug(project.get("id", f"research-{index}"))
-        pub_status = project.get("status") or (publication or {}).get("status", "")
-        summary = str(project.get("summary", "")).strip()
-        bullets = project.get("bullets", [])
-        if not isinstance(bullets, list):
-            raise ValueError("Research bullets must be a list")
-        bullet_html = (
-            '<ul class="work-points">'
-            + "".join(f"<li>{e(item)}</li>" for item in bullets)
-            + "</ul>"
-            if bullets
-            else ""
-        )
-        heading = (
-            link(title, publication["url"])
-            if publication and publication.get("url")
-            else e(title)
-        )
-        bib = citation(publication, person, project=project) if publication else ""
         figure = figures[publication_id]
+        variants = previews[publication_id]
+        default = next(v for v in variants if v["width"] == 640)
         figure_html = (
             '<figure class="research-figure">'
             f'<a class="figure-link" href="{e(figure["path"])}" '
-            f'aria-label="Open full-size {e(figure["figure"])} for {e(title)}">'
-            f'<img src="{e(figure["path"])}" alt="{e(figure["alt"])}" '
-            f'width="{int(figure["width"])}" height="{int(figure["height"])}" '
+            f'aria-label="Open the complete {e(figure["figure"])} of {e(title)}">'
+            f'<img src="{e(default["path"])}" srcset="{srcset(variants)}" '
+            'sizes="(max-width: 640px) calc(100vw - 32px), 280px" '
+            f'alt="{e(figure["teaser"]["alt"])}" width="{default["width"]}" height="{default["height"]}" '
             f'loading="{"eager" if index == 1 else "lazy"}" decoding="async"></a></figure>'
         )
-        extra = f'<details class="research-details"><summary>Full citation</summary>{bib}</details>'
-        badge = status(pub_status) if pub_status.casefold() != "published" else ""
-        result_html = f'<p class="work-result">{e(project["result"])}</p>' if project.get("result") else ""
         entries.append(
             f'<article class="research-entry" id="research-{e(entry_id)}">'
-            f'{figure_html}<div class="work-body"><header class="work-header">'
-            f'<div class="work-heading"><h3>{heading}</h3>{badge}</div>'
-            f'<p class="work-meta"><cite>{e(publication["venue"])}</cite> · {e(publication["year"])}</p></header>'
-            f'<p class="work-summary">{e(summary)}</p>'
-            f'{result_html}'
-            f'<div class="work-links">{publication_links(publication, project)}'
-            f'<a href="{e(figure["path"])}">Full figure</a></div>{extra}</div></article>'
+            f'{figure_html}<div class="work-body">'
+            f'<h3>{link(title, publication["url"])}</h3>'
+            f'<p class="authors">{author_list(publication, person)}</p>'
+            f'<p class="work-meta">{venue_line(publication, full=False)}</p>'
+            f'<p class="work-summary">{e(str(project.get("summary", "")).strip())}</p>'
+            f'{publication_links(publication, project)}</div></article>'
         )
     return "\n".join(entries), selected_ids
 
 
-def other_publications(
-    publications: list[dict[str, Any]], selected_ids: set[str], person: dict[str, Any]
-) -> str:
+def other_publications(publications: list[dict[str, Any]], selected_ids: set[str], person: dict[str, Any]) -> str:
     entries = []
     for publication in publications:
         if str(publication["id"]) in selected_ids:
             continue
-        identifier = slug(publication["id"])
-        title = (
-            link(publication["title"], publication["url"])
-            if publication.get("url")
-            else e(publication["title"])
-        )
-        publication_status = str(publication.get("status", "") or "")
-        badge = "" if publication_status.casefold() == "published" else status(publication_status)
         entries.append(
-            f'<li class="publication publication-entry" id="publication-{e(identifier)}" '
+            f'<li class="publication publication-entry" id="publication-{e(slug(publication["id"]))}" '
             f'data-publication-id="{e(publication["id"])}">'
-            '<div class="publication-heading">'
-            f'<h3>{title}</h3>{badge}</div>'
+            f'<h3>{link(publication["title"], publication["url"])}</h3>'
             f'<p class="authors">{author_list(publication, person)}</p>'
-            '<div class="citation-tail">'
             f'<p class="venue">{venue_line(publication)}</p>'
-            f'{publication_links(publication)}</div></li>'
+            f'{publication_links(publication)}</li>'
         )
+    return "\n".join(entries)
+
+
+def news(rows: list[dict[str, Any]]) -> str:
+    entries, previous = [], None
+    for row in rows:
+        match = re.fullmatch(r"(\d{4})-(0[1-9]|1[0-2])", str(row.get("date", "")))
+        if not match:
+            raise ValueError(f"News dates must be YYYY-MM: {row.get('date')!r}")
+        if previous and row["date"] > previous:
+            raise ValueError("News must be listed newest first")
+        previous = row["date"]
+        text, target = str(row["text"]), row.get("link_text")
+        if row.get("url") and target and target in text:
+            before, after = text.split(target, 1)
+            body = e(before) + link(target, row["url"]) + e(after)
+        else:
+            body = e(text)
+        label = f'{MONTHS[int(match[2]) - 1]} {match[1]}'
+        entries.append(f'<li><time datetime="{e(row["date"])}">{e(label)}</time><p>{body}</p></li>')
     return "\n".join(entries)
 
 
 def current_directions(directions: list[dict[str, Any]]) -> str:
-    entries = []
-    for index, direction in enumerate(directions, start=1):
-        entries.append(
-            '<li class="direction-entry">'
-            f'<span class="direction-number" aria-hidden="true">{index:02d}</span>'
-            '<div><div class="direction-heading">'
-            f'<h3>{e(direction.get("title", ""))}</h3>'
-            f'{status(direction.get("status", ""))}</div>'
-            f'<p>{e(direction.get("description", ""))}</p></div></li>'
-        )
-    return "\n".join(entries)
+    return "\n".join(
+        '<li class="direction-entry"><div class="direction-heading">'
+        f'<h3>{e(direction.get("title", ""))}</h3>{status(direction.get("status", ""))}</div>'
+        f'<p>{e(direction.get("description", ""))}</p></li>'
+        for direction in directions
+    )
 
 
 def education(rows: list[dict[str, Any]]) -> str:
     entries = []
     for row in rows:
-        degree = row.get("degree", "")
         field = str(row.get("field", "") or "").strip()
-        degree_line = e(degree) + (f" · {e(field)}" if field else "")
+        degree_line = e(row.get("degree", "")) + (f" · {e(field)}" if field else "")
         dates = str(row.get("display_dates", "") or "").strip()
         entries.append(
             '<li><h4>' + e(row.get("institution", "")) + "</h4>"
@@ -338,9 +444,7 @@ def profile_links(rows: list[dict[str, Any]], *, primary: bool = False) -> str:
         rows = [row for row in rows if str(row.get("name", "")).casefold() in {
             "google scholar", "scholar", "orcid", "github"
         }]
-    return "\n".join(
-        f'<li>{link(row.get("name", ""), row["url"])}</li>' for row in rows
-    )
+    return "\n".join(f'<li>{link(row.get("name", ""), row["url"])}</li>' for row in rows)
 
 
 def cv_links(rows: list[dict[str, Any]]) -> str:
@@ -351,12 +455,45 @@ def cv_links(rows: list[dict[str, Any]]) -> str:
     )
 
 
-def build(
-    profile: dict[str, Any],
-    output_dir: Path,
-    *,
-    source_dir: Path | None = None,
-) -> Path:
+def awards(rows: list[dict[str, Any]]) -> str:
+    if not rows:
+        return ""
+    items = "".join(
+        f'<li><span>{e(row.get("title", ""))}</span>'
+        f'<span class="entry-dates">{e(row.get("year", ""))}</span>'
+        + (f' {link("Code", row["code_url"])}' if row.get("code_url") else "")
+        + "</li>"
+        for row in rows
+    )
+    return f'<div class="awards-block"><h3>Award</h3><ul>{items}</ul></div>'
+
+
+def write_support_files(profile: dict[str, Any], output_dir: Path) -> None:
+    updated = str(profile.get("updated", ""))
+    pages = ["", *(row["path"] for row in sequence(profile, "cvs"))]
+    urls = "".join(f"  <url><loc>{e(SITE_URL + path)}</loc><lastmod>{e(updated)}</lastmod></url>\n" for path in pages)
+    (output_dir / "sitemap.xml").write_text(
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + urls + "</urlset>\n",
+        encoding="utf-8", newline="\n",
+    )
+    (output_dir / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {SITE_URL}sitemap.xml\n", encoding="utf-8", newline="\n")
+    name = e(profile["person"]["name"])
+    (output_dir / "404.html").write_text(
+        '<!doctype html>\n<html lang="en">\n<head>\n  <meta charset="utf-8">\n'
+        '  <meta name="viewport" content="width=device-width, initial-scale=1">\n'
+        '  <meta name="robots" content="noindex">\n'
+        f'  <title>Page not found · {name}</title>\n'
+        '  <link rel="icon" href="/favicon.svg" type="image/svg+xml">\n'
+        '  <link rel="stylesheet" href="/style.css">\n</head>\n<body>\n'
+        '  <main class="page-shell not-found">\n    <h1>Page not found</h1>\n'
+        f'    <p>This page does not exist. Go to <a href="/">{name}’s homepage</a>.</p>\n'
+        '  </main>\n</body>\n</html>\n',
+        encoding="utf-8", newline="\n",
+    )
+
+
+def build(profile: dict[str, Any], output_dir: Path, *, source_dir: Path | None = None) -> Path:
     """Build the public site while leaving CV output and unrelated assets alone."""
     source_dir = Path(source_dir) if source_dir else SOURCE_DIR
     output_dir = Path(output_dir)
@@ -366,6 +503,9 @@ def build(
         raise ValueError("person.name is required")
     if not isinstance(narrative, dict) or not narrative.get("hero") or not narrative.get("bio"):
         raise ValueError("narrative.hero and narrative.bio are required")
+    description = str(narrative.get("meta_description", "")).strip()
+    if not 50 <= len(description) <= 160:
+        raise ValueError("narrative.meta_description must be 50-160 characters for search snippets")
     project_map = {p["id"]: p for p in sequence(profile, "projects")}
     projects = [project_map[pid] for pid in profile["selected_project_ids"]]
     publications = sorted(
@@ -388,14 +528,11 @@ def build(
     if not isinstance(portrait, dict):
         raise ValueError("The reviewed portrait metadata is required")
     assets = [reviewed_asset(portrait, source_dir, portrait=True)]
-    for project in projects:
-        record = figures[project["publication_id"]]
-        assets.append(reviewed_asset(record, source_dir))
-    selected, selected_ids = selected_research(projects, publications, person, figures)
-    roles = [
-        str(person.get("position", "") or "").strip(),
-        str(person.get("institution", "") or "").strip(),
-    ]
+    assets += [reviewed_asset(figures[project["publication_id"]], source_dir) for project in projects]
+    output_dir.mkdir(parents=True, exist_ok=True)
+    derived = derive_images(figure_records, source_dir, output_dir)
+    selected, selected_ids = selected_research(projects, publications, person, figures, derived["figures"])
+    roles = [str(person.get("position", "") or "").strip(), str(person.get("institution", "") or "").strip()]
     institution = "".join(f"<p>{e(role)}</p>" for role in roles if role)
     visiting = str(person.get("visiting_role", "") or "").strip()
     visiting_institution = str(person.get("visiting_institution", "") or "").strip()
@@ -407,57 +544,39 @@ def build(
         if visiting or visiting_institution
         else ""
     )
-    location = str(person.get("location", "") or "").strip()
     name_zh = str(person.get("name_zh", "") or "").strip()
     direction = str(narrative.get("long_term") or narrative.get("direction", "") or "").strip()
     welcome = str(narrative.get("welcome", "") or "").strip()
-    description = re.sub(r"\s+", " ", str(narrative["bio"])).strip()
-    updated = profile.get("last_updated")
-    if not updated:
-        source_date = str(profile.get("updated", "2026-10-11"))
-        updated = date.fromisoformat(source_date).strftime("%B %Y")
+    updated = date.fromisoformat(str(profile.get("updated", "2026-10-11"))).strftime("%B %Y")
+    title = f'{person["name"]} · Computational imaging & physics-aware learning'
     structured = {
         "@context": "https://schema.org",
         "@type": "Person",
         "name": person["name"],
+        "alternateName": name_zh,
+        "url": SITE_URL,
+        "image": SITE_URL + "assets/portrait-480.webp",
         "jobTitle": person.get("position", ""),
         "email": str(person.get("email", "")),
-        "affiliation": {
-            "@type": "CollegeOrUniversity",
-            "name": person.get("institution", ""),
-        },
+        "affiliation": [
+            {"@type": "CollegeOrUniversity", "name": person.get("institution", "")},
+            {"@type": "CollegeOrUniversity", "name": person.get("visiting_institution", "")},
+        ],
+        "knowsAbout": profile.get("platform_copy", {}).get("keywords", []),
         "sameAs": [url(row["url"]) for row in profiles],
     }
     structured_json = json.dumps(structured, ensure_ascii=False, indent=2)
     structured_json = structured_json.replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026")
-    awards = sequence(profile, "awards")
-    award_html = ""
-    if awards:
-        award_html = (
-            '<div class="awards-block"><h3>Award</h3><ul>'
-            + "".join(
-                f'<li><span>{e(row.get("title", ""))}</span>'
-                f'<span class="entry-dates">{e(row.get("year", ""))}</span></li>'
-                for row in awards
-            )
-            + "</ul></div>"
-        )
-    other_cv_html = ""
-    if len(cvs) > 2:
-        other_cv_html = '<p class="additional-cv">' + " · ".join(
-            link(row.get("label", "CV"), row["path"], local=True)
-            for row in cvs[2:]
-        ) + ' <span class="file-type">PDF</span></p>'
     replacements = {
-        "TITLE": e(f'{person["name"]} · Computational imaging & physics-aware learning'),
+        "TITLE": e(title),
         "DESCRIPTION": e(description),
+        "SOCIAL_ALT": e(f'{person["name"]}: {narrative.get("field", "")}'),
         "STRUCTURED_DATA": structured_json,
         "NAME": e(person["name"]),
         "CHINESE_NAME": f'<span lang="zh-Hans" class="chinese-name">{e(name_zh)}</span>' if name_zh else "",
-        "PORTRAIT": portrait_image(portrait, str(person["name"])),
+        "PORTRAIT": portrait_image(portrait, derived["portrait"], str(person["name"])),
         "IDENTITY": institution,
         "VISITING_IDENTITY": visiting_html,
-        "LOCATION": f'<p class="location">{e(location)}</p>' if location else "",
         "FIELD": e(narrative.get("field", "Computational imaging · Physics-aware learning")),
         "HERO": e(narrative["hero"]),
         "BIO": e(narrative["bio"]),
@@ -466,16 +585,15 @@ def build(
         "CV_LINKS": cv_links(cvs[:2]),
         "EMAIL": email_link(person.get("email", "")),
         "PRIMARY_PROFILES": profile_links(profiles, primary=True),
+        "NEWS": news(sequence(profile, "news")),
         "SELECTED_RESEARCH": selected,
         "DIRECTIONS": current_directions(sequence(profile, "directions")),
         "DIRECTION_PARAGRAPH": f'<p class="future-paragraph">{e(direction)}</p>' if direction else "",
         "PUBLICATIONS": other_publications(publications, selected_ids, person),
-        "PUBLICATION_COUNT": e(len(publications)),
         "SELECTED_COUNT": e(len(selected_ids)),
         "EDUCATION": education(sequence(profile, "education")),
         "APPOINTMENTS": appointments(sequence(profile, "appointments")),
-        "AWARDS": award_html,
-        "OTHER_CVS": other_cv_html,
+        "AWARDS": awards(sequence(profile, "awards")),
         "SOFTWARE": software([row for row in sequence(profile, "software") if row["name"] in profile["additional_code_ids"]]),
         "PROFILES": profile_links(profiles),
         "UPDATED": e(updated),
@@ -488,7 +606,6 @@ def build(
     document = TOKENS.sub(lambda match: replacements[match.group(1)], template)
     if TOKENS.search(document):
         raise ValueError("The generated page contains an unresolved template token")
-    output_dir.mkdir(parents=True, exist_ok=True)
     destination = output_dir / "index.html"
     destination.write_text(document, encoding="utf-8", newline="\n")
     shutil.copyfile(source_dir / "style.css", output_dir / "style.css")
@@ -496,6 +613,9 @@ def build(
         destination_asset = output_dir / relative
         destination_asset.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(source_dir / relative, destination_asset)
+    write_icons(output_dir)
+    social_card(profile, source_dir / portrait["path"], source_dir, output_dir)
+    write_support_files(profile, output_dir)
     return destination
 
 

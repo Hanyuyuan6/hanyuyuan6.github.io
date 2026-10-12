@@ -5,13 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
   <meta name="theme-color" content="#ffffff">
+  <title>@@TITLE@@</title>
   <meta name="description" content="@@DESCRIPTION@@">
-  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://hanyuyuan6.github.io/">
+  <meta property="og:type" content="profile">
+  <meta property="og:url" content="https://hanyuyuan6.github.io/">
   <meta property="og:title" content="@@TITLE@@">
   <meta property="og:description" content="@@DESCRIPTION@@">
-  <link rel="canonical" href="https://hanyuyuan6.github.io/">
-  <meta property="og:url" content="https://hanyuyuan6.github.io/">
-  <title>@@TITLE@@</title>
+  <meta property="og:image" content="https://hanyuyuan6.github.io/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="@@SOCIAL_ALT@@">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon.ico" sizes="48x48">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="stylesheet" href="style.css">
   <script type="application/ld+json">
 @@STRUCTURED_DATA@@
@@ -53,6 +61,11 @@
         </div>
       </section>
 
+      <section class="section news-section" id="news" aria-labelledby="news-heading">
+        <div class="section-heading"><h2 id="news-heading">News</h2></div>
+        <ul class="news-list">@@NEWS@@</ul>
+      </section>
+
       <section class="section research-section" id="research" aria-labelledby="research-heading">
         <div class="section-heading">
           <h2 id="research-heading">Selected research</h2>
@@ -83,7 +96,6 @@
         </div>
         <div class="research-background"><h3>Additional experience</h3>@@RESEARCH_BACKGROUND@@</div>
         @@AWARDS@@
-        @@OTHER_CVS@@
       </section>
 
       <section class="section software-section" id="software" aria-labelledby="software-heading">
@@ -100,6 +112,7 @@
     <footer class="site-footer">
       <p>@@NAME@@ · Updated @@UPDATED@@</p>
       <details class="figure-credits"><summary>Figure credits</summary>
+        <p>Previews are cropped panels; select one to open the complete figure.</p>
         <p>The Lift Spectrum, Fig. 1: <a href="https://arxiv.org/abs/2607.22077v2">Han et al., 2026</a>.</p>
         <p>Sparse Hadamard imaging, Fig. 9: <a href="https://doi.org/10.1364/OE.576533">Han et al., Optics Express, 2025</a>. © 2025 Optica Publishing Group.</p>
         <p>LDGI, Fig. 2: <a href="https://doi.org/10.1016/j.optcom.2025.131589">Han et al., Optics Communications, 2025</a>. © 2025 Elsevier B.V.</p>

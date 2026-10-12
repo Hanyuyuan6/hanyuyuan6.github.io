@@ -11,10 +11,21 @@ import re
 import sys
 
 ROOT = Path(__file__).resolve().parent
+SITE_URL = 'https://hanyuyuan6.github.io/'
+# Bytes a desktop retina visitor downloads for images on first view (640w previews
+# plus the 320w portrait). The full-size originals load only on click.
+IMAGE_BUDGET = 450_000
+DASH_RANGE = re.compile(r'\b\d{4} - (?:\d{4}|present)\b')
 
 
 def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def png_dimensions(data):
+    if data[:8] != b'\x89PNG\r\n\x1a\n':
+        raise ValueError('Not a PNG file')
+    return int.from_bytes(data[16:20], 'big'), int.from_bytes(data[20:24], 'big')
 
 
 def webp_dimensions(data):
@@ -170,6 +181,23 @@ def validate(root):
         require(any(t == 'meta' and a.get('name') == 'viewport' for t, a in home.tags), 'Responsive viewport metadata')
         home_text = home_path.read_text(encoding='utf-8')
         require(escape(profile['narrative']['bio'], quote=True) in home_text, 'Homepage contains approved research biography')
+        description = profile['narrative'].get('meta_description', '')
+        require(50 <= len(description) <= 160 and f'name="description" content="{escape(description, quote=True)}"' in home_text, 'Search description is present and fits a result snippet')
+        metas = {a.get('property') or a.get('name'): a.get('content', '') for t, a in home.tags if t == 'meta'}
+        require(metas.get('og:image') == SITE_URL + 'social-card.png' and metas.get('twitter:card') == 'summary_large_image', 'Link previews use the social card')
+        card = root / 'dist' / 'social-card.png'
+        require(card.is_file() and png_dimensions(card.read_bytes()) == (1200, 630), 'Social card is a 1200×630 PNG')
+        icons = {a.get('href') for t, a in home.tags if t == 'link' and 'icon' in (a.get('rel') or '')}
+        require({'favicon.svg', 'favicon.ico', 'apple-touch-icon.png'} <= icons and all((root / 'dist' / name).is_file() for name in ('favicon.svg', 'favicon.ico', 'apple-touch-icon.png')), 'Site icons are declared and deployed')
+        robots = (root / 'dist' / 'robots.txt').read_text(encoding='utf-8') if (root / 'dist' / 'robots.txt').is_file() else ''
+        sitemap = (root / 'dist' / 'sitemap.xml').read_text(encoding='utf-8') if (root / 'dist' / 'sitemap.xml').is_file() else ''
+        require(f'Sitemap: {SITE_URL}sitemap.xml' in robots, 'robots.txt points to the sitemap')
+        require(f'<loc>{SITE_URL}</loc>' in sitemap and all(f'<loc>{SITE_URL}{cv["path"]}</loc>' in sitemap for cv in profile['cvs']), 'Sitemap lists the homepage and public CVs')
+        require((root / 'dist' / '404.html').is_file(), 'Custom 404 page exists')
+        require(not DASH_RANGE.search(home_text), 'Date ranges use en dashes on the homepage')
+        news = profile.get('news', [])
+        require(1 <= len(news) <= 5 and [n['date'] for n in news] == sorted((n['date'] for n in news), reverse=True), 'News is short and newest first')
+        require(home_text.count('<details class="bibtex">') == len(publications) and all(p['doi'] in home_text for p in publications), 'Every publication offers BibTeX with its DOI')
         require('overleaf.com/project/' not in home_text, 'Private Overleaf editor is not a public CV link')
         image_metadata = json.loads((root / 'research-figures.json').read_text(encoding='utf-8'))
         figures = image_metadata['figures']
@@ -183,8 +211,10 @@ def validate(root):
         for project in profile['projects']:
             if project['id'] in selected:
                 require(escape(project['summary'], quote=True) in home_text, f"Selected-work conclusion appears in homepage: {project['id']}")
-        require('trained on clean data' in home_text and 'tested reconstruct-then-segment' in home_text, 'Lift homepage preserves the comparison and training condition')
+        require(all(term in home_text for term in ('20 dB', 'clean-trained', 'reconstruct-then-segment')), 'Lift homepage states its noise level, training condition and baseline')
         require('one-dimensional optical phased arrays' in home_text, 'LDGI homepage identifies its OPA illumination setting')
+        first_authored = [p for p in publications if p['id'] in {pr['publication_id'] for pr in profile['projects'] if pr['id'] in selected}]
+        require(home_text.count('<strong class="self-author">Yuyuan Han</strong>') >= len(publications) and all(p['authors'][0] == 'Yuyuan Han' for p in first_authored), 'Author lists are visible with the researcher highlighted')
 
         require(len(figures) == 3 and len({f['id'] for f in figures}) == 3 and {f['id'] for f in figures} == expected_figure_ids, 'Every selected paper has exactly one reviewed figure')
         require(isinstance(portrait, dict), 'Reviewed portrait metadata is present')
@@ -196,6 +226,7 @@ def validate(root):
             require(portrait.get('selected_id') == 'P2', 'Portrait matches the selected P2 image')
             require(portrait.get('alt') == profile['person']['name'], 'Portrait alt identifies the researcher')
         require(len({record.get('path') for _, record, _ in records}) == len(records), 'Portrait and research figures use distinct assets')
+        first_view_bytes = 0
         for label, record, is_portrait in records:
             relative = record.get('path', '')
             valid_path = relative == 'assets/portrait.webp' if is_portrait else bool(re.fullmatch(r'assets/research/[^/\\]+\.webp', relative))
@@ -214,10 +245,32 @@ def validate(root):
                     require(dimensions == (record.get('width'), record.get('height')), f'WebP dimensions match reviewed metadata: {label}')
                 except ValueError as error:
                     require(False, f'Invalid WebP image: {label}: {error}')
-            matched = [(a, parent) for a, parent in home.images if a.get('src') == relative]
-            require(len(matched) == 1 and matched[0][0].get('alt', '').strip() == record.get('alt', '').strip() and bool(record.get('alt', '').strip()), f'Image identification and alt text: {label}')
-            require(len(matched) == 1 and matched[0][0].get('width') == str(record.get('width')) and matched[0][0].get('height') == str(record.get('height')), f'HTML preserves intrinsic image dimensions: {label}')
-            require(len(matched) == 1 and matched[0][1] is not None and matched[0][1].get('href') == relative and bool(matched[0][1].get('aria-label', '').strip()), f'Image has a labelled full-size link: {label}')
+            # The page shows a responsive preview; the reviewed original opens on click.
+            matched = [(a, parent) for a, parent in home.images if parent is not None and parent.get('href') == relative]
+            require(len(matched) == 1 and bool(matched[0][1].get('aria-label', '').strip()), f'Preview opens the labelled full-size original: {label}')
+            if len(matched) != 1:
+                continue
+            image = matched[0][0]
+            expected_alt = record.get('alt') if is_portrait else record.get('teaser', {}).get('alt')
+            require(bool(expected_alt) and image.get('alt', '').strip() == expected_alt.strip(), f'Preview alt text matches the reviewed record: {label}')
+            candidates = [part.strip().rsplit(' ', 1) for part in image.get('srcset', '').split(',') if part.strip()]
+            require(len(candidates) >= 2 and image.get('sizes'), f'Preview is responsive (srcset and sizes): {label}')
+            crop = record.get('teaser', {}).get('crop') if not is_portrait else [0, 0, record['width'], record['height']]
+            for candidate, descriptor in candidates:
+                file = root / 'dist' / candidate
+                ok = file.is_file() and descriptor.endswith('w')
+                if ok:
+                    width, height = webp_dimensions(file.read_bytes())
+                    ok = width == int(descriptor[:-1]) and abs(width / height - (crop[2] - crop[0]) / (crop[3] - crop[1])) < 0.01 and file.stat().st_size <= 220_000
+                require(ok, f'Preview candidate exists, matches its width and aspect, under 220 kB: {candidate}')
+            default = root / 'dist' / image.get('src', '')
+            if default.is_file():
+                width, height = webp_dimensions(default.read_bytes())
+                require((image.get('width'), image.get('height')) == (str(width), str(height)), f'HTML declares the preview’s intrinsic size: {label}')
+                first_view_bytes += default.stat().st_size
+            else:
+                require(False, f'Default preview exists: {label}')
+        require(first_view_bytes <= IMAGE_BUDGET, f'First-view image payload {first_view_bytes} bytes within {IMAGE_BUDGET}')
         for publication in publications:
             require(publication['doi'] in home_text or publication['url'].replace('&', '&amp;') in home_text, f"Homepage includes publication link: {publication['id']}")
         for cv in profile['cvs']:
@@ -264,12 +317,17 @@ def validate(root):
             require(content.find('EDUCATION & RESEARCH APPOINTMENTS') >= 0 and content.find('EDUCATION & RESEARCH APPOINTMENTS') < content.find('SELECTED RESEARCH'), f'Education precedes selected research in actual PDF: {path.name}')
             require('PhD (in progress)' not in content and 'RESEARCH SOFTWARE' not in content, f'Current professional terminology in actual PDF: {path.name}')
             compact_text = re.sub(r'\s+', ' ', content)
-            require('trained on clean data' in compact_text and 'measurement noise' in compact_text, f'Lift conclusion retains its noise and training scope: {path.name}')
+            require('clean-trained' in compact_text and '20 dB' in compact_text, f'Lift claim keeps its noise level and training condition: {path.name}')
             require('one-dimensional optical phased arrays' in compact_text, f'LDGI OPA setting in actual PDF: {path.name}')
+            require(not re.search(r'\bPublished\b', content), f'No redundant Published labels: {path.name}')
+            require(not DASH_RANGE.search(compact_text), f'Date ranges use en dashes: {path.name}')
 
             require(not any(word in content for word in ['CET-6', 'Programming and modeling', 'TECHNICAL SKILLS']), f'No generic tools/language section: {path.name}')
             links = [str(a.get_object().get('/A', {}).get('/URI', '')) for page in reader.pages for a in page.get('/Annots', [])]
             require(any('mailto:' in link for link in links), f'PDF email link annotation: {path.name}')
+            require(SITE_URL in links, f'PDF links back to the homepage: {path.name}')
+            info = reader.metadata or {}
+            require(info.get('/Title', '').startswith(profile['person']['name']) and info.get('/Author') == profile['person']['name'], f'PDF title and author metadata: {path.name}')
         except Exception as error:
             require(False, f'{path.name}: {error}')
     return failures, checks
