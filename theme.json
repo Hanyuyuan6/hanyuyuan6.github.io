@@ -1,0 +1,36 @@
+{
+  "selected": "harbor",
+  "dark": "night",
+  "palettes": {
+    "harbor": {
+      "label": "Harbor — calm navy (current)",
+      "bg": "#ffffff", "ink": "#20252b", "muted": "#5d6570", "link": "#205b87", "hover": "#0f3d5e",
+      "line": "#dce1e6", "tint": "#eef4f8", "wash": "#f5f7f9"
+    },
+    "paper": {
+      "label": "Paper blue — crisp, brighter blue on near-white",
+      "bg": "#fafafa", "ink": "#13181d", "muted": "#5c6670", "link": "#1c64b0", "hover": "#134a85",
+      "line": "#dfe3e7", "tint": "#eaf1f9", "wash": "#f1f4f8"
+    },
+    "classic": {
+      "label": "Classic lab — the vision-community blue with an orange hover",
+      "bg": "#ffffff", "ink": "#1a1a1a", "muted": "#555b61", "link": "#1772d0", "hover": "#a85400",
+      "line": "#e2e2e2", "tint": "#fffbe0", "wash": "#f6f6f6"
+    },
+    "graphite": {
+      "label": "Graphite — near-monochrome with a deep teal accent",
+      "bg": "#ffffff", "ink": "#1b1d1f", "muted": "#5f6368", "link": "#0b6e69", "hover": "#07514d",
+      "line": "#e3e5e8", "tint": "#e8f3f2", "wash": "#f4f6f6"
+    },
+    "ivory": {
+      "label": "Ivory — warm editorial paper with a rust accent",
+      "bg": "#faf9f5", "ink": "#171717", "muted": "#666666", "link": "#8a3b12", "hover": "#171717",
+      "line": "#e5e5e5", "tint": "#f3efe4", "wash": "#f2efe7"
+    },
+    "night": {
+      "label": "Night — automatic dark mode",
+      "bg": "#14181d", "ink": "#e6e9ec", "muted": "#9aa4ae", "link": "#7db7e8", "hover": "#b5d8f5",
+      "line": "#2a3138", "tint": "#1c2530", "wash": "#1b2128"
+    }
+  }
+}

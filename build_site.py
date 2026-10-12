@@ -25,11 +25,55 @@ from PIL import Image, ImageDraw, ImageFont
 SOURCE_DIR = Path(__file__).resolve().parent
 SITE_URL = "https://hanyuyuan6.github.io/"
 TOKENS = re.compile(r"@@([A-Z_]+)@@")
-INK, MUTED, LINK, RULE = "#20252b", "#5d6570", "#205b87", "#dce1e6"
-# A 4×4 Walsh–Hadamard basis pattern (outer product of rows 1 and 2 of H4):
-# the measurement that single-pixel imaging is built on, used as the site icon.
-HADAMARD = [[1 if r * c > 0 else 0 for c in (1, 1, -1, -1)] for r in (1, -1, 1, -1)]
+THEME_KEYS = ("bg", "ink", "muted", "link", "hover", "line", "tint", "wash")
+# "YH" outlined from Noto Sans Bold (fonts/, OFL) and centred in a 32-unit
+# square with fontTools, once. Only straight segments, so the same polygons
+# draw the SVG icon and the raster ICO/PNG.
+MONOGRAM = (
+    "M9.82 14.92 12.55 9.36H15.64L11.25 17.47V22.64H8.39V17.56L4 9.36H7.09Z"
+    "M28 22.64H25.19V16.91H19.93V22.64H17.12V9.36H19.93V14.57H25.19V9.36H28Z"
+)
 MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+
+def load_theme(source_dir: Path) -> dict[str, Any]:
+    """theme.json is the one colour source for the site, icons, social card and CVs."""
+    theme = json.loads((source_dir / "theme.json").read_text(encoding="utf-8"))
+    palettes = theme.get("palettes", {})
+    for name, palette in palettes.items():
+        for key in THEME_KEYS:
+            if not re.fullmatch(r"#[0-9a-f]{6}", str(palette.get(key, ""))):
+                raise ValueError(f"Palette {name!r} needs a lowercase #rrggbb {key}")
+    for role in ("selected", "dark"):
+        if theme.get(role) is not None and theme[role] not in palettes:
+            raise ValueError(f"theme.json {role} names an unknown palette: {theme[role]!r}")
+    return theme
+
+
+def theme_css(theme: dict[str, Any]) -> str:
+    """Custom properties for the selected palette, plus the automatic dark one."""
+    def block(selector: str, palette: dict[str, str], scheme: str, indent: str = "") -> str:
+        body = "".join(f"{indent}  --{key}: {palette[key]};\n" for key in THEME_KEYS)
+        return f"{indent}{selector} {{\n{indent}  color-scheme: {scheme};\n{body}{indent}}}\n"
+
+    css = "/* Generated from theme.json by build_site.py. */\n"
+    css += block(":root", theme["palettes"][theme["selected"]], "light")
+    if theme.get("dark"):
+        css += "@media (prefers-color-scheme: dark) {\n"
+        css += block(":root", theme["palettes"][theme["dark"]], "dark", "  ") + "}\n"
+    return css + "\n"
+
+
+def theme_meta(theme: dict[str, Any]) -> str:
+    light = theme["palettes"][theme["selected"]]["bg"]
+    if not theme.get("dark"):
+        return f'<meta name="color-scheme" content="light">\n  <meta name="theme-color" content="{light}">'
+    dark = theme["palettes"][theme["dark"]]["bg"]
+    return (
+        '<meta name="color-scheme" content="light dark">\n'
+        f'  <meta name="theme-color" content="{light}" media="(prefers-color-scheme: light)">\n'
+        f'  <meta name="theme-color" content="{dark}" media="(prefers-color-scheme: dark)">'
+    )
 
 
 def e(value: Any) -> str:
@@ -242,57 +286,75 @@ def srcset(variants: list[dict[str, Any]]) -> str:
     return ", ".join(f'{e(v["path"])} {v["width"]}w' for v in variants)
 
 
-def hadamard_icon(size: int, padding: int = 0, background: str = "#ffffff") -> Image.Image:
-    cell = (size - 2 * padding) // 4
-    image = Image.new("RGB", (size, size), background)
+def monogram_polygons() -> list[list[tuple[float, float]]]:
+    """Parse MONOGRAM's absolute M/L/H/V/Z commands into point lists."""
+    polygons: list[list[tuple[float, float]]] = []
+    x = y = 0.0
+    for command, args in re.findall(r"([MLHVZ])([^MLHVZ]*)", MONOGRAM):
+        values = [float(v) for v in args.split()]
+        if command == "M":
+            polygons.append([])
+        if command in "ML":
+            for x, y in zip(values[0::2], values[1::2]):
+                polygons[-1].append((x, y))
+        elif command == "H":
+            for x in values:
+                polygons[-1].append((x, y))
+        elif command == "V":
+            for y in values:
+                polygons[-1].append((x, y))
+    return polygons
+
+
+def monogram_icon(size: int, background: str, *, radius: float = 7) -> Image.Image:
+    """Draw at 512 px and downsample, so small sizes stay crisp and anti-aliased."""
+    scale = 512 / 32
+    image = Image.new("RGBA", (512, 512), (0, 0, 0, 0))
     draw = ImageDraw.Draw(image)
-    for r, row in enumerate(HADAMARD):
-        for c, on in enumerate(row):
-            if on:
-                x, y = padding + c * cell, padding + r * cell
-                draw.rectangle((x, y, x + cell - 1, y + cell - 1), fill=INK)
-    return image
+    draw.rounded_rectangle((0, 0, 511, 511), radius=radius * scale, fill=background)
+    for polygon in monogram_polygons():
+        draw.polygon([(px * scale, py * scale) for px, py in polygon], fill="#ffffff")
+    return image.resize((size, size), Image.LANCZOS)
 
 
-def write_icons(output_dir: Path) -> None:
-    cells = "".join(
-        f'<rect x="{c * 8}" y="{r * 8}" width="8" height="8"/>'
-        for r, row in enumerate(HADAMARD) for c, on in enumerate(row) if on
-    )
+def write_icons(output_dir: Path, palette: dict[str, str]) -> None:
+    """A "YH" monogram in the accent colour: legible at 16 px, unlike a pattern."""
+    accent = palette["link"]
     svg = (
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">'
-        '<rect width="32" height="32" rx="4" fill="#fff"/>'
-        f'<g fill="{INK}">{cells}</g></svg>\n'
+        f'<rect width="32" height="32" rx="7" fill="{accent}"/>'
+        f'<path fill="#fff" d="{MONOGRAM}"/></svg>\n'
     )
     (output_dir / "favicon.svg").write_text(svg, encoding="utf-8", newline="\n")
-    hadamard_icon(64).save(output_dir / "favicon.ico", sizes=[(16, 16), (32, 32), (48, 48)])
-    hadamard_icon(180, padding=26).save(output_dir / "apple-touch-icon.png", optimize=True)
+    monogram_icon(256, accent).save(output_dir / "favicon.ico", sizes=[(16, 16), (32, 32), (48, 48)])
+    # iOS masks its own corners, so the touch icon fills the square.
+    monogram_icon(180, accent, radius=0).convert("RGB").save(output_dir / "apple-touch-icon.png", optimize=True)
 
 
-def social_card(profile: dict[str, Any], portrait_path: Path, source_dir: Path, output_dir: Path) -> None:
+def social_card(profile: dict[str, Any], portrait_path: Path, source_dir: Path, output_dir: Path, palette: dict[str, str]) -> None:
     """A 1200×630 link-preview card (og:image) in the site's own type and colours."""
     person, narrative = profile["person"], profile["narrative"]
     fonts = source_dir / "fonts"
     bold = ImageFont.truetype(str(fonts / "NotoSans-Bold.ttf"), 64)
     regular = ImageFont.truetype(str(fonts / "NotoSans-Regular.ttf"), 28)
     small = ImageFont.truetype(str(fonts / "NotoSans-Regular.ttf"), 24)
-    card = Image.new("RGB", (1200, 630), "#ffffff")
+    card = Image.new("RGB", (1200, 630), palette["bg"])
     with Image.open(portrait_path) as portrait:
         card.paste(portrait.convert("RGB").resize((300, 300), Image.LANCZOS), (84, 165))
     draw = ImageDraw.Draw(card)
     x, right = 432, 1116
     lines = [
-        (person["name"], bold, INK, 172),
-        (narrative["field"], regular, INK, 266),
-        (f'{person["position"]} · {person["institution"]}', small, MUTED, 322),
-        (f'{person["visiting_role"]} · {person["visiting_institution"]}', small, MUTED, 358),
-        (person["homepage"].replace("https://", "").rstrip("/"), small, LINK, 426),
+        (person["name"], bold, palette["ink"], 172),
+        (narrative["field"], regular, palette["ink"], 266),
+        (f'{person["position"]} · {person["institution"]}', small, palette["muted"], 322),
+        (f'{person["visiting_role"]} · {person["visiting_institution"]}', small, palette["muted"], 358),
+        (person["homepage"].replace("https://", "").rstrip("/"), small, palette["link"], 426),
     ]
     for text, font, colour, y in lines:
         if x + draw.textlength(text, font=font) > right:
             raise ValueError(f"Social card text overflows its 84 px margin: {text!r}")
         draw.text((x, y), text, font=font, fill=colour)
-    draw.line((x, 412, right, 412), fill=RULE, width=2)
+    draw.line((x, 412, right, 412), fill=palette["line"], width=2)
     card.save(output_dir / "social-card.png", optimize=True)
 
 
@@ -353,14 +415,14 @@ def selected_research(
     return "\n".join(entries), selected_ids
 
 
-def other_publications(publications: list[dict[str, Any]], selected_ids: set[str], person: dict[str, Any]) -> str:
+def all_publications(publications: list[dict[str, Any]], selected_ids: set[str], person: dict[str, Any]) -> str:
+    """The complete record, newest first; selected works stay in it (marked), not removed."""
     entries = []
     for publication in publications:
-        if str(publication["id"]) in selected_ids:
-            continue
+        selected = str(publication["id"]) in selected_ids
         entries.append(
-            f'<li class="publication publication-entry" id="publication-{e(slug(publication["id"]))}" '
-            f'data-publication-id="{e(publication["id"])}">'
+            f'<li class="publication publication-entry{" is-selected" if selected else ""}" '
+            f'id="publication-{e(slug(publication["id"]))}" data-publication-id="{e(publication["id"])}">'
             f'<h3>{link(publication["title"], publication["url"])}</h3>'
             f'<p class="authors">{author_list(publication, person)}</p>'
             f'<p class="venue">{venue_line(publication)}</p>'
@@ -425,7 +487,7 @@ def appointments(rows: list[dict[str, Any]]) -> str:
             f'<li><h4>{e(row.get("institution", ""))}</h4>'
             f'<p>{e(row.get("role", ""))}</p>'
             + (f'<p class="entry-note">{e(department)}</p>' if department else "")
-            + (f'<p class="entry-note">Host: {e(host)}</p>' if host else "")
+            + (f'<p class="entry-note">Supervisor: {e(host)}</p>' if host else "")
             + (f'<p class="entry-dates">{e(dates)}</p>' if dates else "")
             + "</li>"
         )
@@ -470,7 +532,7 @@ def awards(rows: list[dict[str, Any]]) -> str:
     return f'<div class="awards-block"><h3>Award</h3><ul>{items}</ul></div>'
 
 
-def write_support_files(profile: dict[str, Any], output_dir: Path) -> None:
+def write_support_files(profile: dict[str, Any], output_dir: Path, style_version: str) -> None:
     updated = str(profile.get("updated", ""))
     pages = ["", *(row["path"] for row in sequence(profile, "cvs"))]
     urls = "".join(f"  <url><loc>{e(SITE_URL + path)}</loc><lastmod>{e(updated)}</lastmod></url>\n" for path in pages)
@@ -487,7 +549,7 @@ def write_support_files(profile: dict[str, Any], output_dir: Path) -> None:
         '  <meta name="robots" content="noindex">\n'
         f'  <title>Page not found · {name}</title>\n'
         '  <link rel="icon" href="/favicon.svg" type="image/svg+xml">\n'
-        '  <link rel="stylesheet" href="/style.css">\n</head>\n<body>\n'
+        f'  <link rel="stylesheet" href="/style.css?v={style_version}">\n</head>\n<body>\n'
         '  <main class="page-shell not-found">\n    <h1>Page not found</h1>\n'
         f'    <p>This page does not exist. Go to <a href="/">{name}’s homepage</a>.</p>\n'
         '  </main>\n</body>\n</html>\n',
@@ -520,6 +582,10 @@ def build(profile: dict[str, Any], output_dir: Path, *, source_dir: Path | None 
     ids = [str(publication["id"]) for publication in publications]
     if len(ids) != len(set(ids)):
         raise ValueError("Publication identifiers must be unique")
+    theme = load_theme(source_dir)
+    palette = theme["palettes"][theme["selected"]]
+    stylesheet = theme_css(theme) + (source_dir / "style.css").read_text(encoding="utf-8")
+    style_version = hashlib.sha256(stylesheet.encode("utf-8")).hexdigest()[:10]
     figure_records = json.loads((source_dir / "research-figures.json").read_text(encoding="utf-8"))
     figures = {record["id"]: record for record in figure_records["figures"]}
     if len(figures) != len(figure_records["figures"]):
@@ -591,8 +657,10 @@ def build(profile: dict[str, Any], output_dir: Path, *, source_dir: Path | None 
         "SELECTED_RESEARCH": selected,
         "DIRECTIONS": current_directions(sequence(profile, "directions")),
         "DIRECTION_PARAGRAPH": f'<p class="future-paragraph">{e(direction)}</p>' if direction else "",
-        "PUBLICATIONS": other_publications(publications, selected_ids, person),
-        "SELECTED_COUNT": e(len(selected_ids)),
+        "PUBLICATIONS": all_publications(publications, selected_ids, person),
+        "PUBLICATION_COUNT": e(len(publications)),
+        "STYLE_VERSION": style_version,
+        "THEME_META": theme_meta(theme),
         "EDUCATION": education(sequence(profile, "education")),
         "APPOINTMENTS": appointments(sequence(profile, "appointments")),
         "AWARDS": awards(sequence(profile, "awards")),
@@ -610,14 +678,16 @@ def build(profile: dict[str, Any], output_dir: Path, *, source_dir: Path | None 
         raise ValueError("The generated page contains an unresolved template token")
     destination = output_dir / "index.html"
     destination.write_text(document, encoding="utf-8", newline="\n")
-    shutil.copyfile(source_dir / "style.css", output_dir / "style.css")
+    (output_dir / "style.css").write_text(stylesheet, encoding="utf-8", newline="\n")
+    bib = "\n\n".join(bibtex(publication) for publication in publications)
+    (output_dir / "publications.bib").write_text(bib + "\n", encoding="utf-8", newline="\n")
     for relative in assets:
         destination_asset = output_dir / relative
         destination_asset.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(source_dir / relative, destination_asset)
-    write_icons(output_dir)
-    social_card(profile, source_dir / portrait["path"], source_dir, output_dir)
-    write_support_files(profile, output_dir)
+    write_icons(output_dir, palette)
+    social_card(profile, source_dir / portrait["path"], source_dir, output_dir, palette)
+    write_support_files(profile, output_dir, style_version)
     return destination
 
 

@@ -1,13 +1,5 @@
 {
   "schema_version": 1,
-  "palette": {
-    "paper": "#ffffff",
-    "ink": "#20252b",
-    "muted": "#5d6570",
-    "accent": "#20252b",
-    "rule": "#dce1e6",
-    "link": "#205b87"
-  },
   "variants": [
     {
       "id": "academic",
@@ -23,7 +15,11 @@
       ],
       "publication_ids": "all",
       "software_ids": [
+        "STSF-TPLS",
         "Comparison-of-SPI-DLs",
+        "SHSI",
+        "LDGI",
+        "TGIs-Entry",
         "remote-gpu-trainer"
       ],
       "body_size": 9.3,
@@ -74,7 +70,11 @@
       ],
       "publication_ids": "all",
       "software_ids": [
+        "STSF-TPLS",
         "Comparison-of-SPI-DLs",
+        "SHSI",
+        "LDGI",
+        "TGIs-Entry",
         "remote-gpu-trainer"
       ],
       "body_size": 10.0,
@@ -150,8 +150,8 @@
         "status": "预印本",
         "role": "第一作者",
         "bullets": [
-          "证明直接从 3.13% 采样的单像素测量进行分割，在 20 dB 噪声下比最强的干净数据训练先重建再分割基线的前景 mIoU 高 3.1–21.7 个百分点。",
-          "设计内容自适应的测量—空间提升模块，并以分阶段辅助重建监督训练；同采样率下比已有免成像基线高 3.2–9.9 个百分点。"
+          "揭示去掉重建后，核心设计问题转移到 1D 到 2D 的提升（lift），并把各类 lift 梳理为从固定物理逆变换到内容自适应检索的谱系。",
+          "提出 STSF + TPLS：前景 mIoU 比已有免成像方法高 3.2–9.9 个百分点，采样率降至 0.78% 时精度几乎不变；在 20 dB 噪声下，比干净数据训练的先重建再分割高达 21.7 个百分点。"
         ]
       },
       "shsi": {
@@ -159,7 +159,7 @@
         "status": "已发表",
         "role": "第一作者",
         "bullets": [
-          "设计可调稀疏度的 Hadamard 照明及两种采集模式；建立稀疏度与噪声的关系模型，并通过仿真和穿透毛玻璃的光学实验验证抗噪性。"
+          "使正交 Hadamard 图案具备可调稀疏性（两种采集模式与完整理论）：在散射与噪声下稳健成像，低阶矩阵即可高分辨成像、节省存储，且无需训练与后处理。"
         ]
       },
       "loop": {
@@ -167,7 +167,7 @@
         "status": "已发表",
         "role": "第一作者",
         "bullets": [
-          "揭示一维光学相控阵线光场会破坏传统鬼成像去噪算法所依赖的噪声对称性；提出循环差分鬼成像算法并完成光学实验验证。"
+          "揭示一维光学相控阵线光场会破坏鬼成像去噪所依赖的噪声对称性；提出循环差分鬼成像（较传统算法提升数个数量级）并完成光学实验验证。"
         ]
       }
     },
@@ -187,23 +187,25 @@
       "Second Prize, National Post-Graduate Mathematical Contest in Modeling": "全国研究生数学建模竞赛二等奖"
     },
     "software": {
-      "STSF-TPLS": "免成像单像素分割代码。",
-      "SHSI": "稀疏 Hadamard 测量与重建示例。",
-      "Comparison-of-SPI-DLs": "学习式单像素重建方法的比较评估。",
-      "remote-gpu-trainer": "可复现远程 GPU 深度学习实验的开源智能体技能。"
+      "STSF-TPLS": "免成像单像素分割：代码与预训练权重（PyTorch）。",
+      "SHSI": "稀疏 Hadamard 单像素成像：图样生成与重建（MATLAB）。",
+      "Comparison-of-SPI-DLs": "十种深度单像素重建方法在同一 Hadamard 采集下的基准比较（PyTorch）。",
+      "remote-gpu-trainer": "面向 Claude Code 与 Codex 的开源智能体技能：运行、核验并交付 GPU 实验（60+ 星）。",
+      "LDGI": "面向光学相控阵线光场的循环差分鬼成像（MATLAB）。",
+      "TGIs-Entry": "传统、差分与归一化鬼成像的参考实现（MATLAB）。"
     },
     "internship_summary": "电子科学与技术博士研究生，研究计算成像与面向光学测量的物理驱动学习。",
     "current_summary": "开发采集条件感知模型，并将预训练多模态模型适配至桶探测信号；米理访学计划聚焦时域漫射光学与三维重建。",
     "internship_technical": [
       {
-        "label": "工具",
-        "text": "Python、PyTorch、MATLAB、COMSOL；开源项目 remote-gpu-trainer（可复现远程 GPU 实验，GitHub 60+ 星）",
+        "label": "开源",
+        "text": "remote-gpu-trainer：面向 Claude Code 与 Codex 的智能体技能，覆盖 GPU 实验运行、核验与交付（GitHub 60+ 星）",
         "url": "https://github.com/Hanyuyuan6/remote-gpu-trainer",
         "link_text": "remote-gpu-trainer"
       },
       {
-        "label": "实验",
-        "text": "DMD/SLM 照明、单像素探测、光路调校与系统集成"
+        "label": "工具与实验",
+        "text": "PyTorch、MATLAB、COMSOL；DMD/SLM 照明、单像素探测、光路调校与系统集成"
       },
       {
         "label": "器件建模",
@@ -212,9 +214,9 @@
     ]
   },
   "translation_source_hashes": {
-    "lift": "4f79d0ec343ca082c8d85189f5528f34718d170717c7a909da05fbd3aa0b4abc",
-    "shsi": "675b24f7676c23661ad7fc7f30ac647ec2c947c60a85a4787f56bab8571405a6",
+    "lift": "a925f12cbfcc67eac287332ce047b72aaab3b15eccc789fa1d7236ea0767d9e4",
+    "shsi": "c3e4fe2a63b849111c1b76bf1caef56dbca45dc4bcea77b480e47ab434787ddd",
     "acquisition": "b8ea85ca21177c7eb28a98ad8ac32e8f8d22be9580c0d1315e5b270e84862483",
-    "loop": "57bdfaea7db02204e3708590a9d0d9f021c5802416bdf4895e119146c9a973d1"
+    "loop": "b25b5d24ab008df127bec850856d077da381928be742aa56f8967f16a464da49"
   }
 }

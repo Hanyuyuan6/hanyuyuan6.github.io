@@ -44,6 +44,7 @@
     "dist/favicon.ico",
     "dist/favicon.svg",
     "dist/index.html",
+    "dist/publications.bib",
     "dist/robots.txt",
     "dist/sitemap.xml",
     "dist/social-card.png",
@@ -59,6 +60,7 @@
     "research-figures.json",
     "style.css",
     "template.html",
+    "theme.json",
     "watch_orcid.py"
   ],
   "site_files": [
@@ -88,6 +90,7 @@
     "favicon.ico",
     "favicon.svg",
     "index.html",
+    "publications.bib",
     "robots.txt",
     "sitemap.xml",
     "social-card.png",

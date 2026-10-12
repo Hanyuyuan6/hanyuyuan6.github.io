@@ -46,7 +46,14 @@ RIGHT = 44.0
 WIDTH = PAGE_W - LEFT - RIGHT
 BOTTOM = 48.0
 FONT_SOURCES: dict[str, dict[str, Any]] = {}
-LINK_COLOR = '#205b87'
+LINK_COLOR = ''  # set from theme.json in build()
+
+
+def cv_palette() -> dict[str, str]:
+    """The website's selected theme.json palette, on white paper for print."""
+    theme = json.loads((HERE / 'theme.json').read_text(encoding='utf-8'))
+    colours = theme['palettes'][theme['selected']]
+    return {'paper': '#ffffff', 'ink': colours['ink'], 'muted': colours['muted'], 'accent': colours['link'], 'rule': colours['line'], 'link': colours['link']}
 
 
 def sha256(path: Path) -> str:
@@ -176,7 +183,8 @@ def pub_reference(pub: dict[str, Any], short: bool = False) -> str:
     if not authors or not year or not venue:
         raise ValueError(f'Publication lacks authors, venue or year: {pub.get("id")}')
     target = publication_url(pub)
-    pieces = [authors + '.', f'<b>{link(title, target)}</b>.']
+    # Regular-weight titles let the bold own name lead each entry (Finn, Glassman).
+    pieces = [authors + '.', f'{link(title, target)}.']
     details = f'<i>{esc(venue)}</i>'
     volume = pub.get('volume')
     issue = pub.get('issue')
@@ -220,7 +228,7 @@ def appointment_blocks(profile: dict[str, Any], cfg: dict[str, Any], zh: bool, c
             a['display_dates'] = chinese_period(app['display_dates'])
         label = f"<b>{esc(a['institution'])}</b>{sep(zh)}{esc(a['role'])}"
         out.append(Block('entry', label, f'appointments[{i}]', meta={'right': a['display_dates']}))
-        host_label = a.get('host_label', 'Host')
+        host_label = a.get('host_label', 'Supervisor')
         colon = '：' if zh else ': '
         out.append(Block('detail', f"{esc(a['department'])}{sep(zh)}{esc(host_label)}{colon}{esc(app['host'])}", f'appointments[{i}].host', gap=5 if compact else 8))
     return out
@@ -288,7 +296,7 @@ def linked_text(row: dict[str, Any]) -> str:
 def technical_blocks(profile: dict[str, Any], cfg: dict[str, Any], zh: bool) -> list[Block]:
     """Tools grounded in the listed research, for industry résumés only."""
     rows = cfg['zh']['internship_technical'] if zh else profile['internship_technical']
-    return [Block('body', f"<b>{esc(row['label'])}</b>{sep(zh)}{linked_text(row)}", f'internship_technical[{i}]', gap=2) for i, row in enumerate(rows)]
+    return [Block('body', f"<b>{esc(row['label'])}</b>{sep(zh)}{linked_text(row)}", f'internship_technical[{i}]', gap=1) for i, row in enumerate(rows)]
 
 
 def software_blocks(profile: dict[str, Any], cfg: dict[str, Any], variant: dict[str, Any]) -> list[Block]:
@@ -299,7 +307,7 @@ def software_blocks(profile: dict[str, Any], cfg: dict[str, Any], variant: dict[
         if software['name'] not in names:
             continue
         desc = cfg['zh']['software'][software['name']] if zh else software['description']
-        out.append(Block('body', f"<b>{link(software['name'], software['url'])}</b>{sep(zh)}{esc(desc)}", f'software[{i}]', gap=5))
+        out.append(Block('body', f"<b>{link(software['name'], software['url'])}</b>{sep(zh)}{esc(desc)}", f'software[{i}]', gap=4))
     return out
 
 
@@ -322,7 +330,9 @@ def compact_education(profile: dict[str, Any], cfg: dict[str, Any], zh: bool) ->
         if row.get('advisor'):
             detail += sep(zh) + (f"导师：{esc(row['advisor'])}" if zh else f"Advisor: {esc(row['advisor'])}")
         out.append(Block('detail', detail, f'education[{i}].field', gap=4))
-    out += appointment_blocks(profile, cfg, zh, True)
+        if i == 0:
+            # The visiting appointment is part of the current PhD, so it follows it.
+            out += appointment_blocks(profile, cfg, zh, True)
     return out
 
 
@@ -337,31 +347,31 @@ def model(profile: dict[str, Any], cfg: dict[str, Any], variant: dict[str, Any])
     summary_key = 'internship_summary' if compact else 'summary'
     summary = cfg['zh'][summary_key] if zh else profile['narrative']['internship_summary' if compact else 'resume_summary']
     page1 = [Block('body', esc(summary), 'narrative.internship_summary' if compact else 'narrative.resume_summary', gap=5)]
-    page1.append(Block('section', '教育与科研经历' if zh else 'EDUCATION & RESEARCH APPOINTMENTS'))
+    page1.append(Block('section', '教育与科研经历' if zh else 'Education & Research Appointments'))
     page1 += compact_education(profile, cfg, zh)
-    page1.append(Block('section', '代表性研究' if zh else 'SELECTED RESEARCH'))
+    page1.append(Block('section', '代表性研究' if zh else 'Selected Research'))
     page1 += project_blocks(profile, cfg, variant)
-    page1.append(Block('section', '当前研究' if zh else 'CURRENT RESEARCH'))
+    page1.append(Block('section', '当前研究' if zh else 'Current Research'))
     current = cfg['zh']['current_summary'] if zh else profile['narrative']['current_summary']
     current_text = esc(current).replace('；', '。<br/>', 1) if zh else esc(current)
     page1.append(Block('body', current_text, 'narrative.current_summary', gap=7))
     if compact:
-        # One page: device-modeling experience stays, as a line under tools.
-        page1.append(Block('section', '技术与开源' if zh else 'TOOLS & OPEN SOURCE'))
+        # One page: open-source evidence first, then tools; device modeling stays.
+        page1.append(Block('section', '开源与技术' if zh else 'Open Source & Tools'))
         page1 += technical_blocks(profile, cfg, zh)
-        page1.append(Block('section', '奖励' if zh else 'AWARD'))
+        page1.append(Block('section', '奖励' if zh else 'Award'))
         page1 += awards_blocks(profile, cfg, zh, compact)
         return [page1]
     # Page 1 is the profile; page 2 holds the unbroken publication list, code and
     # whichever closing sections the variant's page-1 budget cannot hold.
     closing = {
-        'background': [Block('section', '其他经历' if zh else 'ADDITIONAL EXPERIENCE')] + background_blocks(profile, cfg, zh, compact),
-        'awards': [Block('section', '奖励' if zh else 'AWARD')] + awards_blocks(profile, cfg, zh, compact),
+        'background': [Block('section', '其他经历' if zh else 'Additional Experience')] + background_blocks(profile, cfg, zh, compact),
+        'awards': [Block('section', '奖励' if zh else 'Award')] + awards_blocks(profile, cfg, zh, compact),
     }
     on_page1 = variant.get('page1_closing', ['background', 'awards'])
     for key in on_page1:
         page1 += closing[key]
-    page2 = [Block('section', '论文' if zh else 'PUBLICATIONS')]
+    page2 = [Block('section', '论文' if zh else 'Publications')]
     journals = sorted((p for p in chosen if not is_preprint(p)), key=lambda p: str(p['year']), reverse=True)
     preprints = [p for p in chosen if is_preprint(p)]
     page2.append(Block('subsection', '同行评议期刊论文' if zh else 'Peer-reviewed journal articles'))
@@ -371,7 +381,7 @@ def model(profile: dict[str, Any], cfg: dict[str, Any], variant: dict[str, Any])
         page2.append(Block('subsection', '预印本' if zh else 'Preprints'))
         for i, pub in enumerate(preprints):
             page2.append(Block('publication', pub_reference(pub), f'publications.{pub["id"]}', gap=8, meta={'number': len(journals) + i + 1}))
-    page2.append(Block('section', '研究代码' if zh else 'RESEARCH CODE'))
+    page2.append(Block('section', '研究代码' if zh else 'Research Code'))
     page2 += software_blocks(profile, cfg, variant)
     for key in ['background', 'awards']:
         if key not in on_page1:
@@ -462,7 +472,7 @@ class CVTemplate:
         c.setFillColor(self.palette['paper'])
         c.rect(0, 0, PAGE_W, PAGE_H, stroke=0, fill=1)
         if number == 1:
-            name_size, field_size = (26 if self.zh else 28), 10.2
+            name_size, field_size = 24, 10.2
             name_baseline = PAGE_H - 68
             c.setFont(self.title_font, name_size)
             c.setFillColor(self.palette['ink'])
@@ -474,7 +484,7 @@ class CVTemplate:
             field_top_offset = field_size + pdfmetrics.getDescent(self.font, field_size)
             self.y = name_bottom - 9 - field_top_offset
             c.setFont(self.font, field_size)
-            c.setFillColor(self.palette['accent'])
+            c.setFillColor(self.palette['ink'])
             field = self.config['zh']['field'] if self.zh else self.profile['narrative']['field']
             c.drawString(LEFT, self.y, field)
             self.y -= 18
@@ -511,16 +521,19 @@ class CVTemplate:
             self.y -= block.gap
             return
         if block.kind == 'section':
+            # Headings sit above the body size in the accent colour (cf. Finn,
+            # RenderCV); 9 pt capitals read as smaller than the text they head.
+            size = 11.2 if self.zh else 10.6
             self.y -= 10 if self.compact else 11
             c = self.c
             c.setFillColor(self.palette['accent'])
-            c.setFont(self.bold, 9.0 if not self.zh else 10.6)
-            c.drawString(LEFT, self.y - 9, block.text)
+            c.setFont(self.bold, size)
+            c.drawString(LEFT, self.y - 10, block.text)
             c.setStrokeColor(self.palette['rule'])
-            c.setLineWidth(0.5)
-            textw = pdfmetrics.stringWidth(block.text, self.bold, 9.0 if not self.zh else 10.6)
-            c.line(LEFT + textw + 12, self.y - 6, PAGE_W - RIGHT, self.y - 6)
-            self.y -= 20 if self.compact else 22
+            c.setLineWidth(0.6)
+            textw = pdfmetrics.stringWidth(block.text, self.bold, size)
+            c.line(LEFT + textw + 10, self.y - 6.5, PAGE_W - RIGHT, self.y - 6.5)
+            self.y -= 21 if self.compact else 23
         elif block.kind == 'subsection':
             self.y -= 2
             self.paragraph('<b>' + esc(block.text) + '</b>', 'detail')
@@ -777,7 +790,8 @@ def build(profile_path: Path, output_dir: Path, private_dir: Path | None, *, pub
     profile = json.loads(profile_path.read_text(encoding='utf-8'))
     config_path = HERE / 'cv-variants.json'
     config = json.loads(config_path.read_text(encoding='utf-8'))
-    LINK_COLOR = config['palette'].get('link', LINK_COLOR)
+    config['palette'] = cv_palette()
+    LINK_COLOR = config['palette']['link']
     validate_translations(profile, config)
     load_fonts(chinese=not public_only)
     # Reproducible PDFs: document dates come from the profile, not the clock.
@@ -785,7 +799,7 @@ def build(profile_path: Path, output_dir: Path, private_dir: Path | None, *, pub
     output_dir.mkdir(parents=True, exist_ok=True)
     if not public_only:
         private_dir.mkdir(parents=True, exist_ok=True)
-    inputs = {'profile': {'path': profile_path.name, 'sha256': sha256(profile_path)}, 'template': {'path': Path(__file__).name, 'sha256': sha256(Path(__file__))}, 'variants': {'path': config_path.name, 'sha256': sha256(config_path)}}
+    inputs = {'profile': {'path': profile_path.name, 'sha256': sha256(profile_path)}, 'template': {'path': Path(__file__).name, 'sha256': sha256(Path(__file__))}, 'variants': {'path': config_path.name, 'sha256': sha256(config_path)}, 'theme': {'path': 'theme.json', 'sha256': sha256(HERE / 'theme.json')}}
     fingerprint = hashlib.sha256(json.dumps({k: v['sha256'] for k, v in inputs.items()}, sort_keys=True).encode()).hexdigest()
     manifest: dict[str, Any] = {'schema_version': 2, 'built_at': datetime.now(timezone.utc).isoformat(), 'source_fingerprint': fingerprint, 'inputs': inputs, 'fonts': FONT_SOURCES, 'outputs': [], 'visual_qa': {'status': 'pending', 'method': 'render every latest PDF page and inspect it; then record hashes in cv-review.json'}}
     for variant in config['variants']:
