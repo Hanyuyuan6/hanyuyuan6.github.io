@@ -454,7 +454,8 @@ class CVTemplate:
         self.c = canvas.Canvas(str(path), pagesize=A4, pageCompression=1, invariant=1)
         self.c.setAuthor(profile['person']['name'])
         self.c.setTitle(profile['person']['name'] + ' | ' + variant['label'])
-        self.c.setSubject('Computational imaging, physics-aware learning and image-free perception')
+        self.c.setSubject(config['zh']['field'] if self.zh else profile['narrative']['field'])
+        self.c.setKeywords(', '.join(profile['platform_copy']['keywords']))
         self.c.setCreator(profile['person']['name'])
         self.c._doc.info.producer = ''
         self.positions: list[dict[str, Any]] = []

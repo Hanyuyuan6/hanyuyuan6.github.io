@@ -16,6 +16,10 @@ SITE_URL = 'https://hanyuyuan6.github.io/'
 # plus the 320w portrait). The full-size originals load only on click.
 IMAGE_BUDGET = 450_000
 DASH_RANGE = re.compile(r'\b\d{4} - (?:\d{4}|present)\b')
+# Positioning phrases retired on 2026-10-12 ("physics-aware learning" names no learner);
+# they must not return in any public file, PDF text or PDF metadata.
+RETIRED_TERMS = ('physics-aware',)
+TEXT_SUFFIXES = {'.html', '.txt', '.xml', '.json', '.webmanifest', '.bib', '.svg', '.md'}
 
 
 def sha(path):
@@ -201,6 +205,8 @@ def validate(root):
         description = profile['narrative'].get('meta_description', '')
         require(50 <= len(description) <= 160 and f'name="description" content="{escape(description, quote=True)}"' in home_text, 'Search description is present and fits a result snippet')
         metas = {a.get('property') or a.get('name'): a.get('content', '') for t, a in home.tags if t == 'meta'}
+        page_title = f"{profile['person']['name']} · {profile['narrative']['field']}"
+        require(f'<title>{escape(page_title, quote=True)}</title>' in home_text and metas.get('og:title') == page_title, 'Page and link-preview titles state the current field')
         require(metas.get('og:image') == SITE_URL + 'social-card.png' and metas.get('twitter:card') == 'summary_large_image', 'Link previews use the social card')
         card = root / 'dist' / 'social-card.png'
         require(card.is_file() and png_dimensions(card.read_bytes()) == (1200, 630), 'Social card is a 1200×630 PNG')
@@ -348,6 +354,12 @@ def validate(root):
     except (OSError, ValueError, KeyError) as error:
         require(False, f'CV freshness or visual-review record unavailable: {error}')
 
+    public_text = [path for path in (root / 'dist').rglob('*') if path.is_file() and path.suffix in TEXT_SUFFIXES]
+    public_text += [root / 'profile.json', root / 'cv-variants.json']
+    stale = sorted(str(path.relative_to(root)) for path in public_text if any(term in path.read_text(encoding='utf-8', errors='ignore').lower() for term in RETIRED_TERMS))
+    require(not stale, f'No retired positioning terms in public files: {stale}')
+
+    zh_field = json.loads((root / 'cv-variants.json').read_text(encoding='utf-8'))['zh']['field']
     from pypdf import PdfReader
     for cv in profile['cvs']:
         path = root / 'dist' / cv['path']
@@ -380,6 +392,8 @@ def validate(root):
             require(SITE_URL in links, f'PDF links back to the homepage: {path.name}')
             info = reader.metadata or {}
             require(info.get('/Title', '').startswith(profile['person']['name']) and info.get('/Author') == profile['person']['name'], f'PDF title and author metadata: {path.name}')
+            require(info.get('/Subject') == (zh_field if path.stem.endswith('_ZH') else profile['narrative']['field']) and info.get('/Keywords') == ', '.join(profile['platform_copy']['keywords']), f'PDF subject and keywords come from profile.json: {path.name}')
+            require(not any(term in (content + str(info.get('/Subject', ''))).lower() for term in RETIRED_TERMS), f'No retired positioning terms in PDF: {path.name}')
         except Exception as error:
             require(False, f'{path.name}: {error}')
     return failures, checks

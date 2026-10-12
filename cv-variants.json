@@ -136,15 +136,6 @@
       "host_label": "合作导师"
     },
     "projects": {
-      "acquisition": {
-        "title": "采集条件感知学习与多模态测量接口",
-        "status": "研究进行中",
-        "role": "研究开发",
-        "bullets": [
-          "开发面向重建与感知的采集条件感知模型，研究测量预算和采集条件变化下的表征与推断。",
-          "将预训练多模态模型适配至桶探测信号，当前开展直接解释桶测量的微调研究。"
-        ]
-      },
       "lift": {
         "title": "The Lift Spectrum：鲁棒免成像感知",
         "status": "预印本",
@@ -194,8 +185,8 @@
       "LDGI": "面向光学相控阵线光场的循环差分鬼成像（MATLAB）。",
       "TGIs-Entry": "传统、差分与归一化鬼成像的参考实现（MATLAB）。"
     },
-    "internship_summary": "单像素成像与免成像感知方向博士研究生：光学测量设计与原始信号上的学习。",
-    "current_summary": "采集条件感知的单像素学习与光学平台验证（论文准备中）；直接从原始测量完成语言任务（探索中）。米理访学计划：时域漫射光学层析。",
+    "internship_summary": "单像素成像与免成像感知方向博士研究生：设计光学测量，并训练直接作用于原始信号的网络。",
+    "current_summary": "考虑采集条件的单像素感知与光学平台实测（论文准备中）；直接从原始测量完成语言任务（探索中）。米理访学计划：时域漫射光学层析。",
     "internship_technical": [
       {
         "label": "开源",
@@ -216,7 +207,6 @@
   "translation_source_hashes": {
     "lift": "6f7c4dffb4a5d0fc60a995c484655ae8fdd682b9a818e3c51ef81df22c1dea15",
     "shsi": "78ba6f3616cd10976fc66f73a3fecb3f1440d3330e53039840939169bb6ffbe1",
-    "acquisition": "b8ea85ca21177c7eb28a98ad8ac32e8f8d22be9580c0d1315e5b270e84862483",
     "loop": "0ca902d40aaefdc5a756d6f644bbb3722e3160342972787fc26d0180d1d25150"
   }
 }
