@@ -216,7 +216,8 @@ def validate(root):
         theme = json.loads((root / 'theme.json').read_text(encoding='utf-8'))
         palette = theme['palettes'][theme['selected']]
         favicon = (root / 'dist' / 'favicon.svg').read_text(encoding='utf-8') if (root / 'dist' / 'favicon.svg').is_file() else ''
-        require(f'fill="{theme["mark"]["tile"]}"' in favicon and f'fill="{theme["mark"]["pixel"]}"' in favicon and 'url(#m)' in favicon and '<text' not in favicon, 'Favicon is the outlined Y-and-pixel mark in the theme.json mark colours')
+        mark = theme['mark']
+        require(all(f'stop-color="{mark[k]}"' in favicon for k in ('tile', 'tile_to')) and all(f'fill="{mark[k]}"' in favicon for k in ('ink', 'pixel')) and 'url(#m)' in favicon and '<text' not in favicon, 'Favicon is the outlined Y-and-pixel mark in the theme.json mark colours')
         require((root / 'dist' / 'favicon.ico').is_file() and ico_sizes((root / 'dist' / 'favicon.ico').read_bytes()) == [16, 32, 48], 'favicon.ico carries 16, 32 and 48 px images')
         require((root / 'dist' / 'apple-touch-icon.png').is_file() and png_dimensions((root / 'dist' / 'apple-touch-icon.png').read_bytes()) == (180, 180), 'Apple touch icon is 180×180')
         for name, colours in theme['palettes'].items():
