@@ -10,12 +10,7 @@
       "source_url": "https://arxiv.org/abs/2607.22077v2",
       "source_title": "The Lift Spectrum: How Measurement-to-Space Adaptivity Shapes Robustness in Image-Free Single-Pixel Sensing",
       "figure": "Fig. 1 (a–i)",
-      "alt": "Complete STSF+TPLS architecture showing acquisition and temporal encoding, content-adaptive lift, spatial decoding, loss composition, training schedule and auxiliary-head comparisons.",
-      "teaser": {
-        "crop": [0, 23, 1202, 676],
-        "panels": "Fig. 1 (a–b)",
-        "alt": "Preview of Fig. 1(a–b): Hadamard patterns encode a scene into 512 single-pixel measurements, which a BiGRU and a content-adaptive lift map to spatial features."
-      }
+      "alt": "Complete STSF+TPLS architecture showing acquisition and temporal encoding, content-adaptive lift, spatial decoding, loss composition, training schedule and auxiliary-head comparisons."
     },
     {
       "path": "assets/research/shsi.webp",
@@ -26,12 +21,7 @@
       "source_url": "https://doi.org/10.1364/OE.576533",
       "source_title": "Generalized sparse Hadamard single-pixel Imaging",
       "figure": "Fig. 9 (a–h)",
-      "alt": "Complete SHSI experiment figure with two ground-glass occluders, the testing-board target and six reconstruction rows at all eight sampling rates, retaining every original panel label and comparison border.",
-      "teaser": {
-        "crop": [69, 0, 1155, 343],
-        "panels": "Fig. 9 (a)",
-        "alt": "Preview of Fig. 9(a): a DMD-based single-pixel setup images a test object through two ground-glass diffusers."
-      }
+      "alt": "Complete SHSI experiment figure with two ground-glass occluders, the testing-board target and six reconstruction rows at all eight sampling rates, retaining every original panel label and comparison border."
     },
     {
       "path": "assets/research/loop.webp",
@@ -42,15 +32,10 @@
       "source_url": "https://doi.org/10.1016/j.optcom.2025.131589",
       "source_title": "Loop differential ghost imaging based on line pattern",
       "figure": "Fig. 2 (a–c)",
-      "alt": "Complete LDGI OPA figure with the LNOI one-dimensional optical phased-array and grating-waveguide schematic, magnified emission region, and X- and Y-direction far-field curves with all axes and legends.",
-      "teaser": {
-        "crop": [0, 0, 1095, 600],
-        "panels": "Fig. 2 (a)",
-        "alt": "Preview of Fig. 2(a): a one-dimensional optical phased array with an MMI splitter tree, phase modulators and a grating-waveguide emitter."
-      }
+      "alt": "Complete LDGI OPA figure with the LNOI one-dimensional optical phased-array and grating-waveguide schematic, magnified emission region, and X- and Y-direction far-field curves with all axes and legends."
     }
   ],
-  "teaser_widths": [320, 640, 1080],
+  "preview_widths": [320, 640, 1080],
   "portrait": {
     "path": "assets/portrait.webp",
     "width": 1024,
