@@ -1,24 +1,24 @@
 {
  "reviewed_on": "2026-10-12",
  "reviewer": "Claude (Opus 5.5)",
- "method": "pdftoppm at 100 dpi; every page of both public PDFs and both private Chinese PDFs inspected at full page after the 2026-10-12 third-round copy (unified narrative, Award & Service with 13 verified reviews, SPIFS-qualified Lift claim, corrected Comparison count). The build now fails on orphans, split number-unit pairs and line-initial CJK punctuation (typography_issues); all four variants pass. Checked by eye: no clipping, overlap, missing glyphs or abnormal page breaks; education order; Supervisor label. Later on 2026-10-12: PDF Subject and Keywords now come from profile.json (all page renders byte-identical); the internship summary was rewritten with a subject (\"designs optical measurements and trains networks…\") and the Chinese current-research line no longer says 学习. The two changed pages (internship EN and ZH page 1) and the changed Chinese academic page 1 were re-inspected at full page: no clipping, overlap, orphan or abnormal break; all other pages are byte-identical renders. The remote-gpu-trainer entry now says \"delivers\" as the repository does; the changed academic page 2 was re-inspected at full page.",
- "source_fingerprint": "baed77974463d73ea928937731ad627aa941e6199de532ebf9bbd49d2db63c7b",
+ "method": "pdftoppm at 100 dpi; every page of both public PDFs and both private Chinese PDFs inspected at full page after the 2026-10-12 third-round copy (unified narrative, Award & Service with 13 verified reviews, SPIFS-qualified Lift claim, corrected Comparison count). The build now fails on orphans, split number-unit pairs and line-initial CJK punctuation (typography_issues); all four variants pass. Checked by eye: no clipping, overlap, missing glyphs or abnormal page breaks; education order; Supervisor label. Later on 2026-10-12: PDF Subject and Keywords now come from profile.json (all page renders byte-identical); the internship summary was rewritten with a subject (\"designs optical measurements and trains networks…\") and the Chinese current-research line no longer says 学习. The two changed pages (internship EN and ZH page 1) and the changed Chinese academic page 1 were re-inspected at full page: no clipping, overlap, orphan or abnormal break; all other pages are byte-identical renders. The remote-gpu-trainer entry now says \"delivers\" as the repository does; the changed academic page 2 was re-inspected at full page. The STSF-TPLS code line now names its lift and loss schedule (English and Chinese academic CVs, page 2); both changed pages were re-inspected.",
+ "source_fingerprint": "db6eb4e05313f4192e6fc6bb1dd76c7bbe094735b1b4f83fe40a2a1f9dfbd13d",
  "pdf_sha256": {
-  "Yuyuan_Han_Academic_CV.pdf": "766dc3b5307765d9f7630d409a10366f8ccbf66f7ae538add5727821e92d4de6",
+  "Yuyuan_Han_Academic_CV.pdf": "f6ef9431e4b029e68586e844411a2039c26874c5170a92a26f9c992e99edb39f",
   "Yuyuan_Han_Internship_Resume.pdf": "05781101c4ca094ba74502db7d15006fc54785ff64566612fbda42e36e26ae75"
  },
  "html_visual_qa": "not separately reviewed; HTML CVs are unlinked companions of the PDFs",
- "reviewed_at": "2026-10-12T14:07:48.014223+00:00",
+ "reviewed_at": "2026-10-12T14:11:41.645748+00:00",
  "reviewed_pages": [
   {
    "id": "academic-en-page-1",
    "render_sha256": "c81f5fdeecd682364b688bc7d531e9dfb57246fb01d6245586cebbc30ad3dde1",
-   "pdf_sha256": "766dc3b5307765d9f7630d409a10366f8ccbf66f7ae538add5727821e92d4de6"
+   "pdf_sha256": "f6ef9431e4b029e68586e844411a2039c26874c5170a92a26f9c992e99edb39f"
   },
   {
    "id": "academic-en-page-2",
-   "render_sha256": "ab8c7484944978122eb3a0be9bee1fac4f2c6587b203d84d084ea8effe81b0e8",
-   "pdf_sha256": "766dc3b5307765d9f7630d409a10366f8ccbf66f7ae538add5727821e92d4de6"
+   "render_sha256": "cb9a4b4b5f0ccc89c34d31bb4dff6541290673d53aa43305d5e19e5395119762",
+   "pdf_sha256": "f6ef9431e4b029e68586e844411a2039c26874c5170a92a26f9c992e99edb39f"
   },
   {
    "id": "internship-en-page-1",

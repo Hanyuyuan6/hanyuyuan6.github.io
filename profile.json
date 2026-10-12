@@ -429,7 +429,7 @@
     {
       "name": "STSF-TPLS",
       "url": "https://github.com/Hanyuyuan6/STSF-TPLS",
-      "description": "Image-free segmentation from single-pixel measurements: code and pretrained weights (PyTorch)."
+      "description": "Image-free segmentation from single-pixel measurements with a content-adaptive lift and task-prioritized loss scheduling; code and pretrained weights (PyTorch)."
     },
     {
       "name": "Comparison-of-SPI-DLs",
@@ -454,7 +454,8 @@
     {
       "name": "remote-gpu-trainer",
       "url": "https://github.com/Hanyuyuan6/remote-gpu-trainer",
-      "description": "Open-source agent skill for Claude Code and Codex that runs, verifies and delivers GPU experiments (60+ stars)."
+      "description": "Open-source agent skill for Claude Code and Codex that runs, verifies and delivers GPU experiments (60+ stars).",
+      "github_about": "An Agent Skill for the DL experiment lifecycle: RUN (a GPU you own or rent) → VERIFY the number is real → DELIVER reproducible, single-source figures and tables."
     }
   ],
   "skills": [

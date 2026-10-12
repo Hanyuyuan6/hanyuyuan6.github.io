@@ -178,7 +178,7 @@
       "Second Prize, National Post-Graduate Mathematical Contest in Modeling": "全国研究生数学建模竞赛二等奖"
     },
     "software": {
-      "STSF-TPLS": "免成像单像素分割：代码与预训练权重（PyTorch）。",
+      "STSF-TPLS": "免成像单像素分割：内容自适应提升与任务优先损失调度；代码与预训练权重（PyTorch）。",
       "SHSI": "稀疏 Hadamard 单像素成像：图样生成与重建（MATLAB）。",
       "Comparison-of-SPI-DLs": "八种深度网络与一种经典逆变换在同一 Hadamard 采集下的基准比较（PyTorch）。",
       "remote-gpu-trainer": "面向 Claude Code 与 Codex 的开源智能体技能：运行、核验并交付 GPU 实验（60+ 星）。",

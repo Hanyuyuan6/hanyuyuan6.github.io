@@ -1,11 +1,11 @@
 {
   "schema_version": 2,
-  "built_at": "2026-10-12T14:07:34.413227+00:00",
-  "source_fingerprint": "baed77974463d73ea928937731ad627aa941e6199de532ebf9bbd49d2db63c7b",
+  "built_at": "2026-10-12T14:11:19.365246+00:00",
+  "source_fingerprint": "db6eb4e05313f4192e6fc6bb1dd76c7bbe094735b1b4f83fe40a2a1f9dfbd13d",
   "inputs": {
     "profile": {
       "path": "profile.json",
-      "sha256": "8eeb495ca935c97df21e8cc7f0422d0d52278004e33a2482e65ddb1d7298d8b4"
+      "sha256": "165493693a3013387159e87fe368a4065073f71ed882658ac7377e1c023c9939"
     },
     "template": {
       "path": "build_cv.py",
@@ -13,7 +13,7 @@
     },
     "variants": {
       "path": "cv-variants.json",
-      "sha256": "e43c79d7be08cebb1070455b2908d98eb39ff0dd56e52ebc66711cc2cee69ee7"
+      "sha256": "5c44eb691adb0952002535fc7a83727e17c536b1f546a91a506db62a1282a547"
     },
     "theme": {
       "path": "theme.json",
@@ -70,17 +70,17 @@
       },
       "pdf": {
         "path": "Yuyuan_Han_Academic_CV.pdf",
-        "sha256": "766dc3b5307765d9f7630d409a10366f8ccbf66f7ae538add5727821e92d4de6",
-        "bytes": 59448
+        "sha256": "f6ef9431e4b029e68586e844411a2039c26874c5170a92a26f9c992e99edb39f",
+        "bytes": 59494
       },
       "html": {
         "path": "Yuyuan_Han_Academic_CV.html",
-        "sha256": "6c37a4d440ff16facceb7817806efbfd0e8bfedd74a2a3ff60156f8087a80100",
-        "bytes": 15226
+        "sha256": "3a2215c4353abb90184371965aa9896e1e06398e83a4935f80492589db88ae6e",
+        "bytes": 15292
       },
       "checks": {
         "page_count": 2,
-        "extracted_characters": 5610,
+        "extracted_characters": 5676,
         "embedded_fonts": [
           "/AAAAAA+NotoSans-Bold",
           "/AAAAAA+NotoSans-Italic",
@@ -709,47 +709,47 @@
             "kind": "body",
             "source": "software[0]",
             "top": 253.69,
-            "bottom": 236.69,
-            "text": "STSF-TPLS · Image-free segmentation from single-pixel measurements: code and pretrained weights (PyTorch)."
+            "bottom": 223.69,
+            "text": "STSF-TPLS · Image-free segmentation from single-pixel measurements with a content-adaptive lift and task-prioritized loss scheduling; code and pretrained weights (PyTorch)."
           },
           {
             "page": 2,
             "kind": "body",
             "source": "software[1]",
-            "top": 236.69,
-            "bottom": 206.69,
+            "top": 223.69,
+            "bottom": 193.69,
             "text": "Comparison-of-SPI-DLs · Eight deep architectures and a classical inverse, benchmarked on one shared Hadamard acquisition (PyTorch)."
           },
           {
             "page": 2,
             "kind": "body",
             "source": "software[2]",
-            "top": 206.69,
-            "bottom": 189.69,
+            "top": 193.69,
+            "bottom": 176.69,
             "text": "SHSI · Sparse Hadamard single-pixel imaging: pattern generation and reconstruction (MATLAB)."
           },
           {
             "page": 2,
             "kind": "body",
             "source": "software[3]",
-            "top": 189.69,
-            "bottom": 172.69,
+            "top": 176.69,
+            "bottom": 159.69,
             "text": "LDGI · Loop differential ghost imaging for line patterns from optical phased arrays (MATLAB)."
           },
           {
             "page": 2,
             "kind": "body",
             "source": "software[4]",
-            "top": 172.69,
-            "bottom": 155.69,
+            "top": 159.69,
+            "bottom": 142.69,
             "text": "TGIs-Entry · Reference implementations of traditional, differential and normalized ghost imaging (MATLAB)."
           },
           {
             "page": 2,
             "kind": "body",
             "source": "software[5]",
-            "top": 155.69,
-            "bottom": 125.69,
+            "top": 142.69,
+            "bottom": 112.69,
             "text": "remote-gpu-trainer · Open-source agent skill for Claude Code and Codex that runs, verifies and delivers GPU experiments (60+ stars)."
           }
         ]
@@ -816,7 +816,7 @@
       },
       "html": {
         "path": "Yuyuan_Han_Internship_Resume.html",
-        "sha256": "d5d265d433cefa5424d88bdeabb3dd59e594afb2fdf9de6cfaf5496cdb9f29c3",
+        "sha256": "221e17c19b67f2a82bfbd9cae0ac6315927f3a9a20922aba591d415e6d252e9e",
         "bytes": 9282
       },
       "checks": {
