@@ -90,6 +90,10 @@ def main() -> int:
                 tag = f'{name}@{width}px'
                 if result['overflow'] > 0:
                     failures.append(f'{tag}: horizontal overflow of {result["overflow"]} px')
+                # Expanded disclosures (BibTeX, credits) must not widen the page either.
+                expanded = page.evaluate("document.querySelectorAll('details').forEach(d => { d.open = true; }); document.documentElement.scrollWidth - window.innerWidth")
+                if expanded > 0:
+                    failures.append(f'{tag}: horizontal overflow of {expanded} px with all details expanded')
                 for gap in result['gaps']:
                     if gap['gap'] < MIN_GAP:
                         failures.append(f'{tag}: "{gap["heading"]}" sits {gap["gap"]} px below {gap["after"]!r} (minimum {MIN_GAP})')
