@@ -1,29 +1,29 @@
 {
  "reviewed_on": "2026-10-12",
  "reviewer": "Claude (Opus 5.5), independent of the original Codex build",
- "method": "pdftoppm at 110 dpi; every page of both public PDFs (and both private Chinese PDFs) inspected at full page. Checked: homepage link in header, en-dash date ranges, no Published labels, Lift claim with 20 dB and clean-trained condition, LDGI noise-symmetry wording, no orphan words, no clipping, overlap, missing glyphs or abnormal page breaks.",
- "source_fingerprint": "73583e90f63da8840d19a804d3e8e912b3bb15d13c026c5366ad36a99ee462ae",
+ "method": "pdftoppm at 110 dpi; every page of both public PDFs (and both private Chinese PDFs) inspected at full page. Checked: homepage link in header, en-dash date ranges, no Published labels, Lift claim with 20 dB and clean-trained condition, LDGI noise-symmetry wording, no orphan words, no clipping, overlap, missing glyphs or abnormal page breaks. Re-reviewed after adding the XJTU advisor line (Advisor: Huaibin Zheng / 导师：郑淮斌): fits on the existing detail line, no other layout change.",
+ "source_fingerprint": "dc78de4f76868cc1695c824d5682a2ffcd9c8102fd582c425b88c59e18e02b8c",
  "pdf_sha256": {
-  "Yuyuan_Han_Academic_CV.pdf": "f7dabae47d37e298486bbabb5bf9ba2a57948cf10c3eeb7b11238f173513f5f5",
-  "Yuyuan_Han_Internship_Resume.pdf": "3160f2dcf18e332cceb241ea076364b3489bd3fc4821342fbb62e64f20178682"
+  "Yuyuan_Han_Academic_CV.pdf": "6b25a5693528dabd589c2da39d0ea07e20f904f650b4d2a520ac63b31edfbf3d",
+  "Yuyuan_Han_Internship_Resume.pdf": "ec040d8fac4c454b482f5871b919cb41208a2080976131284b7c8adb0ff90afa"
  },
  "html_visual_qa": "not separately reviewed; HTML CVs are unlinked companions of the PDFs",
- "reviewed_at": "2026-10-12T07:22:40.582609+00:00",
+ "reviewed_at": "2026-10-12T08:52:33.221077+00:00",
  "reviewed_pages": [
   {
    "id": "academic-en-page-1",
-   "render_sha256": "2c82adc7a8d65583a6461c73ecb4669797cbf7ad932b3ec5a28799baa7e2b9d6",
-   "pdf_sha256": "f7dabae47d37e298486bbabb5bf9ba2a57948cf10c3eeb7b11238f173513f5f5"
+   "render_sha256": "f884b2f0b0b17df3af957ff271270f868bcb193819432c2532340e28e01ea082",
+   "pdf_sha256": "6b25a5693528dabd589c2da39d0ea07e20f904f650b4d2a520ac63b31edfbf3d"
   },
   {
    "id": "academic-en-page-2",
    "render_sha256": "fea7a79b96c5a37a183f118b2a3d6c2d0983b2c05badda5d2840a8aa1df2ce83",
-   "pdf_sha256": "f7dabae47d37e298486bbabb5bf9ba2a57948cf10c3eeb7b11238f173513f5f5"
+   "pdf_sha256": "6b25a5693528dabd589c2da39d0ea07e20f904f650b4d2a520ac63b31edfbf3d"
   },
   {
    "id": "internship-en-page-1",
-   "render_sha256": "81a52904771bc5dc35675d46c0bda14e0664b46cc1eb47fa18fa13c4ac3a958b",
-   "pdf_sha256": "3160f2dcf18e332cceb241ea076364b3489bd3fc4821342fbb62e64f20178682"
+   "render_sha256": "fb8d54ab6927f9678f9ae1b65fa5d907487e2ed522c0d15d94b39e3b91d6326d",
+   "pdf_sha256": "ec040d8fac4c454b482f5871b919cb41208a2080976131284b7c8adb0ff90afa"
   }
  ]
 }

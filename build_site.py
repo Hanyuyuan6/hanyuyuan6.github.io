@@ -403,10 +403,12 @@ def education(rows: list[dict[str, Any]]) -> str:
     for row in rows:
         field = str(row.get("field", "") or "").strip()
         degree_line = e(row.get("degree", "")) + (f" · {e(field)}" if field else "")
+        advisor = str(row.get("advisor", "") or "").strip()
         dates = str(row.get("display_dates", "") or "").strip()
         entries.append(
             '<li><h4>' + e(row.get("institution", "")) + "</h4>"
             f'<p>{degree_line}</p>'
+            + (f'<p class="entry-note">Advisor: {e(advisor)}</p>' if advisor else "")
             + (f'<p class="entry-dates">{e(dates)}</p>' if dates else "")
             + "</li>"
         )
