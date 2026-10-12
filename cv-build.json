@@ -1,19 +1,19 @@
 {
   "schema_version": 2,
-  "built_at": "2026-10-12T07:41:32.295844+00:00",
-  "source_fingerprint": "412b785516591c0b4d406875aa8b7732ff7690730a3e51125fddcc9516abf475",
+  "built_at": "2026-10-12T08:52:07.557383+00:00",
+  "source_fingerprint": "dc78de4f76868cc1695c824d5682a2ffcd9c8102fd582c425b88c59e18e02b8c",
   "inputs": {
     "profile": {
       "path": "profile.json",
-      "sha256": "2126bf6914f22558100a7d933cafbc57344dce9db26fbfbe559b1245b9f5d43b"
+      "sha256": "c400c0d768a7b2e74628b3a11448947e1a4849812f541f49c86d4f5dea2246e4"
     },
     "template": {
       "path": "build_cv.py",
-      "sha256": "f5dc3a53b95aef7fed6660dc10db33d206f346862df39d832dd05e7e5b8a5537"
+      "sha256": "aabeaf5686d193a3bc8c8d863e1b0d4db9c4a14ef7ce7c6d3a31795996842f3e"
     },
     "variants": {
       "path": "cv-variants.json",
-      "sha256": "db32c66bf6c0a7a5acb12cf0b6c29636a1ac1fbcbd9de5669d8ffa7627e7db1b"
+      "sha256": "f5ce328f91952baaa663a518a317de01beb3206b5f59bf77efa649e0477ac83a"
     }
   },
   "fonts": {
@@ -66,17 +66,17 @@
       },
       "pdf": {
         "path": "Yuyuan_Han_Academic_CV.pdf",
-        "sha256": "f7dabae47d37e298486bbabb5bf9ba2a57948cf10c3eeb7b11238f173513f5f5",
-        "bytes": 58102
+        "sha256": "6b25a5693528dabd589c2da39d0ea07e20f904f650b4d2a520ac63b31edfbf3d",
+        "bytes": 58127
       },
       "html": {
         "path": "Yuyuan_Han_Academic_CV.html",
-        "sha256": "c0654478dd99a4f8425a239afe04cdf0c5b634f9c15a5e87a815564fc0095a2b",
-        "bytes": 14225
+        "sha256": "5816806a057790196768f33a942abe535e61d570d3d8e87adc046de631d6794b",
+        "bytes": 14251
       },
       "checks": {
         "page_count": 2,
-        "extracted_characters": 5087,
+        "extracted_characters": 5112,
         "embedded_fonts": [
           "/AAAAAA+NotoSans-Bold",
           "/AAAAAA+NotoSans-Italic",
@@ -382,7 +382,7 @@
             "source": "education[0].field",
             "top": 612.37,
             "bottom": 596.37,
-            "text": "Electronic Science and Technology · Master’s-to-PhD track"
+            "text": "Electronic Science and Technology · Master’s-to-PhD track · Advisor: Huaibin Zheng"
           },
           {
             "page": 1,
@@ -734,17 +734,17 @@
       },
       "pdf": {
         "path": "Yuyuan_Han_Internship_Resume.pdf",
-        "sha256": "3160f2dcf18e332cceb241ea076364b3489bd3fc4821342fbb62e64f20178682",
-        "bytes": 35468
+        "sha256": "ec040d8fac4c454b482f5871b919cb41208a2080976131284b7c8adb0ff90afa",
+        "bytes": 35494
       },
       "html": {
         "path": "Yuyuan_Han_Internship_Resume.html",
-        "sha256": "9d8f3df3450aa36ae879a95463f17ee70971e08789ac1134fc91c6ffe1746143",
-        "bytes": 9078
+        "sha256": "ec9b193d4aa30e80567e2b8f89cc57e76efd73e4835dccd6645b126926f9dc0d",
+        "bytes": 9104
       },
       "checks": {
         "page_count": 1,
-        "extracted_characters": 2382,
+        "extracted_characters": 2407,
         "embedded_fonts": [
           "/AAAAAA+NotoSans-Bold",
           "/AAAAAA+NotoSans-Regular"
@@ -916,7 +916,7 @@
             "source": "education[0].field",
             "top": 629.37,
             "bottom": 612.87,
-            "text": "Electronic Science and Technology · Master’s-to-PhD track"
+            "text": "Electronic Science and Technology · Master’s-to-PhD track · Advisor: Huaibin Zheng"
           },
           {
             "page": 1,

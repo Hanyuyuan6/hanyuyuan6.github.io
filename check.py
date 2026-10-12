@@ -213,6 +213,7 @@ def validate(root):
                 require(escape(project['summary'], quote=True) in home_text, f"Selected-work conclusion appears in homepage: {project['id']}")
         require(all(term in home_text for term in ('20 dB', 'clean-trained', 'reconstruct-then-segment')), 'Lift homepage states its noise level, training condition and baseline')
         require('one-dimensional optical phased arrays' in home_text, 'LDGI homepage identifies its OPA illumination setting')
+        require(all(f"Advisor: {escape(row['advisor'], quote=True)}" in home_text for row in profile['education'] if row.get('advisor')), 'Homepage names the recorded advisor')
         first_authored = [p for p in publications if p['id'] in {pr['publication_id'] for pr in profile['projects'] if pr['id'] in selected}]
         require(home_text.count('<strong class="self-author">Yuyuan Han</strong>') >= len(publications) and all(p['authors'][0] == 'Yuyuan Han' for p in first_authored), 'Author lists are visible with the researcher highlighted')
 
@@ -320,6 +321,7 @@ def validate(root):
             require('clean-trained' in compact_text and '20 dB' in compact_text, f'Lift claim keeps its noise level and training condition: {path.name}')
             require('one-dimensional optical phased arrays' in compact_text, f'LDGI OPA setting in actual PDF: {path.name}')
             require(not re.search(r'\bPublished\b', content), f'No redundant Published labels: {path.name}')
+            require(all(f"Advisor: {row['advisor']}" in compact_text for row in profile['education'] if row.get('advisor')), f'PDF names the recorded advisor: {path.name}')
             require(not DASH_RANGE.search(compact_text), f'Date ranges use en dashes: {path.name}')
 
             require(not any(word in content for word in ['CET-6', 'Programming and modeling', 'TECHNICAL SKILLS']), f'No generic tools/language section: {path.name}')

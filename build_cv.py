@@ -226,14 +226,6 @@ def appointment_blocks(profile: dict[str, Any], cfg: dict[str, Any], zh: bool, c
     return out
 
 
-def education_blocks(profile: dict[str, Any], cfg: dict[str, Any], zh: bool, compact: bool) -> list[Block]:
-    out = []
-    for i, e in enumerate(translated_education(profile, cfg, zh)):
-        out.append(Block('entry', f"<b>{esc(e['institution'])}</b>{sep(zh)}{esc(e['degree'])}", f'education[{i}]', meta={'right': e['display_dates']}))
-        out.append(Block('detail', esc(e['field']), f'education[{i}].field', gap=5 if compact else 8))
-    return out
-
-
 def project_blocks(profile: dict[str, Any], cfg: dict[str, Any], variant: dict[str, Any]) -> list[Block]:
     zh = variant['language'].startswith('zh')
     compact = variant['compact']
@@ -326,7 +318,10 @@ def compact_education(profile: dict[str, Any], cfg: dict[str, Any], zh: bool) ->
     for i, row in enumerate(translated_education(profile, cfg, zh)):
         title = f"<b>{esc(row['institution'])}</b>{sep(zh)}{esc(row['degree'])}"
         out.append(Block('entry', title, f'education[{i}]', meta={'right': row['display_dates']}))
-        out.append(Block('detail', esc(row['field']), f'education[{i}].field', gap=4))
+        detail = esc(row['field'])
+        if row.get('advisor'):
+            detail += sep(zh) + (f"导师：{esc(row['advisor'])}" if zh else f"Advisor: {esc(row['advisor'])}")
+        out.append(Block('detail', detail, f'education[{i}].field', gap=4))
     out += appointment_blocks(profile, cfg, zh, True)
     return out
 
