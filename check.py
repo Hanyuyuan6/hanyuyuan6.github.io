@@ -240,6 +240,7 @@ def validate(root):
         require((root / 'dist' / 'apple-touch-icon.png').is_file() and png_dimensions((root / 'dist' / 'apple-touch-icon.png').read_bytes()) == (180, 180), 'Apple touch icon is 180×180')
         for name, colours in theme['palettes'].items():
             require(all(contrast(colours[key], colours['bg']) >= 4.5 for key in ('ink', 'muted', 'link', 'hover')) and all(contrast(colours[key], colours['tint']) >= 4.5 for key in ('ink', 'muted', 'link')), f'Palette {name} passes WCAG AA for text on its background and highlight')
+            require(contrast(colours['accent'], colours['bg']) >= 3, f'Palette {name} accent marks reach 3:1 against the background (WCAG non-text contrast)')
         stylesheet = (root / 'dist' / 'style.css').read_text(encoding='utf-8')
         require(all(f'--{key}: {value};' in stylesheet.split('@media', 1)[0] for key, value in palette.items() if key != 'label'), 'Deployed CSS carries the selected theme.json palette')
         require(not theme.get('dark') or all(f'--{key}: {value};' in stylesheet for key, value in theme['palettes'][theme['dark']].items() if key != 'label'), 'Deployed CSS carries the automatic dark palette')
@@ -291,7 +292,9 @@ def validate(root):
 
         require(len(figures) == 3 and len({f['id'] for f in figures}) == 3 and {f['id'] for f in figures} == expected_figure_ids, 'Every selected paper has exactly one reviewed figure')
         require(isinstance(portrait, dict), 'Reviewed portrait metadata is present')
-        require(not any(t == 'figcaption' for t, _ in home.tags), 'Homepage adds no visible figure captions')
+        # No long captions (owner, round 2): a preview may carry only its panel label and a link.
+        captions = re.findall(r'<figcaption[^>]*>(.*?)</figcaption>', home_text, re.S)
+        require(len(captions) == len(figures) and all(re.fullmatch(r'Fig\. \d+ \([a-z](?:–[a-z])?\) · <a href="[^"]+">Full figure</a>', c) for c in captions), 'Figure captions are only a panel label and a full-figure link')
         require(len(home.images) == 4, 'Homepage renders one portrait and three research figures')
         records = [('figure ' + f['id'], f, False) for f in figures]
         if isinstance(portrait, dict):
@@ -326,6 +329,9 @@ def validate(root):
             image = matched[0][0]
             expected_alt = record.get('alt') if is_portrait else record.get('teaser', {}).get('alt')
             require(bool(expected_alt) and image.get('alt', '').strip() == expected_alt.strip(), f'Preview alt text matches the reviewed record: {label}')
+            if not is_portrait:
+                caption = f'<figcaption class="figure-caption">{escape(record["teaser"]["panels"], quote=True)} · <a href="{escape(relative, quote=True)}">Full figure</a></figcaption>'
+                require(caption in home_text, f'Preview names the panels it shows and links the full figure: {label}')
             candidates = [part.strip().rsplit(' ', 1) for part in image.get('srcset', '').split(',') if part.strip()]
             require(len(candidates) >= 2 and image.get('sizes'), f'Preview is responsive (srcset and sizes): {label}')
             crop = record.get('teaser', {}).get('crop') if not is_portrait else [0, 0, record['width'], record['height']]

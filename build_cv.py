@@ -52,10 +52,12 @@ LINK_COLOR = ''  # set from theme.json in build()
 
 
 def cv_palette() -> dict[str, str]:
-    """The website's selected theme.json palette, on white paper for print."""
+    """The website's selected theme.json palette, on white paper for print: headings take the link
+    colour, rules a light tint of the accent (45% accent, 55% paper)."""
     theme = json.loads((HERE / 'theme.json').read_text(encoding='utf-8'))
     colours = theme['palettes'][theme['selected']]
-    return {'paper': '#ffffff', 'ink': colours['ink'], 'muted': colours['muted'], 'accent': colours['link'], 'rule': colours['line'], 'link': colours['link']}
+    rule = '#' + ''.join(f'{round(int(colours["accent"][i:i + 2], 16) * 0.45 + 255 * 0.55):02x}' for i in (1, 3, 5))
+    return {'paper': '#ffffff', 'ink': colours['ink'], 'muted': colours['muted'], 'accent': colours['link'], 'rule': rule, 'link': colours['link']}
 
 
 def sha256(path: Path) -> str:

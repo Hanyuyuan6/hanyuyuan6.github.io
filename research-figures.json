@@ -12,7 +12,7 @@
       "figure": "Fig. 1 (a–i)",
       "alt": "Complete STSF+TPLS architecture showing acquisition and temporal encoding, content-adaptive lift, spatial decoding, loss composition, training schedule and auxiliary-head comparisons.",
       "teaser": {
-        "crop": [0, 23, 1259, 676],
+        "crop": [0, 23, 1202, 676],
         "panels": "Fig. 1 (a–b)",
         "alt": "Preview of Fig. 1(a–b): Hadamard patterns encode a scene into 512 single-pixel measurements, which a BiGRU and a content-adaptive lift map to spatial features."
       }
@@ -44,7 +44,7 @@
       "figure": "Fig. 2 (a–c)",
       "alt": "Complete LDGI OPA figure with the LNOI one-dimensional optical phased-array and grating-waveguide schematic, magnified emission region, and X- and Y-direction far-field curves with all axes and legends.",
       "teaser": {
-        "crop": [0, 0, 1092, 600],
+        "crop": [0, 0, 1095, 600],
         "panels": "Fig. 2 (a)",
         "alt": "Preview of Fig. 2(a): a one-dimensional optical phased array with an MMI splitter tree, phase modulators and a grating-waveguide emitter."
       }

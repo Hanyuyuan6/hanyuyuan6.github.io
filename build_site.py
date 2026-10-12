@@ -25,7 +25,7 @@ from PIL import Image, ImageDraw, ImageFont
 SOURCE_DIR = Path(__file__).resolve().parent
 SITE_URL = "https://hanyuyuan6.github.io/"
 TOKENS = re.compile(r"@@([A-Z_]+)@@")
-THEME_KEYS = ("bg", "ink", "muted", "link", "hover", "line", "tint", "wash")
+THEME_KEYS = ("bg", "ink", "muted", "link", "hover", "line", "tint", "wash", "accent")
 # The mark: a Y whose two arms carry light into one gold pixel, the single detector a
 # single-pixel camera reads, and whose stem carries the signal out. Straight segments on
 # the 32-unit grid, so the same polygons draw the SVG icon and the raster ICO/PNG; at
@@ -395,8 +395,16 @@ def social_card(profile: dict[str, Any], portrait_path: Path, source_dir: Path, 
     regular = ImageFont.truetype(str(fonts / "NotoSans-Regular.ttf"), 28)
     small = ImageFont.truetype(str(fonts / "NotoSans-Regular.ttf"), 24)
     card = Image.new("RGB", (1200, 630), palette["bg"])
+    # Round portrait inside a thin accent ring, drawn at 4x and reduced for clean edges.
+    photo, ring, scale = 300, 4, 4
     with Image.open(portrait_path) as portrait:
-        card.paste(portrait.convert("RGB").resize((300, 300), Image.LANCZOS), (84, 165))
+        face = portrait.convert("RGB").resize((photo * scale, photo * scale), Image.LANCZOS)
+    disc = Image.new("L", (photo * scale, photo * scale), 0)
+    ImageDraw.Draw(disc).ellipse((0, 0, photo * scale - 1, photo * scale - 1), fill=255)
+    halo = Image.new("L", ((photo + 2 * ring) * scale,) * 2, 0)
+    ImageDraw.Draw(halo).ellipse((0, 0, (photo + 2 * ring) * scale - 1, (photo + 2 * ring) * scale - 1), fill=255)
+    card.paste(Image.new("RGB", ((photo + 2 * ring),) * 2, palette["accent"]), (84 - ring, 165 - ring), halo.resize(((photo + 2 * ring),) * 2, Image.BOX))
+    card.paste(face.resize((photo, photo), Image.BOX), (84, 165), disc.resize((photo, photo), Image.BOX))
     draw = ImageDraw.Draw(card)
     x, right = 432, 1116
     # The field line takes the largest size (28 px down to 22 px) that fits the margin.
@@ -406,16 +414,16 @@ def social_card(profile: dict[str, Any], portrait_path: Path, source_dir: Path, 
             break
     lines = [
         (person["name"], bold, palette["ink"], 172),
-        (narrative["field"], regular, palette["ink"], 266),
+        (narrative["field"], regular, palette["link"], 266),
         (f'{person["position"]} · {person["institution"]}', small, palette["muted"], 322),
         (f'{person["visiting_role"]} · {person["visiting_institution"]}', small, palette["muted"], 358),
-        (person["homepage"].replace("https://", "").rstrip("/"), small, palette["link"], 426),
+        (person["homepage"].replace("https://", "").rstrip("/"), small, palette["accent"], 426),
     ]
     for text, font, colour, y in lines:
         if x + draw.textlength(text, font=font) > right:
             raise ValueError(f"Social card text overflows its 84 px margin: {text!r}")
         draw.text((x, y), text, font=font, fill=colour)
-    draw.line((x, 412, right, 412), fill=palette["line"], width=2)
+    draw.line((x, 412, x + 96, 412), fill=palette["accent"], width=2)
     card.save(output_dir / "social-card.png", optimize=True)
 
 
@@ -470,7 +478,10 @@ def selected_research(
             f'<img src="{e(default["path"])}" srcset="{srcset(variants)}" '
             'sizes="(max-width: 640px) calc(100vw - 32px), 280px" '
             f'alt="{e(figure["teaser"]["alt"])}" width="{default["width"]}" height="{default["height"]}" '
-            f'loading="{"eager" if index == 1 else "lazy"}" decoding="async"></a></figure>'
+            f'loading="{"eager" if index == 1 else "lazy"}" decoding="async"></a>'
+            # The preview is a legible crop; say so, and link the complete figure.
+            f'<figcaption class="figure-caption">{e(figure["teaser"]["panels"])} · '
+            f'<a href="{e(figure["path"])}">Full figure</a></figcaption></figure>'
         )
         entries.append(
             f'<article class="research-entry" id="research-{e(entry_id)}">'
@@ -769,7 +780,8 @@ def build(profile: dict[str, Any], output_dir: Path, *, source_dir: Path | None 
         destination_asset.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(source_dir / relative, destination_asset)
     write_icons(output_dir, theme["mark"])
-    social_card(profile, source_dir / portrait["path"], source_dir, output_dir, palette)
+    # The link-preview card is an identity surface like the GitHub banner: it takes the dark palette.
+    social_card(profile, source_dir / portrait["path"], source_dir, output_dir, theme["palettes"][theme.get("dark") or theme["selected"]])
     write_support_files(profile, output_dir, style_version, replacements["ICON_VERSION"])
     return destination
 
