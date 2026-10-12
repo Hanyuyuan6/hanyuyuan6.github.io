@@ -26,16 +26,16 @@ SOURCE_DIR = Path(__file__).resolve().parent
 SITE_URL = "https://hanyuyuan6.github.io/"
 TOKENS = re.compile(r"@@([A-Z_]+)@@")
 THEME_KEYS = ("bg", "ink", "muted", "link", "hover", "line", "tint", "wash")
-# The mark: a Y whose three strokes stop short of one square pixel, the single
-# detector a single-pixel camera reads. Straight segments in a 32-unit square,
+# The mark: a Y whose three strokes aim at one 6×6 amber pixel, the single
+# detector a single-pixel camera reads. Straight segments on the 32-unit grid,
 # so the same polygons draw the SVG icon and the raster ICO/PNG.
 MARK_STROKES = (
-    "M4.64 5.6 11.27 13.49 14.56 10.73 10.25 5.6Z"
-    "M27.36 5.6 20.73 13.49 17.44 10.73 21.75 5.6Z"
-    "M13.85 18.6H18.15V26.6H13.85Z"
+    "M5.643 5 10.359 5 14.733 12 10.017 12Z"
+    "M21.641 5 26.357 5 21.983 12 17.267 12Z"
+    "M14 20H18V27H14Z"
 )
-MARK_PIXEL = "M13.85 13.05H18.15V17.35H13.85Z"
-MARK_KEYS = ("tile", "from", "to", "pixel")
+MARK_PIXEL = "M13 13H19V19H13Z"
+MARK_KEYS = ("tile", "tile_to", "ink", "pixel")
 MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
 
@@ -315,19 +315,16 @@ def mark_icon(size: int, mark: dict[str, str], *, radius: float = 7) -> Image.Im
     """Draw at 512 px and downsample, so small sizes stay crisp and anti-aliased."""
     scale, full = 512 / 32, 512
     image = Image.new("RGBA", (full, full), (0, 0, 0, 0))
-    ImageDraw.Draw(image).rounded_rectangle((0, 0, full - 1, full - 1), radius=radius * scale, fill=mark["tile"])
-    start, end = (tuple(int(mark[key][i:i + 2], 16) for i in (1, 3, 5)) for key in ("from", "to"))
-    # Same geometry as the SVG's objectBoundingBox gradient: t = (u + v) / 2 over
-    # the strokes' bounding box, from its top-left to its bottom-right corner.
-    points = [pt for polygon in path_polygons(MARK_STROKES) for pt in polygon]
-    x0, y0 = (min(pt[i] for pt in points) * scale for i in (0, 1))
-    x1, y1 = (max(pt[i] for pt in points) * scale for i in (0, 1))
-    gradient = Image.new("RGB", (full, full))
-    gradient.putdata([
-        tuple(round(a + (b - a) * min(max(((x - x0) / (x1 - x0) + (y - y0) / (y1 - y0)) / 2, 0), 1)) for a, b in zip(start, end))
-        for y in range(full) for x in range(full)
-    ])
-    for path, fill in ((MARK_STROKES, gradient), (MARK_PIXEL, Image.new("RGB", (full, full), mark["pixel"]))):
+    start, end = (tuple(int(mark[key][i:i + 2], 16) for i in (1, 3, 5)) for key in ("tile", "tile_to"))
+    # Same geometry as the SVG's objectBoundingBox gradient on the tile:
+    # t = (u + v) / 2, from the top-left to the bottom-right corner.
+    tile = Image.new("RGB", (full, full))
+    tile.putdata([tuple(round(a + (b - a) * (x + y) / (2 * (full - 1))) for a, b in zip(start, end)) for y in range(full) for x in range(full)])
+    shape = Image.new("L", (full, full), 0)
+    ImageDraw.Draw(shape).rounded_rectangle((0, 0, full - 1, full - 1), radius=radius * scale, fill=255)
+    image.paste(tile, (0, 0), shape)
+    for path, colour in ((MARK_STROKES, mark["ink"]), (MARK_PIXEL, mark["pixel"])):
+        fill = Image.new("RGB", (full, full), colour)
         mask = Image.new("L", (full, full), 0)
         for polygon in path_polygons(path):
             ImageDraw.Draw(mask).polygon([(px * scale, py * scale) for px, py in polygon], fill=255)
@@ -338,10 +335,10 @@ def mark_icon(size: int, mark: dict[str, str], *, radius: float = 7) -> Image.Im
 def mark_svg(mark: dict[str, str]) -> str:
     return (
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">'
-        f'<defs><linearGradient id="m" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{mark["from"]}"/>'
-        f'<stop offset="1" stop-color="{mark["to"]}"/></linearGradient></defs>'
-        f'<rect width="32" height="32" rx="7" fill="{mark["tile"]}"/>'
-        f'<path fill="url(#m)" d="{MARK_STROKES}"/><path fill="{mark["pixel"]}" d="{MARK_PIXEL}"/></svg>\n'
+        f'<defs><linearGradient id="m" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{mark["tile"]}"/>'
+        f'<stop offset="1" stop-color="{mark["tile_to"]}"/></linearGradient></defs>'
+        f'<rect width="32" height="32" rx="7" fill="url(#m)"/>'
+        f'<path fill="{mark["ink"]}" d="{MARK_STROKES}"/><path fill="{mark["pixel"]}" d="{MARK_PIXEL}"/></svg>\n'
     )
 
 
