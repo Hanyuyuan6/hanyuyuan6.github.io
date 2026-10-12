@@ -3,16 +3,16 @@
   "dark": "midnight",
   "palettes": {
     "royal": {
-      "label": "Royal — purple and gold on white (current)",
+      "label": "Royal — deep purple with an antique-gold accent on white (current)",
       "bg": "#ffffff",
-      "ink": "#1d1528",
-      "muted": "#5c5470",
-      "link": "#5a2ea6",
-      "hover": "#3b1a73",
-      "line": "#e5dff0",
-      "tint": "#f1ecfa",
-      "wash": "#f8f6fc",
-      "accent": "#a8821a"
+      "ink": "#1b1724",
+      "muted": "#5a5466",
+      "link": "#4a2a80",
+      "hover": "#2e1a57",
+      "line": "#e6e3ec",
+      "tint": "#f3f1f7",
+      "wash": "#f8f7fa",
+      "accent": "#a3874a"
     },
     "harbor": {
       "label": "Harbor — calm navy",
@@ -87,16 +87,16 @@
       "accent": "#f0c674"
     },
     "midnight": {
-      "label": "Midnight — automatic dark mode, purple and gold on black-purple",
+      "label": "Midnight — automatic dark mode, lavender links with a champagne-gold hover",
       "bg": "#121018",
       "ink": "#ebe6f5",
       "muted": "#a49db6",
       "link": "#c4b5fd",
-      "hover": "#f5c33b",
+      "hover": "#d9bf7a",
       "line": "#2a2438",
       "tint": "#211a2f",
       "wash": "#1a1623",
-      "accent": "#f5c33b"
+      "accent": "#d9bf7a"
     }
   },
   "mark": {

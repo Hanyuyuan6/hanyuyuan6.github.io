@@ -417,7 +417,7 @@ def social_card(profile: dict[str, Any], portrait_path: Path, source_dir: Path, 
         (narrative["field"], regular, palette["link"], 266),
         (f'{person["position"]} · {person["institution"]}', small, palette["muted"], 322),
         (f'{person["visiting_role"]} · {person["visiting_institution"]}', small, palette["muted"], 358),
-        (person["homepage"].replace("https://", "").rstrip("/"), small, palette["accent"], 426),
+        (person["homepage"].replace("https://", "").rstrip("/"), small, palette["link"], 426),
     ]
     for text, font, colour, y in lines:
         if x + draw.textlength(text, font=font) > right:
@@ -780,8 +780,7 @@ def build(profile: dict[str, Any], output_dir: Path, *, source_dir: Path | None 
         destination_asset.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(source_dir / relative, destination_asset)
     write_icons(output_dir, theme["mark"])
-    # The link-preview card is an identity surface like the GitHub banner: it takes the dark palette.
-    social_card(profile, source_dir / portrait["path"], source_dir, output_dir, theme["palettes"][theme.get("dark") or theme["selected"]])
+    social_card(profile, source_dir / portrait["path"], source_dir, output_dir, palette)
     write_support_files(profile, output_dir, style_version, replacements["ICON_VERSION"])
     return destination
 
