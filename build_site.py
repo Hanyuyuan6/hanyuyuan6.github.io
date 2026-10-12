@@ -26,16 +26,17 @@ SOURCE_DIR = Path(__file__).resolve().parent
 SITE_URL = "https://hanyuyuan6.github.io/"
 TOKENS = re.compile(r"@@([A-Z_]+)@@")
 THEME_KEYS = ("bg", "ink", "muted", "link", "hover", "line", "tint", "wash")
-# The mark: a Y whose three strokes aim at one 6×6 amber pixel, the single
-# detector a single-pixel camera reads. Straight segments on the 32-unit grid,
-# so the same polygons draw the SVG icon and the raster ICO/PNG.
-MARK_STROKES = (
-    "M5.643 5 10.359 5 14.733 12 10.017 12Z"
-    "M21.641 5 26.357 5 21.983 12 17.267 12Z"
-    "M14 20H18V27H14Z"
+# The mark: a Y whose two arms carry light into one gold pixel, the single detector a
+# single-pixel camera reads, and whose stem carries the signal out. Straight segments on
+# the 32-unit grid, so the same polygons draw the SVG icon and the raster ICO/PNG; at
+# 16 px the pixel is exactly 2×2 with a dark row above and below it.
+MARK_SHAPES = (  # path, gradient start and end on the grid (None: flat), theme.json colour keys
+    ("M5 6H10L14 10V12H11Z", (5, 6, 14, 12), ("light", "light_to")),
+    ("M22 6H27L21 12H18V10Z", (27, 6, 18, 12), ("light", "light_to")),
+    ("M14 20H18V26H14Z", (16, 20, 16, 26), ("signal", "signal_to")),
+    ("M14 14H18V18H14Z", None, ("pixel", "pixel")),
 )
-MARK_PIXEL = "M13 13H19V19H13Z"
-MARK_KEYS = ("tile", "tile_to", "ink", "pixel")
+MARK_KEYS = ("tile", "tile_to", "light", "light_to", "signal", "signal_to", "pixel")
 MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
 
@@ -323,22 +324,44 @@ def mark_icon(size: int, mark: dict[str, str], *, radius: float = 7) -> Image.Im
     shape = Image.new("L", (full, full), 0)
     ImageDraw.Draw(shape).rounded_rectangle((0, 0, full - 1, full - 1), radius=radius * scale, fill=255)
     image.paste(tile, (0, 0), shape)
-    for path, colour in ((MARK_STROKES, mark["ink"]), (MARK_PIXEL, mark["pixel"])):
-        fill = Image.new("RGB", (full, full), colour)
+    for path, line, (key_from, key_to) in MARK_SHAPES:
         mask = Image.new("L", (full, full), 0)
         for polygon in path_polygons(path):
             ImageDraw.Draw(mask).polygon([(px * scale, py * scale) for px, py in polygon], fill=255)
-        image.paste(fill, (0, 0), mask)
-    return image.resize((size, size), Image.LANCZOS)
+        image.paste(linear_fill(full, scale, line, mark[key_from], mark[key_to]), (0, 0), mask)
+    # Area averaging keeps the 16 px pixel a clean 2×2 square; Lanczos rings around small shapes.
+    return image.resize((size, size), Image.BOX)
+
+
+def linear_fill(full: int, scale: float, line: tuple[float, ...] | None, colour_from: str, colour_to: str) -> Image.Image:
+    """A full-size fill matching an SVG userSpaceOnUse linear gradient (flat when line is None)."""
+    if line is None:
+        return Image.new("RGB", (full, full), colour_from)
+    a, b = (tuple(int(c[i:i + 2], 16) for i in (1, 3, 5)) for c in (colour_from, colour_to))
+    x1, y1, x2, y2 = (v * scale for v in line)
+    dx, dy = x2 - x1, y2 - y1
+    norm = dx * dx + dy * dy
+    fill = Image.new("RGB", (full, full))
+    fill.putdata([tuple(round(p + (q - p) * min(1.0, max(0.0, ((x + 0.5 - x1) * dx + (y + 0.5 - y1) * dy) / norm))) for p, q in zip(a, b))
+                  for y in range(full) for x in range(full)])
+    return fill
 
 
 def mark_svg(mark: dict[str, str]) -> str:
+    gradients, shapes = [], []
+    for index, (path, line, (key_from, key_to)) in enumerate(MARK_SHAPES):
+        if line is None:
+            shapes.append(f'<path fill="{mark[key_from]}" d="{path}"/>')
+            continue
+        x1, y1, x2, y2 = line
+        gradients.append(f'<linearGradient id="g{index}" gradientUnits="userSpaceOnUse" x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}">'
+                         f'<stop offset="0" stop-color="{mark[key_from]}"/><stop offset="1" stop-color="{mark[key_to]}"/></linearGradient>')
+        shapes.append(f'<path fill="url(#g{index})" d="{path}"/>')
     return (
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">'
         f'<defs><linearGradient id="m" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{mark["tile"]}"/>'
-        f'<stop offset="1" stop-color="{mark["tile_to"]}"/></linearGradient></defs>'
-        f'<rect width="32" height="32" rx="7" fill="url(#m)"/>'
-        f'<path fill="{mark["ink"]}" d="{MARK_STROKES}"/><path fill="{mark["pixel"]}" d="{MARK_PIXEL}"/></svg>\n'
+        f'<stop offset="1" stop-color="{mark["tile_to"]}"/></linearGradient>{"".join(gradients)}</defs>'
+        f'<rect width="32" height="32" rx="7" fill="url(#m)"/>{"".join(shapes)}</svg>\n'
     )
 
 
@@ -357,7 +380,9 @@ def icon_links(prefix: str, version: str) -> str:
 def write_icons(output_dir: Path, mark: dict[str, str]) -> None:
     """The Y-and-pixel mark: legible at 16 px, unlike the old 4×4 pattern."""
     (output_dir / "favicon.svg").write_text(mark_svg(mark), encoding="utf-8", newline="\n")
-    mark_icon(256, mark).save(output_dir / "favicon.ico", sizes=[(16, 16), (32, 32), (48, 48)])
+    # Each ICO size is drawn on its own, so the ICO writer never rescales a frame.
+    frames = [mark_icon(size, mark) for size in (16, 32, 48)]
+    frames[-1].save(output_dir / "favicon.ico", sizes=[(16, 16), (32, 32), (48, 48)], append_images=frames[:-1])
     # iOS masks its own corners, so the touch icon fills the square.
     mark_icon(180, mark, radius=0).convert("RGB").save(output_dir / "apple-touch-icon.png", optimize=True)
 

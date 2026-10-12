@@ -234,7 +234,8 @@ def validate(root):
         palette = theme['palettes'][theme['selected']]
         favicon = (root / 'dist' / 'favicon.svg').read_text(encoding='utf-8') if (root / 'dist' / 'favicon.svg').is_file() else ''
         mark = theme['mark']
-        require(all(f'stop-color="{mark[k]}"' in favicon for k in ('tile', 'tile_to')) and all(f'fill="{mark[k]}"' in favicon for k in ('ink', 'pixel')) and 'url(#m)' in favicon and '<text' not in favicon, 'Favicon is the outlined Y-and-pixel mark in the theme.json mark colours')
+        require(all(f'stop-color="{mark[k]}"' in favicon for k in ('tile', 'tile_to', 'light', 'light_to', 'signal', 'signal_to')) and f'fill="{mark["pixel"]}"' in favicon and 'url(#m)' in favicon and '<text' not in favicon, 'Favicon is the outlined Y-and-pixel mark in the theme.json mark colours')
+        require(all(contrast(mark[k], mark['tile_to']) >= 4 for k in ('light', 'light_to', 'signal', 'signal_to', 'pixel')), 'Every mark colour stands out from the tile at 16 px (≥ 4:1)')
         require((root / 'dist' / 'favicon.ico').is_file() and ico_sizes((root / 'dist' / 'favicon.ico').read_bytes()) == [16, 32, 48], 'favicon.ico carries 16, 32 and 48 px images')
         require((root / 'dist' / 'apple-touch-icon.png').is_file() and png_dimensions((root / 'dist' / 'apple-touch-icon.png').read_bytes()) == (180, 180), 'Apple touch icon is 180×180')
         for name, colours in theme['palettes'].items():
