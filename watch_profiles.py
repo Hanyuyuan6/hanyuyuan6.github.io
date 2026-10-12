@@ -3,7 +3,8 @@
 
 profile.json is the single source of truth. This script reads what public APIs expose,
 ORCID (works, biography, keywords, links, public emails, other names, affiliations,
-peer reviews) and GitHub (profile fields and the profile README), and reports every
+peer reviews) and GitHub (profile fields, the profile README and each listed repository's
+About line), and reports every
 field that no longer matches. Platforms without a public API (Google Scholar, LinkedIn,
 ResearchGate, OpenReview, Web of Science) are listed as a checklist with the exact
 values to paste. It never edits a platform. Without GITHUB_TOKEN it only prints.
@@ -96,6 +97,16 @@ def check_github(profile: dict, drift: list[str]) -> None:
     for phrase in (profile['narrative']['short_bio'], person['homepage']):
         if norm(phrase) not in norm(readme):
             drift.append(f'GitHub profile README lacks: "{phrase[:80]}".')
+    # Each listed repository's About line is the website's code description, unless the
+    # entry declares its own `github_about` (a tool that keeps its product line).
+    for row in profile['software']:
+        match = re.fullmatch(r'https://github\.com/([^/]+)/([^/]+?)/?', row['url'])
+        if not match:
+            continue
+        about = get(f'https://api.github.com/repos/{match[1]}/{match[2]}').get('description')
+        expected = row.get('github_about', row['description'])
+        if norm(about) != norm(expected):
+            drift.append(f'GitHub {match[2]} About is "{about}"; expected "{expected}".')
 
 
 def manual_checklist(profile: dict) -> list[str]:
