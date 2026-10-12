@@ -22,6 +22,23 @@ def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def contrast(foreground, background):
+    """WCAG 2 contrast ratio of two #rrggbb colours."""
+    def luminance(colour):
+        channels = [int(colour[i:i + 2], 16) / 255 for i in (1, 3, 5)]
+        r, g, b = (c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4 for c in channels)
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b
+    high, low = sorted((luminance(foreground), luminance(background)), reverse=True)
+    return (high + 0.05) / (low + 0.05)
+
+
+def ico_sizes(data):
+    if data[:4] != b'\x00\x00\x01\x00':
+        raise ValueError('Not an ICO file')
+    count = int.from_bytes(data[4:6], 'little')
+    return sorted((data[6 + 16 * i] or 256) for i in range(count))
+
+
 def png_dimensions(data):
     if data[:8] != b'\x89PNG\r\n\x1a\n':
         raise ValueError('Not a PNG file')
@@ -189,6 +206,19 @@ def validate(root):
         require(card.is_file() and png_dimensions(card.read_bytes()) == (1200, 630), 'Social card is a 1200×630 PNG')
         icons = {a.get('href') for t, a in home.tags if t == 'link' and 'icon' in (a.get('rel') or '')}
         require({'favicon.svg', 'favicon.ico', 'apple-touch-icon.png'} <= icons and all((root / 'dist' / name).is_file() for name in ('favicon.svg', 'favicon.ico', 'apple-touch-icon.png')), 'Site icons are declared and deployed')
+        theme = json.loads((root / 'theme.json').read_text(encoding='utf-8'))
+        palette = theme['palettes'][theme['selected']]
+        favicon = (root / 'dist' / 'favicon.svg').read_text(encoding='utf-8') if (root / 'dist' / 'favicon.svg').is_file() else ''
+        require(f'fill="{palette["link"]}"' in favicon and '<path fill="#fff"' in favicon and '<text' not in favicon, 'Favicon is the outlined YH monogram in the accent colour')
+        require((root / 'dist' / 'favicon.ico').is_file() and ico_sizes((root / 'dist' / 'favicon.ico').read_bytes()) == [16, 32, 48], 'favicon.ico carries 16, 32 and 48 px images')
+        require((root / 'dist' / 'apple-touch-icon.png').is_file() and png_dimensions((root / 'dist' / 'apple-touch-icon.png').read_bytes()) == (180, 180), 'Apple touch icon is 180×180')
+        for name, colours in theme['palettes'].items():
+            require(all(contrast(colours[key], colours['bg']) >= 4.5 for key in ('ink', 'muted', 'link', 'hover')) and all(contrast(colours[key], colours['tint']) >= 4.5 for key in ('ink', 'muted', 'link')), f'Palette {name} passes WCAG AA for text on its background and highlight')
+        stylesheet = (root / 'dist' / 'style.css').read_text(encoding='utf-8')
+        require(all(f'--{key}: {value};' in stylesheet.split('@media', 1)[0] for key, value in palette.items() if key != 'label'), 'Deployed CSS carries the selected theme.json palette')
+        require(not theme.get('dark') or all(f'--{key}: {value};' in stylesheet for key, value in theme['palettes'][theme['dark']].items() if key != 'label'), 'Deployed CSS carries the automatic dark palette')
+        require(set(re.findall(r'#[0-9a-fA-F]{3,6}\b', (root / 'style.css').read_text(encoding='utf-8'))) <= {'#fff', '#000'}, 'style.css takes its colours from theme.json only')
+        require(f'style.css?v={hashlib.sha256(stylesheet.encode("utf-8")).hexdigest()[:10]}' in home_text, 'Stylesheet URL changes whenever the CSS changes')
         robots = (root / 'dist' / 'robots.txt').read_text(encoding='utf-8') if (root / 'dist' / 'robots.txt').is_file() else ''
         sitemap = (root / 'dist' / 'sitemap.xml').read_text(encoding='utf-8') if (root / 'dist' / 'sitemap.xml').is_file() else ''
         require(f'Sitemap: {SITE_URL}sitemap.xml' in robots, 'robots.txt points to the sitemap')
@@ -197,7 +227,14 @@ def validate(root):
         require(not DASH_RANGE.search(home_text), 'Date ranges use en dashes on the homepage')
         news = profile.get('news', [])
         require(1 <= len(news) <= 5 and [n['date'] for n in news] == sorted((n['date'] for n in news), reverse=True), 'News is short and newest first')
-        require(home_text.count('<details class="bibtex">') == len(publications) and all(p['doi'] in home_text for p in publications), 'Every publication offers BibTeX with its DOI')
+        featured = {p['publication_id'] for p in profile['projects'] if p['id'] in profile['selected_project_ids']}
+        require(home_text.count('<details class="bibtex">') == len(publications) + len(featured) and all(p['doi'] in home_text for p in publications), 'Every publication offers BibTeX with its DOI')
+        require(home_text.count('class="publication publication-entry') == len(publications) and home_text.count('publication-entry is-selected') == len(featured), 'Complete publication list keeps the featured works, highlighted')
+        bib = (root / 'dist' / 'publications.bib').read_text(encoding='utf-8') if (root / 'dist' / 'publications.bib').is_file() else ''
+        require(len(re.findall(r'^@\w+\{', bib, flags=re.M)) == len(publications) and all(p['doi'] in bib for p in publications) and 'href="publications.bib"' in home_text, 'Complete BibTeX file is linked and lists every paper')
+        order = [home_text.find(f'id="{anchor}"') for anchor in ('news', 'research', 'directions', 'publications', 'software', 'background', 'contact')]
+        require(-1 not in order and order == sorted(order), 'Sections run News, Research, Directions, Publications, Code, Background, Contact')
+        require('Host:' not in home_text and all(f"Supervisor: {escape(row['host'], quote=True)}" in home_text for row in profile['appointments'] if row.get('host')), 'Visiting appointment names its supervisor')
         require('overleaf.com/project/' not in home_text, 'Private Overleaf editor is not a public CV link')
         image_metadata = json.loads((root / 'research-figures.json').read_text(encoding='utf-8'))
         figures = image_metadata['figures']
@@ -315,13 +352,17 @@ def validate(root):
             require(len(reader.pages) == (1 if 'Resume' in path.name else 2), f'Expected PDF page count: {path.name}')
             require(all(word in content for word in ['The Lift Spectrum', 'Hadamard', 'LDGI']), f'Three selected works in actual PDF: {path.name}')
             require('electro-optic' in content.lower(), f'Materials/device experience in actual PDF: {path.name}')
-            require(content.find('EDUCATION & RESEARCH APPOINTMENTS') >= 0 and content.find('EDUCATION & RESEARCH APPOINTMENTS') < content.find('SELECTED RESEARCH'), f'Education precedes selected research in actual PDF: {path.name}')
-            require('PhD (in progress)' not in content and 'RESEARCH SOFTWARE' not in content, f'Current professional terminology in actual PDF: {path.name}')
+            upper = content.upper()
+            require(upper.find('EDUCATION & RESEARCH APPOINTMENTS') >= 0 and upper.find('EDUCATION & RESEARCH APPOINTMENTS') < upper.find('SELECTED RESEARCH'), f'Education precedes selected research in actual PDF: {path.name}')
+            require('PhD (in progress)' not in content and 'RESEARCH SOFTWARE' not in upper, f'Current professional terminology in actual PDF: {path.name}')
+            places = [content.find(name) for name in ("Xi'an Jiaotong University", 'Politecnico di Milano', 'Northwest University')]
+            require(-1 not in places and places == sorted(places), f'Visiting appointment follows the PhD it belongs to: {path.name}')
             compact_text = re.sub(r'\s+', ' ', content)
             require('clean-trained' in compact_text and '20 dB' in compact_text, f'Lift claim keeps its noise level and training condition: {path.name}')
             require('one-dimensional optical phased arrays' in compact_text, f'LDGI OPA setting in actual PDF: {path.name}')
             require(not re.search(r'\bPublished\b', content), f'No redundant Published labels: {path.name}')
             require(all(f"Advisor: {row['advisor']}" in compact_text for row in profile['education'] if row.get('advisor')), f'PDF names the recorded advisor: {path.name}')
+            require('Host:' not in compact_text and all(f"Supervisor: {row['host']}" in compact_text for row in profile['appointments'] if row.get('host')), f'PDF names the visiting supervisor: {path.name}')
             require(not DASH_RANGE.search(compact_text), f'Date ranges use en dashes: {path.name}')
 
             require(not any(word in content for word in ['CET-6', 'Programming and modeling', 'TECHNICAL SKILLS']), f'No generic tools/language section: {path.name}')

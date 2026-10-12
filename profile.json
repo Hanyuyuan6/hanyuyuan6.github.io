@@ -17,11 +17,11 @@
   "narrative": {
     "hero": "Learning to sense the physical world",
     "field": "Computational imaging & physics-aware learning",
-    "bio": "I study how measurement physics can help learning systems perceive the physical world. My research connects optical measurement design with learned representations for image reconstruction and image-free perception. I am now exploring acquisition-aware learning and interfaces between optical signals and pretrained multimodal models. My long-term goal is to build sensing systems that learn what to measure next.",
+    "bio": "I study how measurement physics can help learning systems perceive the physical world. My research connects optical measurement design with learned representations for image reconstruction and image-free perception. I am now exploring acquisition-aware learning and interfaces between optical signals and pretrained multimodal models. My long-term goal is sensing that lets AI systems and embodied robots genuinely understand the physical world.",
     "direction": "During my current visit at Politecnico di Milano, I plan to extend this work to time-domain diffuse optics and three-dimensional reconstruction, investigating how physical modeling can support transfer from simulation to optical experiments.",
     "welcome": "I welcome research collaborations and research internship opportunities in computational imaging, physics-aware machine learning, and multimodal sensing.",
     "resume_summary": "I work on optical measurement design and learning for imaging and perception. Current research explores acquisition-aware learning and pretrained models for optical signals.",
-    "long_term": "Longer term, I aim to develop perception that helps a system decide what to measure next and learn through interaction with the physical world.",
+    "long_term": "Longer term, I want AI systems and embodied robots to understand the physical world through what they sense: learning from interaction, and choosing what to measure when it matters.",
     "internship_summary": "PhD student in computational imaging and physics-aware learning from optical measurements.",
     "current_summary": "Developing acquisition-aware models and adapting pretrained multimodal models to bucket-detector signals. Planned visiting research: time-domain diffuse optics and 3D reconstruction.",
     "meta_description": "PhD student at Xi'an Jiaotong University, visiting Politecnico di Milano. Computational imaging and physics-aware learning from optical measurements."
@@ -92,10 +92,10 @@
       "id": "lift",
       "title": "The Lift Spectrum · Robust image-free perception",
       "status": "Preprint",
-      "summary": "Skipping reconstruction pays off under noise: at 20 dB, segmenting directly from single-pixel measurements beats the strongest clean-trained reconstruct-then-segment baseline by 3.1–21.7 foreground-mIoU points on three datasets.",
+      "summary": "Without reconstruction, the hard part becomes the lift from 1D measurements to 2D features. Our STSF + TPLS lift keeps near-constant accuracy down to 0.78% sampling and, at 20 dB noise, beats clean-trained reconstruct-then-segment by up to 21.7 mIoU points.",
       "bullets": [
-        "Showed that segmenting directly from 3.13%-sampled single-pixel measurements beats the strongest clean-trained reconstruct-then-segment baseline by 3.1–21.7 foreground-mIoU points under 20 dB noise.",
-        "Designed a content-adaptive measurement-to-space lift trained with scheduled auxiliary reconstruction, exceeding the prior image-free baseline by 3.2–9.9 points at the same sampling rate."
+        "Showed that removing reconstruction moves the design problem to the 1D-to-2D lift; organized lifts into a spectrum from fixed-physics inverse to content-adaptive retrieval.",
+        "Proposed STSF + TPLS: +3.2–9.9 pp mIoU over the prior image-free method, near-constant accuracy down to 0.78% sampling, and up to +21.7 pp over clean-trained reconstruct-then-segment at 20 dB noise."
       ],
       "role": "First author",
       "period": "2025–present",
@@ -107,9 +107,9 @@
       "id": "shsi",
       "title": "Sparse Hadamard single-pixel imaging",
       "status": "Published",
-      "summary": "Tunable-sparsity Hadamard patterns make single-pixel imaging noise-resilient, from a noise model to an optical experiment through two ground-glass diffusers.",
+      "summary": "Gives orthogonal Hadamard patterns tunable sparsity: robust imaging through scattering and noise, high resolution from low-order matrices that save memory, and no training or post-processing.",
       "bullets": [
-        "Designed tunable-sparsity Hadamard illumination with two acquisition modes; derived a sparsity-noise model and validated noise resilience in simulations and an optical experiment through ground glass."
+        "Gave orthogonal Hadamard patterns tunable sparsity (two acquisition modes, full theory): noise-robust imaging through scattering, low-order matrices that save memory, and no training or post-processing."
       ],
       "role": "First author",
       "period": "2024–2025",
@@ -121,9 +121,9 @@
       "id": "loop",
       "title": "LDGI · Optical phased-array imaging",
       "status": "Published",
-      "summary": "Line patterns from one-dimensional optical phased arrays break the noise symmetry that traditional ghost-imaging denoising relies on; loop differential ghost imaging overcomes this limitation.",
+      "summary": "Line patterns from one-dimensional optical phased arrays break the noise symmetry that ghost-imaging denoising assumes; loop differential ghost imaging overcomes it, with orders-of-magnitude gains over traditional algorithms.",
       "bullets": [
-        "Showed that line patterns from one-dimensional optical phased arrays break the noise symmetry assumed by traditional ghost-imaging denoising; developed a loop differential algorithm and validated it optically."
+        "Showed that line patterns from one-dimensional optical phased arrays break the noise symmetry assumed by ghost-imaging denoising; proposed LDGI (orders-of-magnitude gains) and validated it optically."
       ],
       "role": "First author",
       "period": "2025",
@@ -426,22 +426,32 @@
     {
       "name": "STSF-TPLS",
       "url": "https://github.com/Hanyuyuan6/STSF-TPLS",
-      "description": "Code for image-free single-pixel segmentation."
-    },
-    {
-      "name": "SHSI",
-      "url": "https://github.com/Hanyuyuan6/SHSI",
-      "description": "Sparse Hadamard measurement and reconstruction examples."
+      "description": "Image-free segmentation from single-pixel measurements: code and pretrained weights (PyTorch)."
     },
     {
       "name": "Comparison-of-SPI-DLs",
       "url": "https://github.com/Hanyuyuan6/Comparison-of-SPI-DLs",
-      "description": "Comparative evaluation of learning-based single-pixel reconstruction."
+      "description": "Ten deep single-pixel reconstruction methods benchmarked on one shared Hadamard acquisition (PyTorch)."
+    },
+    {
+      "name": "SHSI",
+      "url": "https://github.com/Hanyuyuan6/SHSI",
+      "description": "Sparse Hadamard single-pixel imaging: pattern generation and reconstruction (MATLAB)."
+    },
+    {
+      "name": "LDGI",
+      "url": "https://github.com/Hanyuyuan6/LDGI",
+      "description": "Loop differential ghost imaging for line patterns from optical phased arrays (MATLAB)."
+    },
+    {
+      "name": "TGIs-Entry",
+      "url": "https://github.com/Hanyuyuan6/TGIs-Entry",
+      "description": "Reference implementations of traditional, differential and normalized ghost imaging (MATLAB)."
     },
     {
       "name": "remote-gpu-trainer",
       "url": "https://github.com/Hanyuyuan6/remote-gpu-trainer",
-      "description": "Open-source agent skill for reproducible remote-GPU deep-learning experiments."
+      "description": "Open-source agent skill for Claude Code and Codex that runs, verifies and reports GPU experiments (60+ stars)."
     }
   ],
   "skills": [
@@ -500,8 +510,8 @@
       "Multimodal Learning"
     ],
     "orcid_bio": "I am a PhD student at Xi'an Jiaotong University and a visiting PhD student at Politecnico di Milano. My research connects optical measurement design with learning for imaging and perception, including OPA-oriented ghost imaging, sparse Hadamard imaging, and robust image-free segmentation. Current work explores acquisition-aware learning and pretrained models for optical signals. My planned visiting research focuses on time-domain diffuse optics and three-dimensional reconstruction.",
-    "linkedin_about": "I study how measurement physics can help learning systems perceive the physical world. My research includes noise-resilient Hadamard measurement design, ghost-imaging algorithms for optical phased arrays, and image-free segmentation. In The Lift Spectrum, segmenting directly from single-pixel measurements beats the strongest clean-trained reconstruct-then-segment baseline by 3.1–21.7 foreground-mIoU points at 20 dB noise.\n\nI am currently exploring acquisition-aware learning and pretrained multimodal models for optical signals. My long-term goal is to develop sensing systems that learn what to measure next. I welcome research collaborations and internship opportunities in computational imaging, physics-aware machine learning, and multimodal sensing.",
-    "linkedin_about_zh": "我研究如何利用测量物理，帮助学习系统感知物理世界。已完成的工作包括抗噪的 Hadamard 测量设计、面向光学相控阵的鬼成像算法，以及免成像分割：在 The Lift Spectrum 中，20 dB 噪声下直接从单像素测量进行分割，比最强的干净数据训练先重建再分割基线的前景 mIoU 高 3.1–21.7 个百分点。\n\n目前我在探索采集条件感知学习，以及面向光学信号的预训练多模态模型。长期目标是构建能够决定下一步测量什么的感知系统。欢迎计算成像、物理驱动机器学习与多模态感知方向的科研合作与实习交流。",
+    "linkedin_about": "I study how measurement physics can help learning systems perceive the physical world. My research includes noise-resilient Hadamard measurement design, ghost-imaging algorithms for optical phased arrays, and image-free segmentation. In The Lift Spectrum, our STSF + TPLS lift keeps near-constant accuracy down to 0.78% sampling and, at 20 dB noise, beats the strongest clean-trained reconstruct-then-segment baseline by up to 21.7 foreground-mIoU points.\n\nI am currently exploring acquisition-aware learning and pretrained multimodal models for optical signals. My long-term goal is sensing that lets AI systems and embodied robots genuinely understand the physical world. I welcome research collaborations and internship opportunities in computational imaging, physics-aware machine learning, and multimodal sensing.",
+    "linkedin_about_zh": "我研究如何利用测量物理，帮助学习系统感知物理世界。已完成的工作包括抗噪的 Hadamard 测量设计、面向光学相控阵的鬼成像算法，以及免成像分割：在 The Lift Spectrum 中，我们的 STSF + TPLS 在采样率降至 0.78% 时精度几乎不变；在 20 dB 噪声下，前景 mIoU 比最强的干净数据训练先重建再分割基线高达 21.7 个百分点。\n\n目前我在探索采集条件感知学习，以及面向光学信号的预训练多模态模型。长期目标是让 AI 系统与具身机器人通过感知真正理解物理世界。欢迎计算成像、物理驱动机器学习与多模态感知方向的科研合作与实习交流。",
     "linkedin_featured_lift": "Segmenting directly from single-pixel measurements beats the strongest clean-trained reconstruct-then-segment baseline by 3.1–21.7 foreground-mIoU points at 20 dB noise.",
     "researchgate_activity": "PhD student at Xi'an Jiaotong University · open to collaborations in computational imaging and physics-aware learning",
     "openreview_expertise": [
@@ -539,13 +549,17 @@
     }
   ],
   "additional_code_ids": [
+    "STSF-TPLS",
     "Comparison-of-SPI-DLs",
+    "SHSI",
+    "LDGI",
+    "TGIs-Entry",
     "remote-gpu-trainer"
   ],
   "news": [
     {
       "date": "2026-10",
-      "text": "Started a visiting PhD period at Politecnico di Milano, Department of Physics, hosted by Antonio Pifferi."
+      "text": "Started a visiting PhD period at Politecnico di Milano, Department of Physics, supervised by Antonio Pifferi."
     },
     {
       "date": "2026-07",
@@ -568,14 +582,14 @@
   ],
   "internship_technical": [
     {
-      "label": "Tools",
-      "text": "Python, PyTorch, MATLAB, COMSOL; open-source remote-gpu-trainer for reproducible remote-GPU experiments (60+ GitHub stars)",
+      "label": "Open source",
+      "text": "remote-gpu-trainer, an agent skill for Claude Code and Codex that runs, verifies and delivers GPU experiments (60+ GitHub stars)",
       "url": "https://github.com/Hanyuyuan6/remote-gpu-trainer",
       "link_text": "remote-gpu-trainer"
     },
     {
-      "label": "Experiments",
-      "text": "DMD/SLM illumination, single-pixel detection, optical alignment and system integration"
+      "label": "Tools & lab",
+      "text": "PyTorch, MATLAB, COMSOL; DMD/SLM illumination, single-pixel detection, optical alignment and system integration"
     },
     {
       "label": "Device modeling",

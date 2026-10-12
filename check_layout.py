@@ -3,9 +3,11 @@
 
 At 1440, 1024 and 390 px widths it checks that nothing scrolls sideways, that
 every heading in the main content clears the block above it by at least 12 px,
-that headings of one level share a single size within a section, and that
-every image loads at no less than its displayed width. Full-page screenshots
-are written for a human look; passing checks are not a design review.
+that headings of one level share a single size within a section, that every
+image loads at no less than its displayed width, and that each BibTeX toggle
+reads as one more link (same type, colour and baseline, no disclosure marker).
+The widest view is repeated in dark mode. Full-page screenshots are written
+for a human look; passing checks are not a design review.
 
 Usage: python check_layout.py [--site dist] [--out .qa/layout]
 """
@@ -19,7 +21,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parent
-VIEWPORTS = [(1440, 900), (1024, 768), (390, 844)]
+VIEWPORTS = [(1440, 900, 'light'), (1024, 768, 'light'), (390, 844, 'light'), (1440, 900, 'dark')]
 MIN_GAP = 12
 
 MEASURE = r"""
@@ -60,7 +62,24 @@ MEASURE = r"""
     const match = src.match(/-(\d+)\.webp$/); return {src, loaded: img.naturalWidth > 0,
     pixels: match ? Number(match[1]) : img.naturalWidth,
     needed: Math.round(img.getBoundingClientRect().width * Math.min(window.devicePixelRatio, 2))}; });
-  return {overflow: document.documentElement.scrollWidth - window.innerWidth, gaps, levels, images};
+  // A BibTeX toggle must match the Paper link beside it: same font, colour and
+  // text baseline (within 1 px), and no list-item marker in any engine.
+  const textBottom = el => { const range = document.createRange(); range.selectNodeContents(el);
+    return range.getBoundingClientRect().bottom; };
+  const bibtex = [];
+  for (const row of main.querySelectorAll('.resource-links')) {
+    const link = row.querySelector(':scope > a'), summary = row.querySelector('.bibtex > summary');
+    if (!link || !summary || !visible(summary)) continue;
+    const a = getComputedStyle(link), s = getComputedStyle(summary);
+    const problems = [];
+    for (const key of ['fontSize', 'fontWeight', 'fontFamily', 'color']) if (a[key] !== s[key]) problems.push(`${key} ${s[key]} vs ${a[key]}`);
+    const offset = Math.abs(textBottom(link) - textBottom(summary));
+    if (offset > 1) problems.push(`baseline off by ${offset.toFixed(1)} px`);
+    if (s.display === 'list-item' && s.listStyleType !== 'none') problems.push('disclosure marker visible');
+    if (problems.length) bibtex.push({row: (row.closest('[id]') || {}).id, problems});
+  }
+  const linkColour = getComputedStyle(main.querySelector('a')).color;
+  return {overflow: document.documentElement.scrollWidth - window.innerWidth, gaps, levels, images, bibtex, linkColour};
 }
 """
 
@@ -76,8 +95,11 @@ def main() -> int:
     failures, report = [], []
     with sync_playwright() as p:
         browser = p.chromium.launch(**({'executable_path': args.executable} if args.executable else {}))
-        for width, height in VIEWPORTS:
-            context = browser.new_context(viewport={'width': width, 'height': height}, device_scale_factor=2)
+        theme = json.loads((ROOT / 'theme.json').read_text(encoding='utf-8'))
+        for width, height, scheme in VIEWPORTS:
+            if scheme == 'dark' and not theme.get('dark'):
+                continue
+            context = browser.new_context(viewport={'width': width, 'height': height}, device_scale_factor=2, color_scheme=scheme)
             page = context.new_page()
             for name in pages:
                 page.goto((args.site / name).resolve().as_uri(), wait_until='load')
@@ -85,9 +107,15 @@ def main() -> int:
                 page.evaluate("document.querySelectorAll('img[loading=lazy]').forEach(i => { i.loading = 'eager'; })")
                 page.wait_for_function("[...document.images].every(i => i.complete && i.naturalWidth > 0)", timeout=15000)
                 result = page.evaluate(MEASURE)
-                shot = args.out / f'{Path(name).stem}-{width}.png'
+                shot = args.out / f'{Path(name).stem}-{width}{"-dark" if scheme == "dark" else ""}.png'
                 page.screenshot(path=str(shot), full_page=True)
-                tag = f'{name}@{width}px'
+                tag = f'{name}@{width}px{" dark" if scheme == "dark" else ""}'
+                for row in result['bibtex']:
+                    failures.append(f'{tag}: BibTeX toggle in #{row["row"]} does not match its links: {"; ".join(row["problems"])}')
+                expected = theme['palettes'][theme['dark'] if scheme == 'dark' else theme['selected']]['link']
+                rgb = 'rgb({}, {}, {})'.format(*(int(expected[i:i + 2], 16) for i in (1, 3, 5)))
+                if name == 'index.html' and result['linkColour'] != rgb:
+                    failures.append(f'{tag}: links render {result["linkColour"]}, expected the {scheme} palette {expected}')
                 if result['overflow'] > 0:
                     failures.append(f'{tag}: horizontal overflow of {result["overflow"]} px')
                 # Expanded disclosures (BibTeX, credits) must not widen the page either.

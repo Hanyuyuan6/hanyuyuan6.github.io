@@ -3,8 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light">
-  <meta name="theme-color" content="#ffffff">
+  @@THEME_META@@
   <title>@@TITLE@@</title>
   <meta name="description" content="@@DESCRIPTION@@">
   <link rel="canonical" href="https://hanyuyuan6.github.io/">
@@ -20,7 +19,7 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="icon" href="favicon.ico" sizes="48x48">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=@@STYLE_VERSION@@">
   <script type="application/ld+json">
 @@STRUCTURED_DATA@@
   </script>
@@ -32,6 +31,7 @@
       <nav aria-label="Main navigation">
         <a href="#research">Research</a>
         <a href="#publications">Publications</a>
+        <a href="#software">Code</a>
         <a href="#background">Background</a>
         <a href="#contact">Contact</a>
       </nav>
@@ -69,7 +69,7 @@
       <section class="section research-section" id="research" aria-labelledby="research-heading">
         <div class="section-heading">
           <h2 id="research-heading">Selected research</h2>
-          <a class="section-link" href="#publications">More publications</a>
+          <a class="section-link" href="#publications">All publications</a>
         </div>
         <div class="research-list">@@SELECTED_RESEARCH@@</div>
       </section>
@@ -82,10 +82,15 @@
 
       <section class="section publications-section" id="publications" aria-labelledby="publications-heading">
         <div class="section-heading">
-          <h2 id="publications-heading">More publications</h2>
-          <p class="section-note">@@SELECTED_COUNT@@ featured above</p>
+          <h2 id="publications-heading">Publications</h2>
+          <p class="section-note">@@PUBLICATION_COUNT@@ papers, newest first<a href="publications.bib" download>All BibTeX (.bib)</a></p>
         </div>
         <ol class="publications-list">@@PUBLICATIONS@@</ol>
+      </section>
+
+      <section class="section software-section" id="software" aria-labelledby="software-heading">
+        <div class="section-heading"><h2 id="software-heading">Research code</h2></div>
+        <ul class="software-list">@@SOFTWARE@@</ul>
       </section>
 
       <section class="section background-section" id="background" aria-labelledby="background-heading">
@@ -96,11 +101,6 @@
         </div>
         <div class="research-background"><h3>Additional experience</h3>@@RESEARCH_BACKGROUND@@</div>
         @@AWARDS@@
-      </section>
-
-      <section class="section software-section" id="software" aria-labelledby="software-heading">
-        <div class="section-heading"><h2 id="software-heading">Research code</h2></div>
-        <ul class="software-list">@@SOFTWARE@@</ul>
       </section>
 
       <section class="section contact-section" id="contact" aria-labelledby="contact-heading">
