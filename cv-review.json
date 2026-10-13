@@ -1,29 +1,29 @@
 {
- "reviewed_on": "2026-10-12",
+ "reviewed_on": "2026-10-13",
  "reviewer": "Claude (Opus 5.5)",
- "method": "pdftoppm at 100 dpi; every page of both public PDFs and both private Chinese PDFs inspected at full page on 2026-10-12. The build fails on orphans, split number-unit pairs and line-initial CJK punctuation (typography_issues); all four variants pass. Latest change, the formal purple and gold palette (theme.json \"royal\"): headings, bullets, numbers and links in deep purple #4a2a80, rules in a light antique gold #d6c9ae; the recorded block positions in cv-build.json are identical to the previous build; all six pages (English academic 1-2, English internship 1, Chinese academic 1-2, Chinese internship 1) were inspected at full page: layout unchanged, no clipping, overlap, orphan, missing glyph or abnormal break. The Chinese current-research line breaks after its first clause by design (build_cv.py replaces the first \"；\" with a line break). Chinese CVs now carry the customary ID photo (60 x 84 pt, 5:7) at the top right; English CVs stay photo-free as international CVs do. Contact lines break only between items (never inside \"ORCID / number\"); both Chinese first pages were inspected at full page: photo clear of every text line, no overflow.",
- "source_fingerprint": "34f75ad024d9400e450bd6275814db24953423513c9b4fa78ba4c13e4928baee",
+ "method": "pdftoppm at 100 dpi; all six pages (English academic 1-2, English internship 1, Chinese academic 1-2, Chinese internship 1) inspected at full page on 2026-10-13 after the full-text rewrite. The build fails on orphans, split number-unit pairs and line-initial CJK punctuation (typography_issues); all four variants pass, and every page bottom was measured against the 48 pt margin before rendering (academic 59.0/125.7, internship 50.5, Chinese academic 60.2/51.7, Chinese internship 49.2). Layout changes in this round: the planned Milan research is stated on the visiting-appointment line under Education (build_cv.py appointment_blocks, field 'plan'); Current Research lists only the two ongoing projects; the academic CV keeps Additional Experience and Award & Service on page 1 (page1_closing background, awards), so page 2 holds only publications and code. Inspected: no clipping, overlap, orphan, missing glyph or abnormal break; the Chinese current-research line still breaks after its first clause by design; the Chinese photo stays clear of every text line. Afterwards only the document date changed (profile 'updated' 2026-10-13) and the web-only short biography; all six pages re-rendered at 100 dpi are pixel-identical (same PNG SHA-256) to the inspected renders. Last change: the STSF-TPLS code line again names its content-adaptive lift and task-prioritized loss scheduling (English academic page 2 now 112.7 pt above the margin; Chinese page 2 unchanged in height); both changed pages (English academic 2, Chinese academic 2) were re-inspected at full page; the other four renders are pixel-identical.",
+ "source_fingerprint": "d2d67e6e78d908a5df01856ec0a02b3edf5c859916763b974fa08cb15cd9c371",
  "pdf_sha256": {
-  "Yuyuan_Han_Academic_CV.pdf": "24bc455891df3319ce25f0ff92d79d20638930e545cc94c6701dcfcab75ae2eb",
-  "Yuyuan_Han_Internship_Resume.pdf": "3df92a758e9aea8930d72c1472fa42ce5714f3df8f943e8ef59c50ab0ce6544a"
+  "Yuyuan_Han_Academic_CV.pdf": "09c6cc2075cdf07f63049ac636bd88a3835241f658da5717add890f06537e227",
+  "Yuyuan_Han_Internship_Resume.pdf": "085fc87135735fd8bf8af6767b91f776e949dc7bfbfb6e3ebcc8fb3747a3e33e"
  },
  "html_visual_qa": "not separately reviewed; HTML CVs are unlinked companions of the PDFs",
- "reviewed_at": "2026-10-12T19:15:53.194702+00:00",
+ "reviewed_at": "2026-10-13T00:19:02.696302+00:00",
  "reviewed_pages": [
   {
    "id": "academic-en-page-1",
-   "render_sha256": "291f3591017287cd6ddc507332b48ab8e6fbd5cc1ebdfa8986cb08f79e68fa8c",
-   "pdf_sha256": "24bc455891df3319ce25f0ff92d79d20638930e545cc94c6701dcfcab75ae2eb"
+   "render_sha256": "8760418da74e57b0a8d587d9637bae1878701e74b5053774572f2a9f0e7409a3",
+   "pdf_sha256": "09c6cc2075cdf07f63049ac636bd88a3835241f658da5717add890f06537e227"
   },
   {
    "id": "academic-en-page-2",
-   "render_sha256": "21796b166457749dee4b7a4fca858314e7bfbf3c2399c4c2f993d1ee2544d889",
-   "pdf_sha256": "24bc455891df3319ce25f0ff92d79d20638930e545cc94c6701dcfcab75ae2eb"
+   "render_sha256": "0498cf551640c5f253ee82897b881497cbbabea30b4d7219f6bdc14b641a9c9d",
+   "pdf_sha256": "09c6cc2075cdf07f63049ac636bd88a3835241f658da5717add890f06537e227"
   },
   {
    "id": "internship-en-page-1",
-   "render_sha256": "2f7c2e950c520a1466fae068878bcfcaa1cc05e4ce1d8055f4bb37319bf57aad",
-   "pdf_sha256": "3df92a758e9aea8930d72c1472fa42ce5714f3df8f943e8ef59c50ab0ce6544a"
+   "render_sha256": "9e984e0ffec51b56a5612a7ce87e71f6191ff74fa9b07e58f2a4bf4d6954d6ca",
+   "pdf_sha256": "085fc87135735fd8bf8af6767b91f776e949dc7bfbfb6e3ebcc8fb3747a3e33e"
   }
  ]
 }

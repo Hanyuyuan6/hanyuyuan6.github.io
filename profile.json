@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated": "2026-10-12",
+  "updated": "2026-10-13",
   "publication_verification_date": "2026-10-11",
   "person": {
     "name": "Yuyuan Han",
@@ -13,18 +13,18 @@
     "institution": "Xi'an Jiaotong University"
   },
   "narrative": {
-    "hero": "Teaching machines to see from raw measurements, not images.",
+    "hero": "Robust perception from optical measurements, with or without images.",
     "field": "Computational imaging & robust image-free sensing",
-    "bio": "I work on single-pixel imaging and image-free sensing: I design optical measurements and train networks that operate directly on the measurement sequence, without first reconstructing an image. A single-pixel camera illuminates a scene with structured patterns and records one value per pattern with a single detector; I study how much a machine can perceive from those values alone. The results hold where conventional approaches struggle: sparse Hadamard patterns keep imaging robust through scattering media, and image-free segmentation maintains near-constant accuracy down to 0.78% sampling. At Politecnico di Milano, I plan to work on time-domain diffuse optical tomography: 3D reconstruction inside scattering media from photon arrival times, from simulation to phantoms. My long-term aim is to enable robotic systems to infer physical parameters and interpret their surroundings directly from raw measurements, guided by physical models.",
+    "bio": "I study how the way light is measured shapes what a machine can infer about a scene. A single-pixel camera makes this concrete: it records one value per structured-light pattern, so any image must be computed. Three questions follow: what to measure, how to reconstruct, and whether to form an image at all. My papers take them in turn. An image is not always needed: in noise tests with clean-trained models, segmenting directly from measurements can be more robust than segmenting reconstructed images. At Politecnico di Milano, I plan to carry these questions into scattering media, using time-domain diffuse optics to recover optical properties from photon arrival times. My long-term aim is for robots to infer physical parameters and interpret their surroundings directly from raw measurements, guided by physical models.",
     "direction": "",
     "welcome": "I am open to research collaborations and internships in computational imaging, image-free sensing and machine perception.",
     "personal": "Outside the lab: basketball, fitness and travel.",
-    "resume_summary": "I design optical measurements for single-pixel imaging and train networks that operate directly on the measurements, without reconstructing an image.",
+    "resume_summary": "Robust machine perception from raw optical measurements, with or without an image: single-pixel pattern design, reconstruction, and direct segmentation from the measurements.",
     "long_term": "",
-    "internship_summary": "PhD student in single-pixel imaging and image-free sensing: designs optical measurements and trains networks that operate directly on the measurements, without image reconstruction.",
-    "current_summary": "Acquisition-aware single-pixel sensing with optical-bench tests (manuscript in preparation); question answering on single-pixel measurements (exploratory). Planned at Politecnico di Milano: time-domain diffuse optical tomography.",
-    "meta_description": "Yuyuan Han, PhD student at Xi'an Jiaotong University: single-pixel imaging and image-free sensing from raw measurements.",
-    "short_bio": "I work on single-pixel imaging and image-free sensing: I design optical measurements and train networks that operate directly on the measurement sequence, without first reconstructing an image. A single-pixel camera illuminates a scene with structured patterns and records one value per pattern with a single detector; I study how much a machine can perceive from those values alone."
+    "internship_summary": "PhD student in computational imaging and robust image-free sensing: single-pixel measurement design and reconstruction (MATLAB) and direct segmentation from measurements (PyTorch).",
+    "current_summary": "Acquisition-aware single-pixel sensing on an optical bench (manuscript in preparation); question answering from measurements with a frozen vision–language model (exploratory).",
+    "meta_description": "Yuyuan Han, PhD student at Xi'an Jiaotong University, studies robust machine perception from optical measurements: single-pixel imaging and image-free sensing.",
+    "short_bio": "I study how the way light is measured shapes what a machine can infer about a scene. A single-pixel camera makes this concrete: it records one value per structured-light pattern, so any image must be computed. Three questions follow: what to measure, how to reconstruct, and whether to form an image at all."
   },
   "profiles": [
     {
@@ -84,7 +84,8 @@
       "role": "Visiting PhD student",
       "department": "Department of Physics",
       "host": "Antonio Pifferi",
-      "display_dates": "Oct 2026–present"
+      "display_dates": "Oct 2026–present",
+      "plan": "time-domain diffuse optics"
     }
   ],
   "projects": [
@@ -92,10 +93,10 @@
       "id": "lift",
       "title": "The Lift Spectrum · Robust image-free sensing",
       "status": "Preprint",
-      "summary": "Image-free sensing moves the hard problem to the 1D-to-2D lift; how adaptive that lift is determines robustness.",
+      "summary": "Introduces a content-adaptive 1D-to-2D lift and benchmarks it against the best clean-trained reconstruct-then-segment baselines on three simulated datasets.",
       "bullets": [
-        "Showed that, without reconstruction, the 1D-to-2D lift is the design problem; mapped the lift spectrum.",
-        "Proposed STSF + TPLS: +3.2–9.9 mIoU over the prior image-free method (SPIFS); near-constant accuracy down to 0.78% sampling; up to +21.7 mIoU over clean-trained reconstruct-then-segment at 20 dB noise."
+        "Framed the measurement-to-space lift as the key design question in image-free single-pixel segmentation; designed the STSF network and the TPLS training schedule.",
+        "In simulation at 3.13% sampling: +3.2–9.9 pp foreground mIoU over SPIFS; at 20 dB SNR, +3.1–21.7 pp over the best clean-trained reconstruct-then-segment baseline, which wins without noise."
       ],
       "role": "First author",
       "period": "2025–present",
@@ -103,19 +104,18 @@
       "code_url": "https://github.com/Hanyuyuan6/STSF-TPLS",
       "result": "",
       "highlights": [
-        "Near-constant accuracy down to 0.78% sampling",
-        "Up to +21.7 mIoU at 20 dB over clean-trained reconstruct-then-segment",
-        "+3.2–9.9 mIoU over the prior image-free method (SPIFS)",
-        "Runs on a real DMD bench without fine-tuning"
+        "+3.1–21.7 pp foreground mIoU at 20 dB Gaussian noise, 3.13% sampling",
+        "Within 2.0–5.7 pp of its 3.13% result at 0.39% sampling",
+        "Proof of concept on a real single-pixel bench, no fine-tuning"
       ]
     },
     {
       "id": "shsi",
       "title": "Sparse Hadamard single-pixel imaging",
       "status": "Published",
-      "summary": "Orthogonal Hadamard patterns with tunable sparsity make single-pixel imaging robust through scattering and noise.",
+      "summary": "Tunable sparse Hadamard patterns are more resilient to noise than conventional Hadamard patterns in 20 and 30 dB SNR simulations.",
       "bullets": [
-        "Introduced tunable sparsity into orthogonal Hadamard patterns: noise-robust imaging through scattering, low-order matrices that save memory, no training or post-processing."
+        "Designed tunable, orthogonal sparse Hadamard patterns with two training-free modes and a noise model; more resilient to noise than conventional patterns in 20 and 30 dB SNR simulations, validated optically."
       ],
       "role": "First author",
       "period": "2024–2025",
@@ -123,18 +123,18 @@
       "code_url": "https://github.com/Hanyuyuan6/SHSI",
       "result": "",
       "highlights": [
-        "Low-order matrices, less memory",
-        "No training or post-processing",
-        "Two acquisition modes with theory"
+        "High resolution from low-order Hadamard matrices, with less memory",
+        "No prior knowledge, training or post-processing",
+        "Two operating modes; theory validated in simulation and experiment"
       ]
     },
     {
       "id": "loop",
-      "title": "LDGI · Optical phased-array imaging",
+      "title": "LDGI · Ghost imaging for optical phased-array line patterns",
       "status": "Published",
-      "summary": "Line patterns from one-dimensional optical phased arrays break the noise symmetry that ghost-imaging denoising relies on; LDGI overcomes this limitation.",
+      "summary": "Loop differential ghost imaging corrects the spatial noise asymmetry caused by line-pattern illumination from one-dimensional optical phased arrays.",
       "bullets": [
-        "Showed that line patterns from one-dimensional optical phased arrays break the noise symmetry of ghost-imaging denoising; proposed LDGI (orders-of-magnitude gains), validated optically."
+        "Developed loop differential ghost imaging, which corrects the noise asymmetry of line patterns from 1D optical phased arrays; orders-of-magnitude gains over traditional ghost imaging, validated with an SLM."
       ],
       "role": "First author",
       "period": "2025",
@@ -142,27 +142,27 @@
       "code_url": "https://github.com/Hanyuyuan6/LDGI",
       "result": "",
       "highlights": [
-        "Orders-of-magnitude gain over traditional ghost imaging",
-        "Noise-symmetry metric κs",
-        "Validated optically"
+        "Orders-of-magnitude gains in reconstruction quality vs. traditional GI",
+        "A metric that quantifies the spatial symmetry of noise",
+        "Validated optically with SLM-generated line patterns"
       ]
     }
   ],
   "directions": [
     {
-      "title": "Acquisition-aware sensing",
+      "title": "Acquisition-aware single-pixel sensing",
       "status": "Ongoing",
-      "description": "Single-pixel sensing methods that account for acquisition conditions, tested in optical-bench experiments. Manuscript in preparation."
+      "description": "Single-pixel sensing that accounts for the conditions under which measurements are acquired, tested in optical-bench experiments; manuscript in preparation."
     },
     {
       "title": "Question answering from measurements",
       "status": "Exploratory",
-      "description": "Whether a frozen vision–language model can answer questions directly from single-pixel measurements."
+      "description": "Testing whether a frozen vision–language model can answer questions about a scene directly from its single-pixel measurements."
     },
     {
       "title": "Time-domain diffuse optics",
-      "status": "Planned study",
-      "description": "3D reconstruction inside scattering media from photon arrival times, from simulation to phantoms."
+      "status": "Planned",
+      "description": "Simulation and phantom studies of 3D optical-property reconstruction in scattering media from photon arrival times."
     }
   ],
   "publications": [
@@ -433,17 +433,17 @@
     {
       "name": "Comparison-of-SPI-DLs",
       "url": "https://github.com/Hanyuyuan6/Comparison-of-SPI-DLs",
-      "description": "Eight deep architectures and a classical inverse, benchmarked on one shared Hadamard acquisition (PyTorch)."
+      "description": "Eight deep networks and correlation ghost imaging, benchmarked on one shared Hadamard acquisition (PyTorch)."
     },
     {
       "name": "SHSI",
       "url": "https://github.com/Hanyuyuan6/SHSI",
-      "description": "Sparse Hadamard single-pixel imaging: pattern generation and reconstruction (MATLAB)."
+      "description": "Sparse Hadamard pattern generation, simulation and reconstruction examples (MATLAB)."
     },
     {
       "name": "LDGI",
       "url": "https://github.com/Hanyuyuan6/LDGI",
-      "description": "Loop differential ghost imaging for line patterns from optical phased arrays (MATLAB)."
+      "description": "Loop differential ghost imaging for line-pattern illumination from 1D optical phased arrays (MATLAB)."
     },
     {
       "name": "TGIs-Entry",
@@ -501,10 +501,10 @@
     }
   ],
   "platform_copy": {
-    "github_bio": "Teaching machines to see from raw measurements, not images. Single-pixel imaging & image-free sensing.",
-    "linkedin_headline": "PhD Student at Xi'an Jiaotong University | Teaching machines to see from raw measurements, not images",
-    "researchgate_bio": "I work on single-pixel imaging and image-free sensing: I design optical measurements and train networks that operate directly on the measurement sequence, without first reconstructing an image. A single-pixel camera illuminates a scene with structured patterns and records one value per pattern with a single detector; I study how much a machine can perceive from those values alone. I am a PhD student at Xi'an Jiaotong University.",
-    "long_bio": "I am a PhD student at Xi'an Jiaotong University. I work on single-pixel imaging and image-free sensing: I design optical measurements and train networks that operate directly on the measurement sequence, without first reconstructing an image. A single-pixel camera illuminates a scene with structured patterns and records one value per pattern with a single detector; I study how much a machine can perceive from those values alone. The results hold where conventional approaches struggle: sparse Hadamard patterns keep imaging robust through scattering media, and image-free segmentation maintains near-constant accuracy down to 0.78% sampling. At Politecnico di Milano, I plan to work on time-domain diffuse optical tomography: 3D reconstruction inside scattering media from photon arrival times, from simulation to phantoms. My long-term aim is to enable robotic systems to infer physical parameters and interpret their surroundings directly from raw measurements, guided by physical models.",
+    "github_bio": "Robust perception from optical measurements, with or without images. Single-pixel imaging, image-free sensing, PyTorch and MATLAB.",
+    "linkedin_headline": "PhD Student at Xi'an Jiaotong University | Computational imaging and robust image-free sensing | Single-pixel imaging, structured illumination and direct inference from measurements",
+    "researchgate_bio": "I study how the way light is measured shapes what a machine can infer about a scene. A single-pixel camera makes this concrete: it records one value per structured-light pattern, so any image must be computed. Three questions follow: what to measure, how to reconstruct, and whether to form an image at all.",
+    "long_bio": "I am a PhD student at Xi'an Jiaotong University. I study how the way light is measured shapes what a machine can infer about a scene. A single-pixel camera makes this concrete: it records one value per structured-light pattern, so any image must be computed. Three questions follow: what to measure, how to reconstruct, and whether to form an image at all. My papers take them in turn. An image is not always needed: in noise tests with clean-trained models, segmenting directly from measurements can be more robust than segmenting reconstructed images. At Politecnico di Milano, I plan to carry these questions into scattering media, using time-domain diffuse optics to recover optical properties from photon arrival times. My long-term aim is for robots to infer physical parameters and interpret their surroundings directly from raw measurements, guided by physical models.",
     "keywords": [
       "Computational Imaging",
       "Single-Pixel Imaging",
@@ -512,20 +512,20 @@
       "Inverse Problems",
       "Machine Perception"
     ],
-    "orcid_bio": "I am a PhD student at Xi'an Jiaotong University. I work on single-pixel imaging and image-free sensing: I design optical measurements and train networks that operate directly on the measurement sequence, without first reconstructing an image. A single-pixel camera illuminates a scene with structured patterns and records one value per pattern with a single detector; I study how much a machine can perceive from those values alone. The results hold where conventional approaches struggle: sparse Hadamard patterns keep imaging robust through scattering media, and image-free segmentation maintains near-constant accuracy down to 0.78% sampling. At Politecnico di Milano, I plan to work on time-domain diffuse optical tomography: 3D reconstruction inside scattering media from photon arrival times, from simulation to phantoms. My long-term aim is to enable robotic systems to infer physical parameters and interpret their surroundings directly from raw measurements, guided by physical models.",
-    "linkedin_about": "I am a PhD student at Xi'an Jiaotong University. I work on single-pixel imaging and image-free sensing: I design optical measurements and train networks that operate directly on the measurement sequence, without first reconstructing an image. A single-pixel camera illuminates a scene with structured patterns and records one value per pattern with a single detector; I study how much a machine can perceive from those values alone. The results hold where conventional approaches struggle: sparse Hadamard patterns keep imaging robust through scattering media, and image-free segmentation maintains near-constant accuracy down to 0.78% sampling. At Politecnico di Milano, I plan to work on time-domain diffuse optical tomography: 3D reconstruction inside scattering media from photon arrival times, from simulation to phantoms. My long-term aim is to enable robotic systems to infer physical parameters and interpret their surroundings directly from raw measurements, guided by physical models.\n\nI am open to research collaborations and internships in computational imaging, image-free sensing and machine perception.",
-    "linkedin_about_zh": "我是西安交通大学博士研究生。我的研究方向是单像素成像与免成像感知：设计光学测量方案，并训练直接处理测量序列、无需先重建图像的网络。单像素相机用一系列结构光图案照明场景，由单个探测器为每个图案记录一个数值。我关注的问题是：机器仅凭这些数值能感知多少。已有工作在传统方法难以胜任的条件下依然奏效：稀疏 Hadamard 图案可在散射介质中稳健成像；免成像分割在采样率低至 0.78% 时准确率几乎不变。在米兰理工，我计划研究时域漫射光学层析成像：利用光子到达时间重建散射介质内部的三维信息，从仿真推进到仿体实验。我的长期目标是让机器人系统在物理模型指导下，直接从原始测量中推断物理参数、理解周围环境。\n\n欢迎计算成像、免成像感知与机器感知方向的科研合作与实习机会。",
+    "orcid_bio": "I am a PhD student at Xi'an Jiaotong University. I study how the way light is measured shapes what a machine can infer about a scene. A single-pixel camera makes this concrete: it records one value per structured-light pattern, so any image must be computed. Three questions follow: what to measure, how to reconstruct, and whether to form an image at all. My papers take them in turn. An image is not always needed: in noise tests with clean-trained models, segmenting directly from measurements can be more robust than segmenting reconstructed images. At Politecnico di Milano, I plan to carry these questions into scattering media, using time-domain diffuse optics to recover optical properties from photon arrival times. My long-term aim is for robots to infer physical parameters and interpret their surroundings directly from raw measurements, guided by physical models.",
+    "linkedin_about": "I am a PhD student at Xi'an Jiaotong University. I study how the way light is measured shapes what a machine can infer about a scene. A single-pixel camera makes this concrete: it records one value per structured-light pattern, so any image must be computed. Three questions follow: what to measure, how to reconstruct, and whether to form an image at all. My papers take them in turn. An image is not always needed: in noise tests with clean-trained models, segmenting directly from measurements can be more robust than segmenting reconstructed images.\n\nOn what to measure, tunable sparse Hadamard patterns make single-pixel imaging more robust to noise than conventional ones, in simulation and optical experiments (Optics Express 2025). On how to reconstruct, loop differential ghost imaging restores the spatial noise symmetry broken by line-pattern illumination from one-dimensional optical phased arrays (Optics Communications 2025). On whether to form an image, \"The Lift Spectrum\" (arXiv 2026, with code) shows how lifting one-dimensional measurements into a two-dimensional task representation shapes robustness.\n\nMy background spans devices and systems: I modeled electro-optic phased arrays in COMSOL and MATLAB and integrated optical systems, from mechanical design and alignment to underwater field tests. I built remote-gpu-trainer, an open-source agent skill for GPU experiments (60+ GitHub stars), and completed 13 verified peer reviews for IEEE TIP, IEEE TCI, Optics Express and Optics Letters.\n\nAt Politecnico di Milano, I plan to carry these questions into scattering media, using time-domain diffuse optics to recover optical properties from photon arrival times. My long-term aim is for robots to infer physical parameters and interpret their surroundings directly from raw measurements, guided by physical models.\n\nI am open to research collaborations and internships in computational imaging, image-free sensing and machine perception.",
+    "linkedin_about_zh": "我是西安交通大学博士研究生。我研究光学测量方式如何影响机器对场景的感知。单像素相机是我的主要研究平台：它以一系列结构光图案依次照明场景，每个图案只记录一个测量值，因此任何图像都必须经计算得到。由此引出三个问题：测量什么、如何重建，以及是否需要成像。我的论文依次回应这三个问题。图像并非总是必要：在噪声测试中（模型均以无噪声数据训练），直接从测量中分割场景，可以比先重建图像再分割更为鲁棒。\n\n关于测量什么，仿真与光学实验表明，相比传统 Hadamard 图案，稀疏度可调的 Hadamard 图案能提高单像素成像的抗噪性（Optics Express 2025）。关于如何重建，循环差分鬼成像恢复了一维光学相控阵线图案照明所破坏的噪声空间对称性（Optics Communications 2025）。关于是否需要成像，“The Lift Spectrum”（arXiv 2026，附代码）表明，一维测量如何映射为二维任务表征，会影响免成像单像素分割的鲁棒性。\n\n此外，我具备器件与系统层面的经验：曾使用 COMSOL 与 MATLAB 对电光相控阵进行建模，并参与光学系统集成，从机械设计、光路调校到水下外场试验。我开发的开源智能体技能 remote-gpu-trainer 用于 GPU 实验，在 GitHub 获得 60 余个星标。我还为 IEEE TIP、IEEE TCI、Optics Express 与 Optics Letters 完成 13 次经核验的审稿。\n\n在米兰理工大学，我计划将研究拓展至散射介质，利用时域漫射光学，从光子到达时间分布反演介质的光学参数。我的长期目标是让机器人在物理模型指导下，直接从原始测量中推断物理参数、理解周围环境。\n\n欢迎就计算成像、免成像感知与机器感知方向的科研合作或研究实习与我联系。",
     "linkedin_featured_lift": "Segmentation directly from single-pixel measurements outperforms the strongest clean-trained reconstruct-then-segment baseline by 3.1–21.7 foreground-mIoU points at 20 dB noise.",
     "linkedin_featured_site_title": "Yuyuan Han · Computational imaging & robust image-free sensing",
     "linkedin_featured_site": "Research, publications and CV in single-pixel imaging and image-free sensing.",
     "linkedin_featured_resume": "One-page résumé (PDF): optical measurement design for single-pixel imaging and networks that operate directly on the measurements.",
-    "researchgate_activity": "PhD student at Xi'an Jiaotong University · open to collaborations in computational imaging and image-free sensing",
+    "researchgate_activity": "PhD student, Xi'an Jiaotong University · Robust perception from optical measurements, with or without images",
     "openreview_expertise": [
       "Computational Imaging, Single-Pixel Imaging, Image-Free Sensing",
       "Inverse Problems, Machine Perception"
     ],
     "github_company": "Xi'an Jiaotong University",
-    "linkedin_headline_zh": "西安交通大学博士研究生｜单像素成像与免成像感知"
+    "linkedin_headline_zh": "西安交通大学博士研究生｜计算成像与鲁棒免成像感知｜单像素成像、结构光照明设计与基于测量序列的直接推断"
   },
   "selected_project_ids": [
     "lift",
@@ -537,23 +537,23 @@
       "id": "electro_optic",
       "title": "Photonic device modeling",
       "role": "Contributing researcher",
-      "summary": "Modeled and optimized electro-optic phased-array geometries for beam steering.",
-      "short": "Modeled and optimized electro-optic phased-array geometries for beam steering.",
+      "summary": "Cascaded, domain-engineered single-electrode optical phased arrays in electro-optic crystals: geometry optimization in COMSOL and MATLAB for steering efficiency and lower drive voltage.",
+      "short": "Geometry optimization of electro-optic phased arrays for beam steering.",
       "role_zh": "项目骨干",
       "title_zh": "光子器件建模",
-      "summary_zh": "开展电光相控阵的器件几何建模与波束扫描优化。",
-      "short_zh": "开展电光相控阵的器件几何建模与波束扫描优化。"
+      "summary_zh": "级联、畴工程单电极电光晶体光学相控阵：使用 COMSOL 与 MATLAB 优化器件几何，以提高波束扫描效率并降低驱动电压。",
+      "short_zh": "使用 COMSOL 与 MATLAB 优化电光相控阵几何结构，用于波束扫描。"
     },
     {
       "id": "optical_systems",
       "title": "Optical system integration",
       "role": "",
-      "summary": "Led mechanical design, optical alignment and system integration; participated in underwater field tests.",
-      "short": "Led mechanical design, optical alignment and system integration; participated in underwater field tests.",
+      "summary": "Mechanical design, precision optical alignment and system integration for an integrated sensing and optical-computing project, including underwater field tests.",
+      "short": "Mechanical design, optical alignment and underwater field tests.",
       "role_zh": "",
       "title_zh": "光学系统集成",
-      "summary_zh": "主导机械设计、光路调校与系统集成，参与水下外场测试。",
-      "short_zh": "主导机械设计、光路调校与系统集成，参与水下外场测试。"
+      "summary_zh": "面向集成感知与光计算项目，完成机械设计、精密光路调校与系统集成，并参与水下外场测试。",
+      "short_zh": "机械设计、光路调校与水下外场测试。"
     }
   ],
   "additional_code_ids": [
@@ -567,23 +567,23 @@
   "news": [
     {
       "date": "2026-10",
-      "text": "Started a visiting PhD period at Politecnico di Milano, Department of Physics, supervised by Antonio Pifferi."
+      "text": "Joined the Department of Physics, Politecnico di Milano, as a visiting PhD student, supervised by Antonio Pifferi."
     },
     {
       "date": "2026-07",
-      "text": "Preprint: The Lift Spectrum, on robust image-free single-pixel sensing, released with code.",
+      "text": "Preprint released with code: The Lift Spectrum, on how measurement-to-space adaptivity shapes robustness in image-free single-pixel sensing.",
       "link_text": "The Lift Spectrum",
       "url": "https://arxiv.org/abs/2607.22077"
     },
     {
       "date": "2026-07",
-      "text": "Review of optical phased arrays on photonic integrated circuits published in Nanophotonics.",
-      "link_text": "Review of optical phased arrays",
+      "text": "Published in Nanophotonics: a review of optical phased arrays on photonic integrated circuit platforms.",
+      "link_text": "review of optical phased arrays",
       "url": "https://doi.org/10.1002/nap2.70182"
     },
     {
       "date": "2025-10",
-      "text": "Generalized sparse Hadamard single-pixel imaging published in Optics Express.",
+      "text": "Published in Optics Express: Generalized sparse Hadamard single-pixel imaging.",
       "link_text": "Generalized sparse Hadamard single-pixel imaging",
       "url": "https://doi.org/10.1364/OE.576533"
     }
@@ -601,7 +601,7 @@
     },
     {
       "label": "Device modeling",
-      "text": "Electro-optic phased-array geometry modeling and optimization for beam steering"
+      "text": "Geometry optimization of electro-optic phased arrays for beam steering"
     }
   ],
   "service": [

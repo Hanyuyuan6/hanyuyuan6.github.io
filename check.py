@@ -18,7 +18,8 @@ IMAGE_BUDGET = 450_000
 DASH_RANGE = re.compile(r'\b\d{4} - (?:\d{4}|present)\b')
 # Positioning phrases retired on 2026-10-12 ("physics-aware learning" names no learner);
 # they must not return in any public file, PDF text or PDF metadata.
-RETIRED_TERMS = ('physics-aware',)
+# Owner, 2026-10-13 ("文字的表述怎么逻辑混乱？"): retired wording that contradicted the imaging work or the evidence.
+RETIRED_TERMS = ('physics-aware', 'not images', 'near-constant accuracy', 'where conventional approaches struggle')
 TEXT_SUFFIXES = {'.html', '.txt', '.xml', '.json', '.webmanifest', '.bib', '.svg', '.md'}
 
 
@@ -178,10 +179,11 @@ def validate(root):
     copy, narrative, person = profile['platform_copy'], profile['narrative'], profile['person']
     identity = f"I am a {person['position']} at {person['institution']}."
     require(narrative['bio'].startswith(narrative['short_bio']), 'Biography opens with the short bio')
-    require(copy['researchgate_bio'] == f"{narrative['short_bio']} {identity}", 'ResearchGate bio is the short bio plus the identity sentence')
+    require(copy['researchgate_bio'] == narrative['short_bio'], 'ResearchGate bio is the short bio (its own sentences, nothing appended)')
     require(copy['long_bio'] == copy['orcid_bio'] == f"{identity} {narrative['bio']}", 'ORCID biography is the identity sentence plus the biography')
-    require(copy['linkedin_about'] == f"{copy['long_bio']}\n\n{narrative['welcome']}", 'LinkedIn About is the long bio plus the welcome line')
-    require(copy['github_bio'].startswith(narrative['hero']) and copy['linkedin_headline'].endswith(narrative['hero'].rstrip('.')), 'GitHub bio and LinkedIn headline carry the hero line')
+    about = copy['linkedin_about'].split('\n\n')  # research and findings, venues, background, plan and aim, welcome
+    require(len(about) == 5 and f'{about[0]} {about[3]}' == copy['long_bio'] and about[4] == narrative['welcome'], 'LinkedIn About is the long bio with its evidence placed before the plan, ending with the welcome line')
+    require(copy['github_bio'].startswith(narrative['hero']) and copy['linkedin_headline'].startswith(f"PhD Student at {person['institution']}"), 'GitHub bio carries the hero line; LinkedIn headline opens with the PhD identity')
     # Identity lines name the PhD only; the visit is listed under Education (owner, 2026-10-12).
     visit, visit_zh = profile['appointments'][0], json.loads((root / 'cv-variants.json').read_text(encoding='utf-8'))['zh']['appointment']
     identity_lines = [identity, narrative['meta_description'], copy['linkedin_headline'], copy['linkedin_headline_zh'], copy['github_company'], copy['github_bio'],
@@ -309,7 +311,7 @@ def validate(root):
                 require(len(project['summary'].split()) <= 22, f"Selected-work takeaway is one short sentence (22 words max): {project['id']}")
         require('one-dimensional optical phased arrays' in home_text, 'LDGI homepage identifies its OPA illumination setting')
         require(all(f"{row['count']} verified reviews" in home_text and all(escape(v, quote=False) in home_text for v in row['venues']) for row in profile.get('service', [])), 'Homepage lists verified peer review with its venues and count')
-        require('Ten deep' not in home_text and 'Eight deep architectures' in home_text, 'Comparison repository is described as in the paper (eight networks plus a classical inverse)')
+        require('ten deep' not in home_text.lower() and 'eight deep networks and correlation ghost imaging' in home_text.lower(), 'Comparison repository is described as in its README (eight deep networks plus correlation ghost imaging)')
         require(escape(profile['narrative']['short_bio'], quote=False) in home_text, 'Homepage carries the canonical short biography verbatim')
         require(not profile['narrative'].get('personal') or f'<p class="personal">{escape(profile["narrative"]["personal"], quote=True)}</p>' in home_text, 'Homepage shows the personal line when profile.json has one')
         require(all(f"Advisor: {escape(row['advisor'], quote=True)}" in home_text for row in profile['education'] if row.get('advisor')), 'Homepage names the recorded advisor')
@@ -452,7 +454,7 @@ def validate(root):
             require(-1 not in places and places == sorted(places), f'Visiting appointment follows the PhD it belongs to: {path.name}')
             compact_text = re.sub(r'\s+', ' ', content)
             require('clean-trained' in compact_text and '20 dB' in compact_text, f'Lift claim keeps its noise level and training condition: {path.name}')
-            require('one-dimensional optical phased arrays' in compact_text, f'LDGI OPA setting in actual PDF: {path.name}')
+            require(re.search(r'(one-dimensional|1D) optical phased arrays', compact_text) is not None, f'LDGI OPA setting in actual PDF: {path.name}')
             require(not re.search(r'\bPublished\b', content), f'No redundant Published labels: {path.name}')
             require(all(f"Advisor: {row['advisor']}" in compact_text for row in profile['education'] if row.get('advisor')), f'PDF names the recorded advisor: {path.name}')
             require('Host:' not in compact_text and all(f"Supervisor: {row['host']}" in compact_text for row in profile['appointments'] if row.get('host')), f'PDF names the visiting supervisor: {path.name}')

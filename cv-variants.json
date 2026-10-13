@@ -113,8 +113,8 @@
   ],
   "zh": {
     "field": "计算成像与鲁棒免成像感知",
-    "summary": "设计单像素成像的光学测量方案，并训练直接处理测量、无需重建图像的网络。",
-    "direction": "",
+    "summary": "研究基于原始光学测量的鲁棒机器感知，涵盖成像与免成像两条路线：单像素照明图案设计、图像重建，以及直接从测量序列完成场景分割。",
+    "direction": "基于原始光学测量的鲁棒机器感知：结构光照明设计、单像素成像重建与免成像感知。",
     "location": "意大利米兰",
     "education": {
       "Xi'an Jiaotong University": {
@@ -133,32 +133,33 @@
       "institution": "米兰理工大学",
       "role": "访问博士研究生",
       "department": "物理系",
-      "host_label": "合作导师"
+      "host_label": "合作导师",
+      "plan": "时域漫射光学"
     },
     "projects": {
       "lift": {
-        "title": "The Lift Spectrum：鲁棒免成像感知",
+        "title": "The Lift Spectrum：鲁棒免成像单像素感知",
         "status": "预印本",
         "role": "第一作者",
         "bullets": [
-          "揭示去掉重建后，1D 到 2D 的提升（lift）成为核心设计问题，并梳理出 lift 谱系。",
-          "提出 STSF + TPLS：mIoU 比已有免成像方法（SPIFS）高 3.2–9.9 个百分点；采样率降至 0.78% 时精度几乎不变；20 dB 噪声下，比干净数据训练的先重建再分割高达 21.7 个百分点。"
+          "以测量序列到空间任务表征的映射为免成像单像素分割的核心设计问题，设计 STSF 网络与 TPLS 训练调度。",
+          "仿真中，3.13% 采样率下前景 mIoU 比 SPIFS 高 3.2–9.9 个百分点；20 dB 信噪比下，较在无噪声数据上训练的最优“先重建再分割”基线高 3.1–21.7 个百分点（无噪声时该基线更优）。"
         ]
       },
       "shsi": {
-        "title": "稀疏 Hadamard 单像素成像",
+        "title": "广义稀疏 Hadamard 单像素成像",
         "status": "已发表",
         "role": "第一作者",
         "bullets": [
-          "使正交 Hadamard 图案具备可调稀疏性：散射与噪声下稳健成像，低阶矩阵节省存储，无需训练与后处理。"
+          "设计稀疏度可调且保持正交的 Hadamard 图案，提出两种无需训练的工作模式并建立噪声理论模型；在信噪比为 20 与 30 dB 的仿真中比传统 Hadamard 图案更抗噪，并经光学实验验证。"
         ]
       },
       "loop": {
-        "title": "LDGI：光学相控阵成像",
+        "title": "LDGI：面向光学相控阵线图案照明的循环差分鬼成像",
         "status": "已发表",
         "role": "第一作者",
         "bullets": [
-          "揭示一维光学相控阵线光场会破坏鬼成像去噪依赖的噪声对称性；提出 LDGI（较传统算法提升数个数量级）并完成光学验证。"
+          "针对一维光学相控阵的线图案照明提出循环差分鬼成像，校正其造成的噪声空间不对称；重建质量较传统鬼成像算法提高数个数量级，并以空间光调制器生成的线图案完成光学验证。"
         ]
       }
     },
@@ -178,19 +179,19 @@
       "Second Prize, National Post-Graduate Mathematical Contest in Modeling": "全国研究生数学建模竞赛二等奖"
     },
     "software": {
-      "STSF-TPLS": "免成像单像素分割：内容自适应提升与任务优先损失调度；代码与预训练权重（PyTorch）。",
-      "SHSI": "稀疏 Hadamard 单像素成像：图样生成与重建（MATLAB）。",
-      "Comparison-of-SPI-DLs": "八种深度网络与一种经典逆变换在同一 Hadamard 采集下的基准比较（PyTorch）。",
+      "STSF-TPLS": "免成像单像素分割：内容自适应映射与任务优先损失调度；代码与预训练权重（PyTorch）。",
+      "SHSI": "稀疏 Hadamard 图案生成、仿真与重建示例（MATLAB）。",
+      "Comparison-of-SPI-DLs": "八种深度网络与关联鬼成像在同一 Hadamard 采集下的基准比较（PyTorch）。",
       "remote-gpu-trainer": "面向 Claude Code 与 Codex 的开源智能体技能：运行、核验并交付 GPU 实验（60+ 星）。",
-      "LDGI": "面向光学相控阵线光场的循环差分鬼成像（MATLAB）。",
+      "LDGI": "面向一维光学相控阵线图案照明的循环差分鬼成像（MATLAB）。",
       "TGIs-Entry": "传统、差分与归一化鬼成像的参考实现（MATLAB）。"
     },
-    "internship_summary": "单像素成像与免成像感知方向博士研究生：设计光学测量方案，训练直接处理测量、无需重建图像的网络。",
-    "current_summary": "考虑采集条件的单像素感知与光学平台实验（论文准备中）；基于单像素测量的问答（探索中）。米兰理工大学访学计划：时域漫射光学层析成像。",
+    "internship_summary": "计算成像与鲁棒免成像感知方向博士研究生：单像素测量设计、图像重建，以及直接从测量序列分割场景。",
+    "current_summary": "考虑采集条件的单像素感知与光学平台实验（论文撰写中）；基于冻结视觉—语言模型的单像素测量问答（探索中）。",
     "internship_technical": [
       {
         "label": "开源",
-        "text": "remote-gpu-trainer：面向 Claude Code 与 Codex 的智能体技能，覆盖 GPU 实验运行、核验与交付（GitHub 60+ 星）",
+        "text": "remote-gpu-trainer：用于运行、核验与交付 GPU 实验的智能体技能（GitHub 60+ 星）",
         "url": "https://github.com/Hanyuyuan6/remote-gpu-trainer",
         "link_text": "remote-gpu-trainer"
       },
@@ -200,13 +201,13 @@
       },
       {
         "label": "器件建模",
-        "text": "电光相控阵器件几何建模与波束扫描优化"
+        "text": "使用 COMSOL 与 MATLAB 优化电光相控阵几何结构，用于波束扫描"
       }
     ]
   },
   "translation_source_hashes": {
-    "lift": "11c3514cbdbabdd5ee88f9f70472966d9dd07c2c32477408f60972399ffcf9d1",
-    "shsi": "de16dcc3a37d4a7e17f78b192ad35a99dcd9592c71587c8c901a340e46b436c6",
-    "loop": "0ca902d40aaefdc5a756d6f644bbb3722e3160342972787fc26d0180d1d25150"
+    "lift": "4f2385a52c4dc707a5e4eef35be426cfb84e52bdbbce5dcd2a3e748c8266e52e",
+    "shsi": "eace6e2f69b30e043446b999845acf6aeae72534578bf33cd06160f6f4f1e6ad",
+    "loop": "2c84c8f6d80f5097a953f927268ea05ad959bb04c5f6f119c7cc0cd32c5a6f2d"
   }
 }
