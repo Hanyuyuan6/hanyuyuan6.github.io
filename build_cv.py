@@ -239,7 +239,10 @@ def appointment_blocks(profile: dict[str, Any], cfg: dict[str, Any], zh: bool, c
         out.append(Block('entry', label, f'appointments[{i}]', meta={'right': a['display_dates']}))
         host_label = a.get('host_label', 'Supervisor')
         colon = '：' if zh else ': '
-        out.append(Block('detail', f"{esc(a['department'])}{sep(zh)}{esc(host_label)}{colon}{esc(app['host'])}", f'appointments[{i}].host', gap=5 if compact else 8))
+        detail = f"{esc(a['department'])}{sep(zh)}{esc(host_label)}{colon}{esc(app['host'])}"
+        if a.get('plan'):  # the planned research belongs to the visit, so it is stated here, under Education
+            detail += sep(zh) + (f"计划研究：{esc(a['plan'])}" if zh else f"Planned research: {esc(a['plan'])}")
+        out.append(Block('detail', detail, f'appointments[{i}].host', gap=5 if compact else 8))
     return out
 
 
@@ -301,7 +304,7 @@ def service_blocks(profile: dict[str, Any], zh: bool, compact: bool) -> list[Blo
         if compact:
             venues = [v.replace('IEEE Transactions on Image Processing', 'IEEE TIP').replace('IEEE Transactions on Computational Imaging', 'IEEE TCI') for v in venues]
         if zh:
-            text = f"<b>审稿人</b>{sep(zh)}{esc('、'.join(venues))}（{row['count']} 次已验证审稿，{esc(row['years'])}）"
+            text = f"<b>审稿人</b>{sep(zh)}{esc('、'.join(venues))}（{row['count']} 次经核验的审稿，{esc(row['years'])}）"
         else:
             text = f"<b>{esc(row['role'])}</b>{sep(zh)}{esc(', '.join(venues))} ({row['count']} verified reviews, {esc(row['years'])})"
         out.append(Block('body', text, f'service[{i}]', gap=2))

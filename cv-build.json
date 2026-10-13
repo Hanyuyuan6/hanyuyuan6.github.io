@@ -1,19 +1,19 @@
 {
   "schema_version": 2,
-  "built_at": "2026-10-12T20:49:34.670574+00:00",
-  "source_fingerprint": "813edd490c5e32e595643a964f946a77acb5588944339250dc80ee7e357e9280",
+  "built_at": "2026-10-13T08:16:41.039088+00:00",
+  "source_fingerprint": "5c89ac36f3c3a8ff904a1803a196767f428038b46eed1fef920cf4b6a232cc8d",
   "inputs": {
     "profile": {
       "path": "profile.json",
-      "sha256": "1151b1e25b11d25706b8a8fb42199553e7bb2b2be00ce2d48b3afb01ac644d74"
+      "sha256": "e962cc16d32af99359286b9a43b3638e7af8cf524c65b3ae491dffa3107d70a7"
     },
     "template": {
       "path": "build_cv.py",
-      "sha256": "6fe475dec01041860e941940f7bcaade7ec7089e4a0115996a15c8bca1714074"
+      "sha256": "6a4dfd190ac6c67473a468fbdd2f43124883395b8d798b82cda7da15c7f8e7c3"
     },
     "variants": {
       "path": "cv-variants.json",
-      "sha256": "41551c4648c0c3c3ad4ff1cb5cad02cf9438ef20211453019dfc42472f0c3142"
+      "sha256": "56f3e0b85265b36c90c44dac2edb951b50d6d2ab764b3e04fe694ec1e99fe23c"
     },
     "theme": {
       "path": "theme.json",
@@ -59,10 +59,10 @@
       "destination": "public",
       "metadata": {
         "Author": "Yuyuan Han",
-        "CreationDate": "D:20261012000000+00'00'",
+        "CreationDate": "D:20261013000000+00'00'",
         "Creator": "Yuyuan Han",
         "Keywords": "Computational Imaging, Single-Pixel Imaging, Image-Free Sensing, Inverse Problems, Machine Perception",
-        "ModDate": "D:20261012000000+00'00'",
+        "ModDate": "D:20261013000000+00'00'",
         "Producer": "",
         "Subject": "Computational imaging & robust image-free sensing",
         "Title": "Yuyuan Han | Academic CV",
@@ -70,17 +70,17 @@
       },
       "pdf": {
         "path": "Yuyuan_Han_Academic_CV.pdf",
-        "sha256": "24bc455891df3319ce25f0ff92d79d20638930e545cc94c6701dcfcab75ae2eb",
-        "bytes": 59470
+        "sha256": "09c6cc2075cdf07f63049ac636bd88a3835241f658da5717add890f06537e227",
+        "bytes": 59511
       },
       "html": {
         "path": "Yuyuan_Han_Academic_CV.html",
-        "sha256": "f5bf390653b7136ae3bceafe0402af41377ed20dac130736510fe534c27d4c20",
-        "bytes": 15542
+        "sha256": "b8a670388157b70eb40bd8c84a3547d4ba307f885ab9c3f04db6fe54509c1619",
+        "bytes": 15658
       },
       "checks": {
         "page_count": 2,
-        "extracted_characters": 5714,
+        "extracted_characters": 5825,
         "embedded_fonts": [
           "/AAAAAA+NotoSans-Bold",
           "/AAAAAA+NotoSans-Italic",
@@ -139,7 +139,7 @@
             {
               "page": 1,
               "source": "projects.loop",
-              "label": "LDGI · Optical phased-array imaging",
+              "label": "LDGI · Ghost imaging for optical phased-array line patterns",
               "uri": "https://doi.org/10.1016/j.optcom.2025.131589",
               "annotation_count": 1
             },
@@ -390,7 +390,7 @@
             "source": "narrative.resume_summary",
             "top": 692.65,
             "bottom": 661.65,
-            "text": "I design optical measurements for single-pixel imaging and train networks that operate directly on the measurements, without reconstructing an image."
+            "text": "Robust machine perception from raw optical measurements, with or without an image: single-pixel pattern design, reconstruction, and direct segmentation from the measurements."
           },
           {
             "page": 1,
@@ -430,7 +430,7 @@
             "source": "appointments[0].host",
             "top": 581.45,
             "bottom": 564.45,
-            "text": "Department of Physics · Supervisor: Antonio Pifferi"
+            "text": "Department of Physics · Supervisor: Antonio Pifferi · Planned research: time-domain diffuse optics"
           },
           {
             "page": 1,
@@ -477,104 +477,104 @@
             "kind": "bullet",
             "source": "projects.lift.bullets[0]",
             "top": 469.25,
-            "bottom": 454.25,
-            "text": "Showed that, without reconstruction, the 1D-to-2D lift is the design problem; mapped the lift spectrum."
+            "bottom": 441.25,
+            "text": "Framed the measurement-to-space lift as the key design question in image-free single-pixel segmentation; designed the STSF network and the TPLS training schedule."
           },
           {
             "page": 1,
             "kind": "bullet",
             "source": "projects.lift.bullets[1]",
-            "top": 454.25,
-            "bottom": 426.25,
-            "text": "Proposed STSF + TPLS: +3.2–9.9 mIoU over the prior image-free method (SPIFS); near-constant accuracy down to 0.78% sampling; up to +21.7 mIoU over clean-trained reconstruct-then-segment at 20 dB noise."
+            "top": 441.25,
+            "bottom": 413.25,
+            "text": "In simulation at 3.13% sampling: +3.2–9.9 pp foreground mIoU over SPIFS; at 20 dB SNR, +3.1–21.7 pp over the best clean-trained reconstruct-then-segment baseline, which wins without noise."
           },
           {
             "page": 1,
             "kind": "project",
             "source": "projects.shsi",
-            "top": 418.25,
-            "bottom": 403.15,
+            "top": 405.25,
+            "bottom": 390.15,
             "text": "Sparse Hadamard single-pixel imaging"
           },
           {
             "page": 1,
             "kind": "detail",
             "source": "projects.shsi.role",
-            "top": 403.15,
-            "bottom": 388.15,
+            "top": 390.15,
+            "bottom": 375.15,
             "text": "Optics Express · 2025 · Paper · Code"
           },
           {
             "page": 1,
             "kind": "bullet",
             "source": "projects.shsi.bullets[0]",
-            "top": 388.15,
-            "bottom": 360.15,
-            "text": "Introduced tunable sparsity into orthogonal Hadamard patterns: noise-robust imaging through scattering, low-order matrices that save memory, no training or post-processing."
+            "top": 375.15,
+            "bottom": 347.15,
+            "text": "Designed tunable, orthogonal sparse Hadamard patterns with two training-free modes and a noise model; more resilient to noise than conventional patterns in 20 and 30 dB SNR simulations, validated optically."
           },
           {
             "page": 1,
             "kind": "project",
             "source": "projects.loop",
-            "top": 352.15,
-            "bottom": 337.05,
-            "text": "LDGI · Optical phased-array imaging"
+            "top": 339.15,
+            "bottom": 324.05,
+            "text": "LDGI · Ghost imaging for optical phased-array line patterns"
           },
           {
             "page": 1,
             "kind": "detail",
             "source": "projects.loop.role",
-            "top": 337.05,
-            "bottom": 322.05,
+            "top": 324.05,
+            "bottom": 309.05,
             "text": "Optics Communications · 2025 · Paper · Code"
           },
           {
             "page": 1,
             "kind": "bullet",
             "source": "projects.loop.bullets[0]",
-            "top": 322.05,
-            "bottom": 294.05,
-            "text": "Showed that line patterns from one-dimensional optical phased arrays break the noise symmetry of ghost-imaging denoising; proposed LDGI (orders-of-magnitude gains), validated optically."
+            "top": 309.05,
+            "bottom": 281.05,
+            "text": "Developed loop differential ghost imaging, which corrects the noise asymmetry of line patterns from 1D optical phased arrays; orders-of-magnitude gains over traditional ghost imaging, validated with an SLM."
           },
           {
             "page": 1,
             "kind": "section",
             "source": "",
-            "top": 286.05,
-            "bottom": 252.05,
+            "top": 273.05,
+            "bottom": 239.05,
             "text": "Current Research"
           },
           {
             "page": 1,
             "kind": "body",
             "source": "narrative.current_summary",
-            "top": 252.05,
-            "bottom": 219.05,
-            "text": "Acquisition-aware single-pixel sensing with optical-bench tests (manuscript in preparation); question answering on single-pixel measurements (exploratory). Planned at Politecnico di Milano: time-domain diffuse optical tomography."
+            "top": 239.05,
+            "bottom": 206.05,
+            "text": "Acquisition-aware single-pixel sensing on an optical bench (manuscript in preparation); question answering from measurements with a frozen vision–language model (exploratory)."
           },
           {
             "page": 1,
             "kind": "section",
             "source": "",
-            "top": 219.05,
-            "bottom": 185.05,
+            "top": 206.05,
+            "bottom": 172.05,
             "text": "Additional Experience"
           },
           {
             "page": 1,
             "kind": "body",
             "source": "research_background.electro_optic",
-            "top": 185.05,
-            "bottom": 167.05,
-            "text": "Photonic device modeling · Modeled and optimized electro-optic phased-array geometries for beam steering."
+            "top": 172.05,
+            "bottom": 154.05,
+            "text": "Photonic device modeling · Geometry optimization of electro-optic phased arrays for beam steering."
           },
           {
             "page": 1,
             "kind": "body",
             "source": "research_background.optical_systems",
-            "top": 167.05,
+            "top": 154.05,
             "bottom": 136.05,
-            "text": "Optical system integration · Led mechanical design, optical alignment and system integration; participated in underwater field tests."
+            "text": "Optical system integration · Mechanical design, optical alignment and underwater field tests."
           },
           {
             "page": 1,
@@ -718,7 +718,7 @@
             "source": "software[1]",
             "top": 223.69,
             "bottom": 193.69,
-            "text": "Comparison-of-SPI-DLs · Eight deep architectures and a classical inverse, benchmarked on one shared Hadamard acquisition (PyTorch)."
+            "text": "Comparison-of-SPI-DLs · Eight deep networks and correlation ghost imaging, benchmarked on one shared Hadamard acquisition (PyTorch)."
           },
           {
             "page": 2,
@@ -726,7 +726,7 @@
             "source": "software[2]",
             "top": 193.69,
             "bottom": 176.69,
-            "text": "SHSI · Sparse Hadamard single-pixel imaging: pattern generation and reconstruction (MATLAB)."
+            "text": "SHSI · Sparse Hadamard pattern generation, simulation and reconstruction examples (MATLAB)."
           },
           {
             "page": 2,
@@ -734,7 +734,7 @@
             "source": "software[3]",
             "top": 176.69,
             "bottom": 159.69,
-            "text": "LDGI · Loop differential ghost imaging for line patterns from optical phased arrays (MATLAB)."
+            "text": "LDGI · Loop differential ghost imaging for line-pattern illumination from 1D optical phased arrays (MATLAB)."
           },
           {
             "page": 2,
@@ -800,10 +800,10 @@
       "destination": "public",
       "metadata": {
         "Author": "Yuyuan Han",
-        "CreationDate": "D:20261012000000+00'00'",
+        "CreationDate": "D:20261013000000+00'00'",
         "Creator": "Yuyuan Han",
         "Keywords": "Computational Imaging, Single-Pixel Imaging, Image-Free Sensing, Inverse Problems, Machine Perception",
-        "ModDate": "D:20261012000000+00'00'",
+        "ModDate": "D:20261013000000+00'00'",
         "Producer": "",
         "Subject": "Computational imaging & robust image-free sensing",
         "Title": "Yuyuan Han | Research Internship Résumé",
@@ -811,17 +811,17 @@
       },
       "pdf": {
         "path": "Yuyuan_Han_Internship_Resume.pdf",
-        "sha256": "3df92a758e9aea8930d72c1472fa42ce5714f3df8f943e8ef59c50ab0ce6544a",
-        "bytes": 35722
+        "sha256": "085fc87135735fd8bf8af6767b91f776e949dc7bfbfb6e3ebcc8fb3747a3e33e",
+        "bytes": 35718
       },
       "html": {
         "path": "Yuyuan_Han_Internship_Resume.html",
-        "sha256": "b70216058f315cc08dfd306323388767ce55e9763788cd831d62215f2c68ab32",
-        "bytes": 9542
+        "sha256": "76581fe190857e0da667084ebe149f70aef920c585bcb7733b2846b6f4bf3fee",
+        "bytes": 9655
       },
       "checks": {
         "page_count": 1,
-        "extracted_characters": 2560,
+        "extracted_characters": 2668,
         "embedded_fonts": [
           "/AAAAAA+NotoSans-Bold",
           "/AAAAAA+NotoSans-Regular"
@@ -879,7 +879,7 @@
             {
               "page": 1,
               "source": "projects.loop",
-              "label": "LDGI · Optical phased-array imaging",
+              "label": "LDGI · Ghost imaging for optical phased-array line patterns",
               "uri": "https://doi.org/10.1016/j.optcom.2025.131589",
               "annotation_count": 1
             },
@@ -969,7 +969,7 @@
             "source": "narrative.internship_summary",
             "top": 694.65,
             "bottom": 662.65,
-            "text": "PhD student in single-pixel imaging and image-free sensing: designs optical measurements and trains networks that operate directly on the measurements, without image reconstruction."
+            "text": "PhD student in computational imaging and robust image-free sensing: single-pixel measurement design and reconstruction (MATLAB) and direct segmentation from measurements (PyTorch)."
           },
           {
             "page": 1,
@@ -1009,7 +1009,7 @@
             "source": "appointments[0].host",
             "top": 583.95,
             "bottom": 566.45,
-            "text": "Department of Physics · Supervisor: Antonio Pifferi"
+            "text": "Department of Physics · Supervisor: Antonio Pifferi · Planned research: time-domain diffuse optics"
           },
           {
             "page": 1,
@@ -1056,80 +1056,80 @@
             "kind": "bullet",
             "source": "projects.lift.bullets[0]",
             "top": 472.25,
-            "bottom": 456.75,
-            "text": "Showed that, without reconstruction, the 1D-to-2D lift is the design problem; mapped the lift spectrum."
+            "bottom": 443.25,
+            "text": "Framed the measurement-to-space lift as the key design question in image-free single-pixel segmentation; designed the STSF network and the TPLS training schedule."
           },
           {
             "page": 1,
             "kind": "bullet",
             "source": "projects.lift.bullets[1]",
-            "top": 456.75,
-            "bottom": 427.75,
-            "text": "Proposed STSF + TPLS: +3.2–9.9 mIoU over the prior image-free method (SPIFS); near-constant accuracy down to 0.78% sampling; up to +21.7 mIoU over clean-trained reconstruct-then-segment at 20 dB noise."
+            "top": 443.25,
+            "bottom": 414.25,
+            "text": "In simulation at 3.13% sampling: +3.2–9.9 pp foreground mIoU over SPIFS; at 20 dB SNR, +3.1–21.7 pp over the best clean-trained reconstruct-then-segment baseline, which wins without noise."
           },
           {
             "page": 1,
             "kind": "project",
             "source": "projects.shsi",
-            "top": 422.75,
-            "bottom": 407.15,
+            "top": 409.25,
+            "bottom": 393.65,
             "text": "Sparse Hadamard single-pixel imaging"
           },
           {
             "page": 1,
             "kind": "detail",
             "source": "projects.shsi.role",
-            "top": 407.15,
-            "bottom": 391.65,
+            "top": 393.65,
+            "bottom": 378.15,
             "text": "Optics Express · 2025 · Paper · Code"
           },
           {
             "page": 1,
             "kind": "bullet",
             "source": "projects.shsi.bullets[0]",
-            "top": 391.65,
-            "bottom": 362.65,
-            "text": "Introduced tunable sparsity into orthogonal Hadamard patterns: noise-robust imaging through scattering, low-order matrices that save memory, no training or post-processing."
+            "top": 378.15,
+            "bottom": 349.15,
+            "text": "Designed tunable, orthogonal sparse Hadamard patterns with two training-free modes and a noise model; more resilient to noise than conventional patterns in 20 and 30 dB SNR simulations, validated optically."
           },
           {
             "page": 1,
             "kind": "project",
             "source": "projects.loop",
-            "top": 357.65,
-            "bottom": 342.05,
-            "text": "LDGI · Optical phased-array imaging"
+            "top": 344.15,
+            "bottom": 328.55,
+            "text": "LDGI · Ghost imaging for optical phased-array line patterns"
           },
           {
             "page": 1,
             "kind": "detail",
             "source": "projects.loop.role",
-            "top": 342.05,
-            "bottom": 326.55,
+            "top": 328.55,
+            "bottom": 313.05,
             "text": "Optics Communications · 2025 · Paper · Code"
           },
           {
             "page": 1,
             "kind": "bullet",
             "source": "projects.loop.bullets[0]",
-            "top": 326.55,
-            "bottom": 297.55,
-            "text": "Showed that line patterns from one-dimensional optical phased arrays break the noise symmetry of ghost-imaging denoising; proposed LDGI (orders-of-magnitude gains), validated optically."
+            "top": 313.05,
+            "bottom": 284.05,
+            "text": "Developed loop differential ghost imaging, which corrects the noise asymmetry of line patterns from 1D optical phased arrays; orders-of-magnitude gains over traditional ghost imaging, validated with an SLM."
           },
           {
             "page": 1,
             "kind": "section",
             "source": "",
-            "top": 292.55,
-            "bottom": 261.55,
+            "top": 279.05,
+            "bottom": 248.05,
             "text": "Current Research"
           },
           {
             "page": 1,
             "kind": "body",
             "source": "narrative.current_summary",
-            "top": 261.55,
+            "top": 248.05,
             "bottom": 214.05,
-            "text": "Acquisition-aware single-pixel sensing with optical-bench tests (manuscript in preparation); question answering on single-pixel measurements (exploratory). Planned at Politecnico di Milano: time-domain diffuse optical tomography."
+            "text": "Acquisition-aware single-pixel sensing on an optical bench (manuscript in preparation); question answering from measurements with a frozen vision–language model (exploratory)."
           },
           {
             "page": 1,
@@ -1161,7 +1161,7 @@
             "source": "internship_technical[2]",
             "top": 127.05,
             "bottom": 112.55,
-            "text": "Device modeling · Electro-optic phased-array geometry modeling and optimization for beam steering"
+            "text": "Device modeling · Geometry optimization of electro-optic phased arrays for beam steering"
           },
           {
             "page": 1,
