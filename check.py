@@ -181,9 +181,9 @@ def validate(root):
     require(narrative['bio'].startswith(narrative['short_bio']), 'Biography opens with the short bio')
     require(copy['researchgate_bio'] == narrative['short_bio'], 'ResearchGate bio is the short bio (its own sentences, nothing appended)')
     require(copy['long_bio'] == copy['orcid_bio'] == f"{identity} {narrative['bio']}", 'ORCID biography is the identity sentence plus the biography')
-    about = copy['linkedin_about'].split('\n\n')  # research and findings, venues, background, plan and aim, welcome
-    require(len(about) == 5 and f'{about[0]} {about[3]}' == copy['long_bio'] and about[4] == narrative['welcome'], 'LinkedIn About is the long bio with its evidence placed before the plan, ending with the welcome line')
-    require(copy['github_bio'].startswith(narrative['hero']) and copy['linkedin_headline'].startswith(f"PhD Student at {person['institution']}"), 'GitHub bio carries the hero line; LinkedIn headline opens with the PhD identity')
+    about = copy['linkedin_about'].split('\n\n')  # shared identity, finding, background, current work and aim, welcome
+    require(len(about) == 5 and all(part.strip() for part in about) and about[0] == f"I am a PhD student at {person['institution']}. {narrative['short_bio']}" and 'need not be the most robust intermediate' in about[1] and 'trained on clean data' in about[1] and copy['long_bio'].endswith(' ' + about[3]) and about[4] == narrative['welcome'], 'LinkedIn shares the canonical identity, short bio, current direction and welcome; its finding has a dedicated paragraph')
+    require(copy['github_bio'].startswith(narrative['hero']) and copy['linkedin_headline'].startswith(f"{person['position']} at {person['institution']}"), 'GitHub bio carries the hero line; LinkedIn headline opens with the PhD identity')
     # Identity lines name the PhD only; the visit is listed under Education (owner, 2026-10-12).
     visit, visit_zh = profile['appointments'][0], json.loads((root / 'cv-variants.json').read_text(encoding='utf-8'))['zh']['appointment']
     identity_lines = [identity, narrative['meta_description'], copy['linkedin_headline'], copy['linkedin_headline_zh'], copy['github_company'], copy['github_bio'],
@@ -283,8 +283,8 @@ def validate(root):
         require(home_text.count('class="publication publication-entry') == len(publications) and home_text.count('publication-entry is-selected') == len(featured), 'Complete publication list keeps the featured works, highlighted')
         bib = (root / 'dist' / 'publications.bib').read_text(encoding='utf-8') if (root / 'dist' / 'publications.bib').is_file() else ''
         require(len(re.findall(r'^@\w+\{', bib, flags=re.M)) == len(publications) and all(p['doi'] in bib for p in publications) and 'href="publications.bib"' in home_text, 'Complete BibTeX file is linked and lists every paper')
-        order = [home_text.find(f'id="{anchor}"') for anchor in ('news', 'research', 'directions', 'publications', 'software', 'background', 'contact')]
-        require(-1 not in order and order == sorted(order), 'Sections run News, Research, Directions, Publications, Code, Background, Contact')
+        order = [home_text.find(f'id="{anchor}"') for anchor in ('research', 'news', 'directions', 'publications', 'software', 'background', 'contact')]
+        require(-1 not in order and order == sorted(order), 'Sections run Research, News, Directions, Publications, Code, Background, Contact')
         require('Host:' not in home_text and all(f"Supervisor: {escape(row['host'], quote=True)}" in home_text for row in profile['appointments'] if row.get('host')), 'Visiting appointment names its supervisor')
         intro = home_text[home_text.find('class="intro"'):home_text.find('class="bio"')]
         education_block = home_text[home_text.find('<h3>Education</h3>'):home_text.find('<h3>Additional experience</h3>')]
@@ -303,13 +303,13 @@ def validate(root):
         for project in profile['projects']:
             if project['id'] in selected:
                 require(escape(project['summary'], quote=True) in home_text, f"Selected-work conclusion appears in homepage: {project['id']}")
-        require(all(term in home_text for term in ('20 dB', 'clean-trained', 'reconstruct-then-segment')), 'Lift homepage states its noise level, training condition and baseline')
+        require('20 dB' in home_text and ('clean-trained' in home_text or 'trained on clean data' in home_text) and ('reconstruct-then-segment' in home_text or 'reconstruction-first' in home_text), 'Lift homepage states its noise level, training condition and baseline')
         for project in profile['projects']:
             if project['id'] in selected:
                 chips = project.get('highlights', [])
-                require(1 <= len(chips) <= 4 and all(len(chip) <= 72 and escape(chip, quote=False) in home_text for chip in chips), f"Selected work shows 1-4 short key-result chips: {project['id']}")
+                require(1 <= len(chips) <= 4 and all(1 <= len(chip.split()) <= 16 and escape(chip, quote=False) in home_text for chip in chips), f"Selected work shows 1-4 concise contribution points (16 words max): {project['id']}")
                 require(len(project['summary'].split()) <= 22, f"Selected-work takeaway is one short sentence (22 words max): {project['id']}")
-        require('one-dimensional optical phased arrays' in home_text, 'LDGI homepage identifies its OPA illumination setting')
+        require('one-dimensional optical phased-array line patterns' in home_text, 'LDGI homepage identifies its OPA illumination setting')
         require(all(f"{row['count']} verified reviews" in home_text and all(escape(v, quote=False) in home_text for v in row['venues']) for row in profile.get('service', [])), 'Homepage lists verified peer review with its venues and count')
         require('ten deep' not in home_text.lower() and 'eight deep networks and correlation ghost imaging' in home_text.lower(), 'Comparison repository is described as in its README (eight deep networks plus correlation ghost imaging)')
         require(escape(profile['narrative']['short_bio'], quote=False) in home_text, 'Homepage carries the canonical short biography verbatim')
@@ -320,13 +320,13 @@ def validate(root):
 
         require(len(figures) == 3 and len({f['id'] for f in figures}) == 3 and {f['id'] for f in figures} == expected_figure_ids, 'Every selected paper has exactly one reviewed figure')
         require(isinstance(portrait, dict), 'Reviewed portrait metadata is present')
-        # No long captions (owner, round 2): a preview carries only its figure number and a link.
+        # No external captions: figure identity remains in the accessible full-size link.
         captions = re.findall(r'<figcaption[^>]*>(.*?)</figcaption>', home_text, re.S)
-        require(len(captions) == len(figures) and all(re.fullmatch(r'Fig\. \d+ · <a href="[^"]+">Full size</a>', c) for c in captions), 'Figure captions are only a figure number and a full-size link')
+        require(not captions, 'Research previews omit external captions; their accessible links identify the complete figures')
         # No partial thumbnails (owner, 2026-10-12): every preview shows the whole figure.
         require(all('teaser' not in f and 'crop' not in json.dumps(f) for f in figures), 'Figure records define no preview crop')
-        # No hole under a short figure (owner, 2026-10-12): figures share one height, take their own
-        # width from --ar, and the key-result chips run in a full-width row after the text.
+        # Approved compact rows preserve complete figures; each finding and its resources
+        # precede one native contribution disclosure.
         articles = re.findall(r'<article class="research-entry"[^>]*>.*?</article>', home_text, re.S)
         by_path = {f['path']: f for f in figures}
         layout_ok = len(articles) == len(figures)
@@ -335,11 +335,12 @@ def validate(root):
             src = re.search(r'<a class="figure-link" href="([^"]+)"', article)
             record = by_path.get(src.group(1)) if src else None
             layout_ok &= bool(ar and record and abs(float(ar.group(1)) - record['width'] / record['height']) < 0.001)
-            layout_ok &= article.find('<ul class="highlights"') > article.find('</div><ul class="highlights"') >= 0
-        require(layout_ok, 'Selected works: figure width follows its aspect; key results run full width after the text')
-        css_height = re.search(r'--fig-h: (\d+)px', (root / 'style.css').read_text(encoding='utf-8'))
-        py_height = re.search(r'^FIGURE_HEIGHT = (\d+)', (root / 'build_site.py').read_text(encoding='utf-8'), re.M)
-        require(bool(css_height and py_height) and css_height.group(1) == py_height.group(1), 'Preview height is one value in style.css and build_site.py')
+            layout_ok &= '<details class="work-details"><summary>Contribution &amp; evidence</summary>' in article
+            layout_ok &= '<h3 class="work-finding">' in article and article.find('class="work-finding"') < article.find('class="paper-title"')
+            layout_ok &= article.find('class="resource-links"') < article.find('class="work-details"')
+        require(layout_ok, 'Selected works preserve figure aspect, lead with findings, expose resources and use one contribution disclosure label')
+        require('Three contributions' not in home_text and home_text.count('<summary>Contribution &amp; evidence</summary>') == len(figures), 'All research disclosures use the same concise label')
+        require(all(escape(p['context'], quote=True) in home_text for p in profile['projects']), 'Selected research carries each recorded scope context')
         require(len(home.images) == 4, 'Homepage renders one portrait and three research figures')
         records = [('figure ' + f['id'], f, False) for f in figures]
         if isinstance(portrait, dict):
@@ -371,13 +372,13 @@ def validate(root):
             require(len(matched) == 1 and bool(matched[0][1].get('aria-label', '').strip()), f'Preview opens the labelled full-size original: {label}')
             if len(matched) != 1:
                 continue
-            image = matched[0][0]
+            image, parent = matched[0]
             expected_alt = record.get('alt')
             require(bool(expected_alt) and image.get('alt', '').strip() == expected_alt.strip(), f'Preview alt text matches the reviewed record: {label}')
             if not is_portrait:
                 number = re.match(r'Fig\. \d+', record.get('figure', ''))
-                caption = f'<figcaption class="figure-caption">{escape(number.group(0) if number else "?", quote=True)} · <a href="{escape(relative, quote=True)}">Full size</a></figcaption>'
-                require(caption in home_text, f'Preview names its figure and links the full-size original: {label}')
+                accessible_name = parent.get('aria-label', '')
+                require(bool(number) and number.group(0) in accessible_name and parent.get('href') == relative, f'Preview accessible name identifies its figure and links the full-size original: {label}')
             candidates = [part.strip().rsplit(' ', 1) for part in image.get('srcset', '').split(',') if part.strip()]
             require(len(candidates) >= 2 and image.get('sizes'), f'Preview is responsive (srcset and sizes): {label}')
             for candidate, descriptor in candidates:
@@ -404,6 +405,21 @@ def validate(root):
             require(cv['path'] in home.links, f"Working CV entry: {cv['label']}")
     else:
         require(False, 'Built homepage exists')
+
+    detail_path = root / 'dist' / 'research' / 'lift.html'
+    require(detail_path.is_file(), 'Lift evidence page is built')
+    if detail_path.is_file():
+        detail = detail_path.read_text(encoding='utf-8')
+        lift = next(project for project in profile['projects'] if project['id'] == 'lift')
+        comparison = lift['condition_comparison']
+        groups = re.findall(r'<tbody data-dataset="([^"]+)">(.*?)</tbody>', detail, re.S)
+        actual_rows = [(name, key, float(value)) for name, body in groups for key, value in re.findall(r'data-condition="([^"]+)" data-value="([^"]+)"', body)]
+        expected_rows = [(row['name'], key, float(row[key])) for row in comparison['rows'] for key in ('clean', 'noisy')]
+        require(actual_rows == expected_rows and len(actual_rows) == 6, 'Lift renders all six signed, source-recorded comparisons')
+        require(comparison['source_url'] in detail and all(escape(condition, quote=True) in detail for condition in comparison['conditions']), 'Lift evidence retains its source and all comparison conditions')
+        require('Synthetic teaching illustration.' in detail and 'does not run the models or generate predictions' in detail, 'Teaching waveform is explicitly distinguished from experimental results')
+        require('All six reported comparisons are shown. Filtering requires JavaScript.' in detail, 'Evidence remains readable without JavaScript')
+        require(all(escape(point, quote=True) in detail for point in lift['detail_points']), 'Lift detail page retains all recorded contributions')
 
     try:
         cv_manifest = json.loads((root / 'cv-build.json').read_text(encoding='utf-8'))
@@ -454,7 +470,7 @@ def validate(root):
             require(-1 not in places and places == sorted(places), f'Visiting appointment follows the PhD it belongs to: {path.name}')
             compact_text = re.sub(r'\s+', ' ', content)
             require('clean-trained' in compact_text and '20 dB' in compact_text, f'Lift claim keeps its noise level and training condition: {path.name}')
-            require(re.search(r'(one-dimensional|1D) optical phased arrays', compact_text) is not None, f'LDGI OPA setting in actual PDF: {path.name}')
+            require(re.search(r'(one-dimensional|1D) optical phased(?: arrays|[- ]array line modulation)', compact_text) is not None, f'LDGI OPA setting in actual PDF: {path.name}')
             require(not re.search(r'\bPublished\b', content), f'No redundant Published labels: {path.name}')
             require(all(f"Advisor: {row['advisor']}" in compact_text for row in profile['education'] if row.get('advisor')), f'PDF names the recorded advisor: {path.name}')
             require('Host:' not in compact_text and all(f"Supervisor: {row['host']}" in compact_text for row in profile['appointments'] if row.get('host')), f'PDF names the visiting supervisor: {path.name}')

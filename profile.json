@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated": "2026-10-13",
+  "updated": "2026-10-14",
   "publication_verification_date": "2026-10-11",
   "person": {
     "name": "Yuyuan Han",
@@ -13,18 +13,18 @@
     "institution": "Xi'an Jiaotong University"
   },
   "narrative": {
-    "hero": "Robust perception from optical measurements, with or without images.",
+    "hero": "How optical measurements shape what machines can infer.",
     "field": "Computational imaging & robust image-free sensing",
-    "bio": "I study how the way light is measured shapes what a machine can infer about a scene. A single-pixel camera makes this concrete: it records one value per structured-light pattern, so any image must be computed. Three questions follow: what to measure, how to reconstruct, and whether to form an image at all. My papers take them in turn. An image is not always needed: in noise tests with clean-trained models, segmenting directly from measurements can be more robust than segmenting reconstructed images. At Politecnico di Milano, I plan to carry these questions into scattering media, using time-domain diffuse optics to recover optical properties from photon arrival times. My long-term aim is for robots to infer physical parameters and interpret their surroundings directly from raw measurements, guided by physical models.",
+    "bio": "I study how optical measurements shape what machines can infer, and how to make that inference reliable with limited, noisy data. I connect measurement design, reconstruction and direct inference to understand what makes perception robust. My work on image-free sensing shows that an image need not be the most robust intermediate. I am now applying this measurement-to-inference perspective to time-domain diffuse optical tomography for 3D brain imaging. My long-term aim is to help robots interpret the physical world from raw measurements and physical models.",
     "direction": "",
     "welcome": "I am open to research collaborations and internships in computational imaging, image-free sensing and machine perception.",
     "personal": "Outside the lab: basketball, fitness and travel.",
-    "resume_summary": "Robust machine perception from raw optical measurements, with or without an image: single-pixel pattern design, reconstruction, and direct segmentation from the measurements.",
+    "resume_summary": "Computational imaging and robust image-free sensing, connecting optical measurement design with reconstruction and direct inference under limited sampling and noise.",
     "long_term": "",
-    "internship_summary": "PhD student in computational imaging and robust image-free sensing: single-pixel measurement design and reconstruction (MATLAB) and direct segmentation from measurements (PyTorch).",
-    "current_summary": "Acquisition-aware single-pixel sensing on an optical bench (manuscript in preparation); question answering from measurements with a frozen vision–language model (exploratory).",
-    "meta_description": "Yuyuan Han, PhD student at Xi'an Jiaotong University, studies robust machine perception from optical measurements: single-pixel imaging and image-free sensing.",
-    "short_bio": "I study how the way light is measured shapes what a machine can infer about a scene. A single-pixel camera makes this concrete: it records one value per structured-light pattern, so any image must be computed. Three questions follow: what to measure, how to reconstruct, and whether to form an image at all."
+    "internship_summary": "PhD student working on computational imaging and robust image-free sensing, from optical measurement design and reconstruction to networks that infer directly from measurements.",
+    "current_summary": "Time-domain diffuse optical tomography for 3D brain imaging; acquisition-aware single-pixel sensing on an optical bench; exploratory question answering from measurements with a frozen vision–language model.",
+    "meta_description": "Yuyuan Han studies how optical measurements shape reliable machine inference through computational imaging, image-free sensing and 3D optical brain imaging.",
+    "short_bio": "I study how optical measurements shape what machines can infer, and how to make that inference reliable with limited, noisy data. I connect measurement design, reconstruction and direct inference to understand what makes perception robust."
   },
   "profiles": [
     {
@@ -85,7 +85,8 @@
       "department": "Department of Physics",
       "host": "Antonio Pifferi",
       "display_dates": "Oct 2026–present",
-      "plan": "time-domain diffuse optics"
+      "plan": "time-domain diffuse optical tomography for 3D brain imaging",
+      "research_status": "current"
     }
   ],
   "projects": [
@@ -93,10 +94,10 @@
       "id": "lift",
       "title": "The Lift Spectrum · Robust image-free sensing",
       "status": "Preprint",
-      "summary": "Introduces a content-adaptive 1D-to-2D lift and benchmarks it against the best clean-trained reconstruct-then-segment baselines on three simulated datasets.",
+      "summary": "Image-free sensing can be more robust to measurement noise than reconstructing an image first.",
       "bullets": [
-        "Framed the measurement-to-space lift as the key design question in image-free single-pixel segmentation; designed the STSF network and the TPLS training schedule.",
-        "In simulation at 3.13% sampling: +3.2–9.9 pp foreground mIoU over SPIFS; at 20 dB SNR, +3.1–21.7 pp over the best clean-trained reconstruct-then-segment baseline, which wins without noise."
+        "Developed a content-adaptive 1D-to-2D lift and task-prioritized loss scheduling for image-free single-pixel segmentation.",
+        "Mapped the noise-dependent crossover against clean-trained reconstruction-first baselines: 3.1–21.7 percentage-point gains in foreground mIoU at 3.13% sampling and 20 dB Gaussian measurement noise across three simulated datasets; optical-bench proof of concept."
       ],
       "role": "First author",
       "period": "2025–present",
@@ -105,17 +106,48 @@
       "result": "",
       "highlights": [
         "+3.1–21.7 pp foreground mIoU at 20 dB Gaussian noise, 3.13% sampling",
-        "Within 2.0–5.7 pp of its 3.13% result at 0.39% sampling",
+        "Reconstruction-first still leads without measurement noise",
         "Proof of concept on a real single-pixel bench, no fine-tuning"
-      ]
+      ],
+      "context": "Single-pixel segmentation · clean training, noisy testing",
+      "detail_points": [
+        "Robustness: direct inference overtakes the strongest tested reconstruction-first baselines as measurement noise increases, when all models are trained on clean data.",
+        "Representation: a content-adaptive 1D-to-2D lift turns the measurement sequence into spatial task features.",
+        "Training: task-prioritized loss scheduling (TPLS) shifts emphasis from auxiliary reconstruction to the sensing task."
+      ],
+      "condition_comparison": {
+        "source_url": "https://arxiv.org/html/2607.22077v2#S4.SS4",
+        "rows": [
+          {
+            "name": "Carvana",
+            "clean": -13.3,
+            "noisy": 4.7
+          },
+          {
+            "name": "MNIST",
+            "clean": -1.5,
+            "noisy": 21.7
+          },
+          {
+            "name": "WBC",
+            "clean": -1.8,
+            "noisy": 3.1
+          }
+        ],
+        "conditions": [
+          "All headline models were trained on clean data. Each scene has 128 × 128 pixels and 512 natural-order Hadamard measurements (3.13% sampling). The noisy condition uses 20 dB additive Gaussian measurement noise calibrated on the AC-coupled bucket signal.",
+          "The values are foreground mean intersection-over-union (mIoU) differences in percentage points, reported over three training seeds. Each condition uses its strongest tested reconstruction-first baseline. The clean values reverse the sign of the paper’s reported baseline lead so that every row follows the same subtraction.",
+          "This comparison uses the paper’s fixed acquisition and normalization. Noise-aware retraining can restore reconstruction-first performance near the training calibration; see Table III in the same section."
+        ]
+      }
     },
     {
       "id": "shsi",
       "title": "Sparse Hadamard single-pixel imaging",
       "status": "Published",
-      "summary": "Tunable sparse Hadamard patterns are more resilient to noise than conventional Hadamard patterns in 20 and 30 dB SNR simulations.",
+      "summary": "Tunable sparse Hadamard patterns preserve orthogonality and improve noise resilience, supported by a sparsity-dependent noise model.",
       "bullets": [
-        "Designed tunable, orthogonal sparse Hadamard patterns with two training-free modes and a noise model; more resilient to noise than conventional patterns in 20 and 30 dB SNR simulations, validated optically."
+        "Designed tunable sparse Hadamard patterns that preserve orthogonality, two training-free operating modes and a sparsity-dependent noise model; validated in noise simulations and through-scattering optical experiments."
       ],
       "role": "First author",
       "period": "2024–2025",
@@ -123,18 +155,19 @@
       "code_url": "https://github.com/Hanyuyuan6/SHSI",
       "result": "",
       "highlights": [
-        "High resolution from low-order Hadamard matrices, with less memory",
-        "No prior knowledge, training or post-processing",
-        "Two operating modes; theory validated in simulation and experiment"
-      ]
+        "Orthogonal sparse patterns built from lower-order Hadamard bases",
+        "Two training-free operating modes",
+        "Sparsity-dependent noise theory tested in simulation and optical experiments"
+      ],
+      "context": "Measurement design · theory and optical experiments"
     },
     {
       "id": "loop",
       "title": "LDGI · Ghost imaging for optical phased-array line patterns",
       "status": "Published",
-      "summary": "Loop differential ghost imaging corrects the spatial noise asymmetry caused by line-pattern illumination from one-dimensional optical phased arrays.",
+      "summary": "Loop differential ghost imaging corrects spatial noise asymmetry in ghost imaging with one-dimensional optical phased-array line patterns.",
       "bullets": [
-        "Developed loop differential ghost imaging, which corrects the noise asymmetry of line patterns from 1D optical phased arrays; orders-of-magnitude gains over traditional ghost imaging, validated with an SLM."
+        "Developed loop differential ghost imaging for one-dimensional optical phased-array line modulation, with a noise-symmetry metric, numerical simulation and optical validation using spatial-light-modulator-generated patterns."
       ],
       "role": "First author",
       "period": "2025",
@@ -142,10 +175,11 @@
       "code_url": "https://github.com/Hanyuyuan6/LDGI",
       "result": "",
       "highlights": [
-        "Orders-of-magnitude gains in reconstruction quality vs. traditional GI",
+        "Algorithm designed for optical phased-array line modulation",
         "A metric that quantifies the spatial symmetry of noise",
-        "Validated optically with SLM-generated line patterns"
-      ]
+        "Validated in simulation and with SLM-generated line patterns"
+      ],
+      "context": "Optical validation with spatial-light-modulator-generated line patterns"
     }
   ],
   "directions": [
@@ -160,9 +194,9 @@
       "description": "Testing whether a frozen vision–language model can answer questions about a scene directly from its single-pixel measurements."
     },
     {
-      "title": "Time-domain diffuse optics",
-      "status": "Planned",
-      "description": "Simulation and phantom studies of 3D optical-property reconstruction in scattering media from photon arrival times."
+      "title": "3D optical brain imaging",
+      "status": "Ongoing",
+      "description": "Time-domain diffuse optical tomography: inferring the 3D distribution of optical properties from photon time-of-flight measurements."
     }
   ],
   "publications": [
@@ -453,7 +487,7 @@
     {
       "name": "remote-gpu-trainer",
       "url": "https://github.com/Hanyuyuan6/remote-gpu-trainer",
-      "description": "Open-source agent skill for Claude Code and Codex that runs, verifies and delivers GPU experiments (60+ stars).",
+      "description": "Open-source agent skill for Claude Code and Codex that runs, verifies and delivers GPU experiments.",
       "github_about": "An Agent Skill for the DL experiment lifecycle: RUN (a GPU you own or rent) → VERIFY the number is real → DELIVER reproducible, single-source figures and tables."
     }
   ],
@@ -501,31 +535,37 @@
     }
   ],
   "platform_copy": {
-    "github_bio": "Robust perception from optical measurements, with or without images. Single-pixel imaging, image-free sensing, PyTorch and MATLAB.",
-    "linkedin_headline": "PhD Student at Xi'an Jiaotong University | Computational imaging and robust image-free sensing | Single-pixel imaging, structured illumination and direct inference from measurements",
-    "researchgate_bio": "I study how the way light is measured shapes what a machine can infer about a scene. A single-pixel camera makes this concrete: it records one value per structured-light pattern, so any image must be computed. Three questions follow: what to measure, how to reconstruct, and whether to form an image at all.",
-    "long_bio": "I am a PhD student at Xi'an Jiaotong University. I study how the way light is measured shapes what a machine can infer about a scene. A single-pixel camera makes this concrete: it records one value per structured-light pattern, so any image must be computed. Three questions follow: what to measure, how to reconstruct, and whether to form an image at all. My papers take them in turn. An image is not always needed: in noise tests with clean-trained models, segmenting directly from measurements can be more robust than segmenting reconstructed images. At Politecnico di Milano, I plan to carry these questions into scattering media, using time-domain diffuse optics to recover optical properties from photon arrival times. My long-term aim is for robots to infer physical parameters and interpret their surroundings directly from raw measurements, guided by physical models.",
+    "github_bio": "How optical measurements shape what machines can infer. Computational imaging · Image-free sensing · 3D optical brain imaging.",
+    "linkedin_headline": "PhD student at Xi'an Jiaotong University | Computational imaging & robust image-free sensing",
+    "researchgate_bio": "I study how optical measurements shape what machines can infer, and how to make that inference reliable with limited, noisy data. I connect measurement design, reconstruction and direct inference to understand what makes perception robust.",
+    "long_bio": "I am a PhD student at Xi'an Jiaotong University. I study how optical measurements shape what machines can infer, and how to make that inference reliable with limited, noisy data. I connect measurement design, reconstruction and direct inference to understand what makes perception robust. My work on image-free sensing shows that an image need not be the most robust intermediate. I am now applying this measurement-to-inference perspective to time-domain diffuse optical tomography for 3D brain imaging. My long-term aim is to help robots interpret the physical world from raw measurements and physical models.",
     "keywords": [
       "Computational Imaging",
       "Single-Pixel Imaging",
       "Image-Free Sensing",
-      "Inverse Problems",
-      "Machine Perception"
+      "Optical Tomography",
+      "Inverse Problems"
     ],
-    "orcid_bio": "I am a PhD student at Xi'an Jiaotong University. I study how the way light is measured shapes what a machine can infer about a scene. A single-pixel camera makes this concrete: it records one value per structured-light pattern, so any image must be computed. Three questions follow: what to measure, how to reconstruct, and whether to form an image at all. My papers take them in turn. An image is not always needed: in noise tests with clean-trained models, segmenting directly from measurements can be more robust than segmenting reconstructed images. At Politecnico di Milano, I plan to carry these questions into scattering media, using time-domain diffuse optics to recover optical properties from photon arrival times. My long-term aim is for robots to infer physical parameters and interpret their surroundings directly from raw measurements, guided by physical models.",
-    "linkedin_about": "I am a PhD student at Xi'an Jiaotong University. I study how the way light is measured shapes what a machine can infer about a scene. A single-pixel camera makes this concrete: it records one value per structured-light pattern, so any image must be computed. Three questions follow: what to measure, how to reconstruct, and whether to form an image at all. My papers take them in turn. An image is not always needed: in noise tests with clean-trained models, segmenting directly from measurements can be more robust than segmenting reconstructed images.\n\nOn what to measure, tunable sparse Hadamard patterns make single-pixel imaging more robust to noise than conventional ones, in simulation and optical experiments (Optics Express 2025). On how to reconstruct, loop differential ghost imaging restores the spatial noise symmetry broken by line-pattern illumination from one-dimensional optical phased arrays (Optics Communications 2025). On whether to form an image, \"The Lift Spectrum\" (arXiv 2026, with code) shows how lifting one-dimensional measurements into a two-dimensional task representation shapes robustness.\n\nMy background spans devices and systems: I modeled electro-optic phased arrays in COMSOL and MATLAB and integrated optical systems, from mechanical design and alignment to underwater field tests. I built remote-gpu-trainer, an open-source agent skill for GPU experiments (60+ GitHub stars), and completed 13 verified peer reviews for IEEE TIP, IEEE TCI, Optics Express and Optics Letters.\n\nAt Politecnico di Milano, I plan to carry these questions into scattering media, using time-domain diffuse optics to recover optical properties from photon arrival times. My long-term aim is for robots to infer physical parameters and interpret their surroundings directly from raw measurements, guided by physical models.\n\nI am open to research collaborations and internships in computational imaging, image-free sensing and machine perception.",
-    "linkedin_about_zh": "我是西安交通大学博士研究生。我研究光学测量方式如何影响机器对场景的感知。单像素相机是我的主要研究平台：它以一系列结构光图案依次照明场景，每个图案只记录一个测量值，因此任何图像都必须经计算得到。由此引出三个问题：测量什么、如何重建，以及是否需要成像。我的论文依次回应这三个问题。图像并非总是必要：在噪声测试中（模型均以无噪声数据训练），直接从测量中分割场景，可以比先重建图像再分割更为鲁棒。\n\n关于测量什么，仿真与光学实验表明，相比传统 Hadamard 图案，稀疏度可调的 Hadamard 图案能提高单像素成像的抗噪性（Optics Express 2025）。关于如何重建，循环差分鬼成像恢复了一维光学相控阵线图案照明所破坏的噪声空间对称性（Optics Communications 2025）。关于是否需要成像，“The Lift Spectrum”（arXiv 2026，附代码）表明，一维测量如何映射为二维任务表征，会影响免成像单像素分割的鲁棒性。\n\n此外，我具备器件与系统层面的经验：曾使用 COMSOL 与 MATLAB 对电光相控阵进行建模，并参与光学系统集成，从机械设计、光路调校到水下外场试验。我开发的开源智能体技能 remote-gpu-trainer 用于 GPU 实验，在 GitHub 获得 60 余个星标。我还为 IEEE TIP、IEEE TCI、Optics Express 与 Optics Letters 完成 13 次经核验的审稿。\n\n在米兰理工大学，我计划将研究拓展至散射介质，利用时域漫射光学，从光子到达时间分布反演介质的光学参数。我的长期目标是让机器人在物理模型指导下，直接从原始测量中推断物理参数、理解周围环境。\n\n欢迎就计算成像、免成像感知与机器感知方向的科研合作或研究实习与我联系。",
-    "linkedin_featured_lift": "Segmentation directly from single-pixel measurements outperforms the strongest clean-trained reconstruct-then-segment baseline by 3.1–21.7 foreground-mIoU points at 20 dB noise.",
+    "orcid_bio": "I am a PhD student at Xi'an Jiaotong University. I study how optical measurements shape what machines can infer, and how to make that inference reliable with limited, noisy data. I connect measurement design, reconstruction and direct inference to understand what makes perception robust. My work on image-free sensing shows that an image need not be the most robust intermediate. I am now applying this measurement-to-inference perspective to time-domain diffuse optical tomography for 3D brain imaging. My long-term aim is to help robots interpret the physical world from raw measurements and physical models.",
+    "linkedin_about": "I am a PhD student at Xi'an Jiaotong University. I study how optical measurements shape what machines can infer, and how to make that inference reliable with limited, noisy data. I connect measurement design, reconstruction and direct inference to understand what makes perception robust.\n\nMy work examines how measurement structure and task representation affect robustness. In single-pixel sensing, it shows that an image need not be the most robust intermediate: when models are trained on clean data, direct segmentation can withstand measurement noise better than reconstructing an image first.\n\nMy background also includes electro-optic device modeling and optical-system integration. I develop open-source tools for research experiments and review for computational imaging and optics journals.\n\nI am now applying this measurement-to-inference perspective to time-domain diffuse optical tomography for 3D brain imaging. My long-term aim is to help robots interpret the physical world from raw measurements and physical models.\n\nI am open to research collaborations and internships in computational imaging, image-free sensing and machine perception.",
+    "linkedin_about_zh": "我是西安交通大学博士研究生。我研究光学测量如何塑造机器的推断能力，以及如何从有限、受噪声影响的测量中获得可靠推断。我的工作将测量设计、图像重建与直接推断联系起来，探究感知鲁棒性的来源。\n\n我关注测量结构和任务表征如何影响鲁棒性。在单像素感知中，我的研究表明，图像未必是最稳健的中间表征：当模型以无噪声数据训练时，直接分割可以比先重建图像再分割更好地抵御测量噪声。\n\n我也具备电光器件建模与光学系统集成经验，开发服务科研实验的开源工具，并担任计算成像与光学期刊审稿人。\n\n目前，我正把从测量到推断的研究思路应用于面向脑部三维成像的时域漫射光学层析成像。长期希望让机器人结合原始测量与物理模型理解物理世界。\n\n欢迎就计算成像、免成像感知与机器感知方向的科研合作或研究实习与我联系。",
+    "linkedin_featured_lift": "When measurement noise favors image-free sensing: a content-adaptive 1D-to-2D lift and task-prioritized training. Clean-trained models; simulation and optical-bench evidence.",
     "linkedin_featured_site_title": "Yuyuan Han · Computational imaging & robust image-free sensing",
-    "linkedin_featured_site": "Research, publications and CV in single-pixel imaging and image-free sensing.",
+    "linkedin_featured_site": "Research, publications and CV in computational imaging and robust image-free sensing.",
     "linkedin_featured_resume": "One-page résumé (PDF): optical measurement design for single-pixel imaging and networks that operate directly on the measurements.",
-    "researchgate_activity": "PhD student, Xi'an Jiaotong University · Robust perception from optical measurements, with or without images",
+    "researchgate_activity": "Current research: time-domain diffuse optical tomography for 3D brain imaging.",
     "openreview_expertise": [
       "Computational Imaging, Single-Pixel Imaging, Image-Free Sensing",
-      "Inverse Problems, Machine Perception"
+      "Inverse Problems, Machine Perception",
+      "Optical Tomography"
     ],
     "github_company": "Xi'an Jiaotong University",
-    "linkedin_headline_zh": "西安交通大学博士研究生｜计算成像与鲁棒免成像感知｜单像素成像、结构光照明设计与基于测量序列的直接推断"
+    "linkedin_headline_zh": "西安交通大学博士研究生｜计算成像与鲁棒免成像感知",
+    "openreview_expertise_start_years": [
+      2022,
+      2022,
+      2026
+    ]
   },
   "selected_project_ids": [
     "lift",
@@ -591,7 +631,7 @@
   "internship_technical": [
     {
       "label": "Open source",
-      "text": "remote-gpu-trainer, an agent skill for Claude Code and Codex that runs, verifies and delivers GPU experiments (60+ GitHub stars)",
+      "text": "remote-gpu-trainer, an agent skill for Claude Code and Codex that runs, verifies and delivers GPU experiments",
       "url": "https://github.com/Hanyuyuan6/remote-gpu-trainer",
       "link_text": "remote-gpu-trainer"
     },

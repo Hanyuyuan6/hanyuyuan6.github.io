@@ -1,19 +1,19 @@
 {
   "schema_version": 2,
-  "built_at": "2026-10-13T08:16:41.039088+00:00",
-  "source_fingerprint": "5c89ac36f3c3a8ff904a1803a196767f428038b46eed1fef920cf4b6a232cc8d",
+  "built_at": "2026-10-14T00:13:34.201676+00:00",
+  "source_fingerprint": "1a0eeff416d007e8524276ec56965cb7c5e4927fb3c9e255037bf829094917e3",
   "inputs": {
     "profile": {
       "path": "profile.json",
-      "sha256": "e962cc16d32af99359286b9a43b3638e7af8cf524c65b3ae491dffa3107d70a7"
+      "sha256": "8ba051f4480218220a3eb8dd318988b909109a7eb2517613284cecec66380505"
     },
     "template": {
       "path": "build_cv.py",
-      "sha256": "6a4dfd190ac6c67473a468fbdd2f43124883395b8d798b82cda7da15c7f8e7c3"
+      "sha256": "ebf25cba2a6a8005ff07f657d65a68ecffa492143010c5045032f0b89c320fd2"
     },
     "variants": {
       "path": "cv-variants.json",
-      "sha256": "56f3e0b85265b36c90c44dac2edb951b50d6d2ab764b3e04fe694ec1e99fe23c"
+      "sha256": "0670caf9dd273eab45895ed794bcd882e2e5eb0f0e55b37655debc1f173ab630"
     },
     "theme": {
       "path": "theme.json",
@@ -59,10 +59,10 @@
       "destination": "public",
       "metadata": {
         "Author": "Yuyuan Han",
-        "CreationDate": "D:20261013000000+00'00'",
+        "CreationDate": "D:20261014000000+00'00'",
         "Creator": "Yuyuan Han",
-        "Keywords": "Computational Imaging, Single-Pixel Imaging, Image-Free Sensing, Inverse Problems, Machine Perception",
-        "ModDate": "D:20261013000000+00'00'",
+        "Keywords": "Computational Imaging, Single-Pixel Imaging, Image-Free Sensing, Optical Tomography, Inverse Problems",
+        "ModDate": "D:20261014000000+00'00'",
         "Producer": "",
         "Subject": "Computational imaging & robust image-free sensing",
         "Title": "Yuyuan Han | Academic CV",
@@ -70,17 +70,17 @@
       },
       "pdf": {
         "path": "Yuyuan_Han_Academic_CV.pdf",
-        "sha256": "09c6cc2075cdf07f63049ac636bd88a3835241f658da5717add890f06537e227",
-        "bytes": 59511
+        "sha256": "66fd2408bbbe109df99fd54e13084532a6c108b02b351ed1b21a9e9126208c94",
+        "bytes": 59609
       },
       "html": {
         "path": "Yuyuan_Han_Academic_CV.html",
-        "sha256": "b8a670388157b70eb40bd8c84a3547d4ba307f885ab9c3f04db6fe54509c1619",
-        "bytes": 15658
+        "sha256": "ac10f26bb70fd9d523ee796ef43ba2186f61226cf78a61feb732496d0862c8a6",
+        "bytes": 15813
       },
       "checks": {
         "page_count": 2,
-        "extracted_characters": 5825,
+        "extracted_characters": 5924,
         "embedded_fonts": [
           "/AAAAAA+NotoSans-Bold",
           "/AAAAAA+NotoSans-Italic",
@@ -382,7 +382,7 @@
       },
       "layout": {
         "page_count": 2,
-        "lowest_content_y": 59.05,
+        "lowest_content_y": 51.69,
         "positions": [
           {
             "page": 1,
@@ -390,7 +390,7 @@
             "source": "narrative.resume_summary",
             "top": 692.65,
             "bottom": 661.65,
-            "text": "Robust machine perception from raw optical measurements, with or without an image: single-pixel pattern design, reconstruction, and direct segmentation from the measurements."
+            "text": "Computational imaging and robust image-free sensing, connecting optical measurement design with reconstruction and direct inference under limited sampling and noise."
           },
           {
             "page": 1,
@@ -429,175 +429,151 @@
             "kind": "detail",
             "source": "appointments[0].host",
             "top": 581.45,
-            "bottom": 564.45,
-            "text": "Department of Physics · Supervisor: Antonio Pifferi · Planned research: time-domain diffuse optics"
+            "bottom": 552.45,
+            "text": "Department of Physics · Supervisor: Antonio PifferiResearch focus: time-domain diffuse optical tomography for 3D brain imaging"
           },
           {
             "page": 1,
             "kind": "entry",
             "source": "education[1]",
-            "top": 564.45,
-            "bottom": 549.35,
+            "top": 552.45,
+            "bottom": 537.35,
             "text": "Northwest University · B.Eng."
           },
           {
             "page": 1,
             "kind": "detail",
             "source": "education[1].field",
-            "top": 549.35,
-            "bottom": 533.35,
+            "top": 537.35,
+            "bottom": 521.35,
             "text": "Electronic Information Science and Technology"
           },
           {
             "page": 1,
             "kind": "section",
             "source": "",
-            "top": 533.35,
-            "bottom": 499.35,
+            "top": 521.35,
+            "bottom": 487.35,
             "text": "Selected Research"
           },
           {
             "page": 1,
             "kind": "project",
             "source": "projects.lift",
-            "top": 499.35,
-            "bottom": 484.25,
+            "top": 487.35,
+            "bottom": 472.25,
             "text": "The Lift Spectrum · Robust image-free sensing"
           },
           {
             "page": 1,
             "kind": "detail",
             "source": "projects.lift.role",
-            "top": 484.25,
-            "bottom": 469.25,
+            "top": 472.25,
+            "bottom": 457.25,
             "text": "arXiv · 2026 · Paper · Code"
           },
           {
             "page": 1,
             "kind": "bullet",
             "source": "projects.lift.bullets[0]",
-            "top": 469.25,
-            "bottom": 441.25,
-            "text": "Framed the measurement-to-space lift as the key design question in image-free single-pixel segmentation; designed the STSF network and the TPLS training schedule."
+            "top": 457.25,
+            "bottom": 429.25,
+            "text": "Developed a content-adaptive 1D-to-2D lift and task-prioritized loss scheduling for image-free single-pixel segmentation."
           },
           {
             "page": 1,
             "kind": "bullet",
             "source": "projects.lift.bullets[1]",
-            "top": 441.25,
-            "bottom": 413.25,
-            "text": "In simulation at 3.13% sampling: +3.2–9.9 pp foreground mIoU over SPIFS; at 20 dB SNR, +3.1–21.7 pp over the best clean-trained reconstruct-then-segment baseline, which wins without noise."
+            "top": 429.25,
+            "bottom": 388.25,
+            "text": "Mapped the noise-dependent crossover against clean-trained reconstruction-first baselines: 3.1–21.7 percentage-point gains in foreground mIoU at 3.13% sampling and 20 dB Gaussian measurement noise across three simulated datasets; optical-bench proof of concept."
           },
           {
             "page": 1,
             "kind": "project",
             "source": "projects.shsi",
-            "top": 405.25,
-            "bottom": 390.15,
+            "top": 380.25,
+            "bottom": 365.15,
             "text": "Sparse Hadamard single-pixel imaging"
           },
           {
             "page": 1,
             "kind": "detail",
             "source": "projects.shsi.role",
-            "top": 390.15,
-            "bottom": 375.15,
+            "top": 365.15,
+            "bottom": 350.15,
             "text": "Optics Express · 2025 · Paper · Code"
           },
           {
             "page": 1,
             "kind": "bullet",
             "source": "projects.shsi.bullets[0]",
-            "top": 375.15,
-            "bottom": 347.15,
-            "text": "Designed tunable, orthogonal sparse Hadamard patterns with two training-free modes and a noise model; more resilient to noise than conventional patterns in 20 and 30 dB SNR simulations, validated optically."
+            "top": 350.15,
+            "bottom": 322.15,
+            "text": "Designed tunable sparse Hadamard patterns that preserve orthogonality, two training-free operating modes and a sparsity-dependent noise model; validated in noise simulations and through-scattering optical experiments."
           },
           {
             "page": 1,
             "kind": "project",
             "source": "projects.loop",
-            "top": 339.15,
-            "bottom": 324.05,
+            "top": 314.15,
+            "bottom": 299.05,
             "text": "LDGI · Ghost imaging for optical phased-array line patterns"
           },
           {
             "page": 1,
             "kind": "detail",
             "source": "projects.loop.role",
-            "top": 324.05,
-            "bottom": 309.05,
+            "top": 299.05,
+            "bottom": 284.05,
             "text": "Optics Communications · 2025 · Paper · Code"
           },
           {
             "page": 1,
             "kind": "bullet",
             "source": "projects.loop.bullets[0]",
-            "top": 309.05,
-            "bottom": 281.05,
-            "text": "Developed loop differential ghost imaging, which corrects the noise asymmetry of line patterns from 1D optical phased arrays; orders-of-magnitude gains over traditional ghost imaging, validated with an SLM."
+            "top": 284.05,
+            "bottom": 243.05,
+            "text": "Developed loop differential ghost imaging for one-dimensional optical phased-array line modulation, with a noise-symmetry metric, numerical simulation and optical validation using spatial-light-modulator-generated patterns."
           },
           {
             "page": 1,
             "kind": "section",
             "source": "",
-            "top": 273.05,
-            "bottom": 239.05,
+            "top": 235.05,
+            "bottom": 201.05,
             "text": "Current Research"
           },
           {
             "page": 1,
             "kind": "body",
             "source": "narrative.current_summary",
-            "top": 239.05,
-            "bottom": 206.05,
-            "text": "Acquisition-aware single-pixel sensing on an optical bench (manuscript in preparation); question answering from measurements with a frozen vision–language model (exploratory)."
+            "top": 201.05,
+            "bottom": 168.05,
+            "text": "Time-domain diffuse optical tomography for 3D brain imaging; acquisition-aware single-pixel sensing on an optical bench; exploratory question answering from measurements with a frozen vision–language model."
           },
           {
             "page": 1,
             "kind": "section",
             "source": "",
-            "top": 206.05,
-            "bottom": 172.05,
-            "text": "Additional Experience"
-          },
-          {
-            "page": 1,
-            "kind": "body",
-            "source": "research_background.electro_optic",
-            "top": 172.05,
-            "bottom": 154.05,
-            "text": "Photonic device modeling · Geometry optimization of electro-optic phased arrays for beam steering."
-          },
-          {
-            "page": 1,
-            "kind": "body",
-            "source": "research_background.optical_systems",
-            "top": 154.05,
-            "bottom": 136.05,
-            "text": "Optical system integration · Mechanical design, optical alignment and underwater field tests."
-          },
-          {
-            "page": 1,
-            "kind": "section",
-            "source": "",
-            "top": 136.05,
-            "bottom": 102.05,
+            "top": 168.05,
+            "bottom": 134.05,
             "text": "Award & Service"
           },
           {
             "page": 1,
             "kind": "body",
             "source": "awards[0]",
-            "top": 102.05,
-            "bottom": 87.05,
+            "top": 134.05,
+            "bottom": 119.05,
             "text": "2024 · Second Prize, National Post-Graduate Mathematical Contest in Modeling · Code"
           },
           {
             "page": 1,
             "kind": "body",
             "source": "service[0]",
-            "top": 87.05,
-            "bottom": 59.05,
+            "top": 119.05,
+            "bottom": 91.05,
             "text": "Reviewer · IEEE Transactions on Image Processing, IEEE Transactions on Computational Imaging, Optics Express, Optics Letters (13 verified reviews, 2025–2026)"
           },
           {
@@ -621,136 +597,160 @@
             "kind": "publication",
             "source": "publications.graph",
             "top": 710.89,
-            "bottom": 664.79,
+            "bottom": 665.79,
             "text": "Chong Wang, Hao Lu, Yuyuan Han, Huaibin Zheng, Yuchen He. Graph-Regularized Estimation for Inverse Problems in Computational Optical Imaging. IEEE Transactions on Image Processing 35, 9314–9326 (2026). doi:10.1109/TIP.2026.3726365"
           },
           {
             "page": 2,
             "kind": "publication",
             "source": "publications.opa_review",
-            "top": 664.79,
-            "bottom": 618.69,
+            "top": 665.79,
+            "bottom": 620.69,
             "text": "Jingwei Li, Yuyuan Han, Aoxiang Chen, Pengpeng Li, Xinglin Zhu, Guanbao Zhao, Luohan Peng, Huaibin Zheng. Optical Phased Arrays on Photonic Integrated Circuit Platforms: Challenges, Opportunities, and Future Applications. Nanophotonics 15(14), e70182 (2026). doi:10.1002/nap2.70182"
           },
           {
             "page": 2,
             "kind": "publication",
             "source": "publications.shsi",
-            "top": 618.69,
-            "bottom": 585.29,
+            "top": 620.69,
+            "bottom": 588.29,
             "text": "Yuyuan Han, Peng Wu, Hanxiong Xu, Bin Li, Yuchen He, Jianbin Liu, Hui Chen, Huaibin Zheng. Generalized sparse Hadamard single-pixel Imaging. Optics Express 33(20), 43324–43341 (2025). doi:10.1364/OE.576533"
           },
           {
             "page": 2,
             "kind": "publication",
             "source": "publications.loop",
-            "top": 585.29,
-            "bottom": 539.19,
+            "top": 588.29,
+            "bottom": 543.19,
             "text": "Yuyuan Han, Huaibin Zheng, Bin Li, Jingwei Li, Long Qiu, Wenxuan Hao, Zheng Dang, Hui Chen, Jianbin Liu, Yuchen He, Yanyan Liu, Zhuo Xu. Loop differential ghost imaging based on line pattern. Optics Communications 580, 131589 (2025). doi:10.1016/j.optcom.2025.131589"
           },
           {
             "page": 2,
             "kind": "publication",
             "source": "publications.opa",
-            "top": 539.19,
-            "bottom": 480.39,
+            "top": 543.19,
+            "bottom": 485.39,
             "text": "Jingwei Li, Huaibin Zheng, Yuyuan Han, Bin Li, Wenxuan Hao, Long Qiu, Yanyan Liu, Yuchen He, Xiaoyong Wei, Zhuo Xu. Design and analysis of single-electrode integrated lithium niobate optical phased array for two-dimensional beam steering. Optics and Lasers in Engineering 184, 108617 (2025). doi:10.1016/j.optlaseng.2024.108617"
           },
           {
             "page": 2,
             "kind": "publication",
             "source": "publications.fusion",
-            "top": 480.39,
-            "bottom": 434.29,
+            "top": 485.39,
+            "bottom": 440.29,
             "text": "Long Qiu, Huaibin Zheng, Yuyuan Han, Bin Li, Wenxuan Hao, Zheng Dang, Yuanlin Yu, Jiawei Li, Hanxiong Xu, Hui Chen, Jianbin Liu, Yuchen He, Yanyan Liu, Zhuo Xu. Fusion of near-infrared single-photon LiDAR with visible light camera. Measurement Science and Technology 36(6), 065409 (2025). doi:10.1088/1361-6501/addddf"
           },
           {
             "page": 2,
             "kind": "publication",
             "source": "publications.lidar",
-            "top": 434.29,
-            "bottom": 388.19,
+            "top": 440.29,
+            "bottom": 395.19,
             "text": "Huaibin Zheng, Yuyuan Han, Long Qiu, Yanfeng Zong, Jingwei Li, Yu Zhou, Yuchen He, Jianbin Liu, Gao Wang, Hui Chen, Zhuo Xu. Long-Range Imaging LiDAR with Multiple Denoising Technologies. Applied Sciences 14(8), 3414 (2024). doi:10.3390/app14083414"
           },
           {
             "page": 2,
             "kind": "publication",
             "source": "publications.ghost_timing",
-            "top": 388.19,
-            "bottom": 354.79,
+            "top": 395.19,
+            "bottom": 362.79,
             "text": "Yanfeng Zong, Huaibin Zheng, Xinwei Wu, Jingwei Li, Long Qiu, Yuyuan Han. Sequence-Controlled Pseudothermal Optical Ghost Imaging System. Acta Optica Sinica 43(7), 0711001 (2023). doi:10.3788/AOS221781"
           },
           {
             "page": 2,
             "kind": "subsection",
             "source": "",
-            "top": 354.79,
-            "bottom": 333.79,
+            "top": 362.79,
+            "bottom": 341.79,
             "text": "Preprints"
           },
           {
             "page": 2,
             "kind": "publication",
             "source": "publications.lift",
-            "top": 333.79,
-            "bottom": 287.69,
+            "top": 341.79,
+            "bottom": 296.69,
             "text": "Yuyuan Han, Jingwei Li, Xiaoxia Zhang, Long Qiu, Chong Wang, Wenxuan Hao, Jiangyu Han, Xinyu Yao, Yuchen He, Hui Chen, Jianbin Liu, Huaibin Zheng. The Lift Spectrum: How Measurement-to-Space Adaptivity Shapes Robustness in Image-Free Single-Pixel Sensing. arXiv (2026). doi:10.48550/arXiv.2607.22077"
           },
           {
             "page": 2,
             "kind": "section",
             "source": "",
-            "top": 287.69,
-            "bottom": 253.69,
+            "top": 296.69,
+            "bottom": 262.69,
             "text": "Research Code"
           },
           {
             "page": 2,
             "kind": "body",
             "source": "software[0]",
-            "top": 253.69,
-            "bottom": 223.69,
-            "text": "STSF-TPLS · Image-free segmentation from single-pixel measurements with a content-adaptive lift and task-prioritized loss scheduling; code and pretrained weights (PyTorch)."
+            "top": 262.69,
+            "bottom": 232.69,
+            "text": "STSF-TPLS · Image-free segmentation from single-pixel measurements with a content-adaptive lift and task-prioritized loss scheduling; code and pretrained weights (PyTorch)."
           },
           {
             "page": 2,
             "kind": "body",
             "source": "software[1]",
-            "top": 223.69,
-            "bottom": 193.69,
-            "text": "Comparison-of-SPI-DLs · Eight deep networks and correlation ghost imaging, benchmarked on one shared Hadamard acquisition (PyTorch)."
+            "top": 232.69,
+            "bottom": 202.69,
+            "text": "Comparison-of-SPI-DLs · Eight deep networks and correlation ghost imaging, benchmarked on one shared Hadamard acquisition (PyTorch)."
           },
           {
             "page": 2,
             "kind": "body",
             "source": "software[2]",
-            "top": 193.69,
-            "bottom": 176.69,
-            "text": "SHSI · Sparse Hadamard pattern generation, simulation and reconstruction examples (MATLAB)."
+            "top": 202.69,
+            "bottom": 185.69,
+            "text": "SHSI · Sparse Hadamard pattern generation, simulation and reconstruction examples (MATLAB)."
           },
           {
             "page": 2,
             "kind": "body",
             "source": "software[3]",
-            "top": 176.69,
-            "bottom": 159.69,
-            "text": "LDGI · Loop differential ghost imaging for line-pattern illumination from 1D optical phased arrays (MATLAB)."
+            "top": 185.69,
+            "bottom": 168.69,
+            "text": "LDGI · Loop differential ghost imaging for line-pattern illumination from 1D optical phased arrays (MATLAB)."
           },
           {
             "page": 2,
             "kind": "body",
             "source": "software[4]",
-            "top": 159.69,
-            "bottom": 142.69,
-            "text": "TGIs-Entry · Reference implementations of traditional, differential and normalized ghost imaging (MATLAB)."
+            "top": 168.69,
+            "bottom": 151.69,
+            "text": "TGIs-Entry · Reference implementations of traditional, differential and normalized ghost imaging (MATLAB)."
           },
           {
             "page": 2,
             "kind": "body",
             "source": "software[5]",
-            "top": 142.69,
-            "bottom": 112.69,
-            "text": "remote-gpu-trainer · Open-source agent skill for Claude Code and Codex that runs, verifies and delivers GPU experiments (60+ stars)."
+            "top": 151.69,
+            "bottom": 121.69,
+            "text": "remote-gpu-trainer · Open-source agent skill for Claude Code and Codex that runs, verifies and delivers GPU experiments."
+          },
+          {
+            "page": 2,
+            "kind": "section",
+            "source": "",
+            "top": 121.69,
+            "bottom": 87.69,
+            "text": "Additional Experience"
+          },
+          {
+            "page": 2,
+            "kind": "body",
+            "source": "research_background.electro_optic",
+            "top": 87.69,
+            "bottom": 69.69,
+            "text": "Photonic device modeling · Geometry optimization of electro-optic phased arrays for beam steering."
+          },
+          {
+            "page": 2,
+            "kind": "body",
+            "source": "research_background.optical_systems",
+            "top": 69.69,
+            "bottom": 51.69,
+            "text": "Optical system integration · Mechanical design, optical alignment and underwater field tests."
           }
         ]
       },
@@ -800,10 +800,10 @@
       "destination": "public",
       "metadata": {
         "Author": "Yuyuan Han",
-        "CreationDate": "D:20261013000000+00'00'",
+        "CreationDate": "D:20261014000000+00'00'",
         "Creator": "Yuyuan Han",
-        "Keywords": "Computational Imaging, Single-Pixel Imaging, Image-Free Sensing, Inverse Problems, Machine Perception",
-        "ModDate": "D:20261013000000+00'00'",
+        "Keywords": "Computational Imaging, Single-Pixel Imaging, Image-Free Sensing, Optical Tomography, Inverse Problems",
+        "ModDate": "D:20261014000000+00'00'",
         "Producer": "",
         "Subject": "Computational imaging & robust image-free sensing",
         "Title": "Yuyuan Han | Research Internship Résumé",
@@ -811,17 +811,17 @@
       },
       "pdf": {
         "path": "Yuyuan_Han_Internship_Resume.pdf",
-        "sha256": "085fc87135735fd8bf8af6767b91f776e949dc7bfbfb6e3ebcc8fb3747a3e33e",
-        "bytes": 35718
+        "sha256": "9953abb9d027aae71cd7f8479e332eaa5a7fd0629afaeaf746d2d81cf1cfd2ef",
+        "bytes": 35821
       },
       "html": {
         "path": "Yuyuan_Han_Internship_Resume.html",
-        "sha256": "76581fe190857e0da667084ebe149f70aef920c585bcb7733b2846b6f4bf3fee",
-        "bytes": 9655
+        "sha256": "6971756116ebdeb072081619a59693ae86a2083ad2217ed2276d6d57d2dfa1bb",
+        "bytes": 9794
       },
       "checks": {
         "page_count": 1,
-        "extracted_characters": 2668,
+        "extracted_characters": 2766,
         "embedded_fonts": [
           "/AAAAAA+NotoSans-Bold",
           "/AAAAAA+NotoSans-Regular"
@@ -961,230 +961,230 @@
       },
       "layout": {
         "page_count": 1,
-        "lowest_content_y": 50.55,
+        "lowest_content_y": 54.25,
         "positions": [
           {
             "page": 1,
             "kind": "body",
             "source": "narrative.internship_summary",
-            "top": 694.65,
-            "bottom": 662.65,
-            "text": "PhD student in computational imaging and robust image-free sensing: single-pixel measurement design and reconstruction (MATLAB) and direct segmentation from measurements (PyTorch)."
+            "top": 697.05,
+            "bottom": 667.45,
+            "text": "PhD student working on computational imaging and robust image-free sensing, from optical measurement design and reconstruction to networks that infer directly from measurements."
           },
           {
             "page": 1,
             "kind": "section",
             "source": "",
-            "top": 662.65,
-            "bottom": 631.65,
+            "top": 667.45,
+            "bottom": 636.45,
             "text": "Education & Research Appointments"
           },
           {
             "page": 1,
             "kind": "entry",
             "source": "education[0]",
-            "top": 631.65,
-            "bottom": 616.05,
+            "top": 636.45,
+            "bottom": 622.05,
             "text": "Xi'an Jiaotong University · PhD student"
           },
           {
             "page": 1,
             "kind": "detail",
             "source": "education[0].field",
-            "top": 616.05,
-            "bottom": 599.55,
+            "top": 622.05,
+            "bottom": 606.75,
             "text": "Electronic Science and Technology · Master’s-to-PhD track · Advisor: Huaibin Zheng"
           },
           {
             "page": 1,
             "kind": "entry",
             "source": "appointments[0]",
-            "top": 599.55,
-            "bottom": 583.95,
+            "top": 606.75,
+            "bottom": 592.35,
             "text": "Politecnico di Milano · Visiting PhD student"
           },
           {
             "page": 1,
             "kind": "detail",
             "source": "appointments[0].host",
-            "top": 583.95,
-            "bottom": 566.45,
-            "text": "Department of Physics · Supervisor: Antonio Pifferi · Planned research: time-domain diffuse optics"
+            "top": 592.35,
+            "bottom": 564.75,
+            "text": "Department of Physics · Supervisor: Antonio PifferiResearch focus: time-domain diffuse optical tomography for 3D brain imaging"
           },
           {
             "page": 1,
             "kind": "entry",
             "source": "education[1]",
-            "top": 566.45,
-            "bottom": 550.85,
+            "top": 564.75,
+            "bottom": 550.35,
             "text": "Northwest University · B.Eng."
           },
           {
             "page": 1,
             "kind": "detail",
             "source": "education[1].field",
-            "top": 550.85,
-            "bottom": 534.35,
+            "top": 550.35,
+            "bottom": 535.05,
             "text": "Electronic Information Science and Technology"
           },
           {
             "page": 1,
             "kind": "section",
             "source": "",
-            "top": 534.35,
-            "bottom": 503.35,
+            "top": 535.05,
+            "bottom": 504.05,
             "text": "Selected Research"
           },
           {
             "page": 1,
             "kind": "project",
             "source": "projects.lift",
-            "top": 503.35,
-            "bottom": 487.75,
+            "top": 504.05,
+            "bottom": 489.65,
             "text": "The Lift Spectrum · Robust image-free sensing"
           },
           {
             "page": 1,
             "kind": "detail",
             "source": "projects.lift.role",
-            "top": 487.75,
-            "bottom": 472.25,
+            "top": 489.65,
+            "bottom": 475.35,
             "text": "arXiv · 2026 · Paper · Code"
           },
           {
             "page": 1,
             "kind": "bullet",
             "source": "projects.lift.bullets[0]",
-            "top": 472.25,
-            "bottom": 443.25,
-            "text": "Framed the measurement-to-space lift as the key design question in image-free single-pixel segmentation; designed the STSF network and the TPLS training schedule."
+            "top": 475.35,
+            "bottom": 448.75,
+            "text": "Developed a content-adaptive 1D-to-2D lift and task-prioritized loss scheduling for image-free single-pixel segmentation."
           },
           {
             "page": 1,
             "kind": "bullet",
             "source": "projects.lift.bullets[1]",
-            "top": 443.25,
-            "bottom": 414.25,
-            "text": "In simulation at 3.13% sampling: +3.2–9.9 pp foreground mIoU over SPIFS; at 20 dB SNR, +3.1–21.7 pp over the best clean-trained reconstruct-then-segment baseline, which wins without noise."
+            "top": 448.75,
+            "bottom": 409.85,
+            "text": "Mapped the noise-dependent crossover against clean-trained reconstruction-first baselines: 3.1–21.7 percentage-point gains in foreground mIoU at 3.13% sampling and 20 dB Gaussian measurement noise across three simulated datasets; optical-bench proof of concept."
           },
           {
             "page": 1,
             "kind": "project",
             "source": "projects.shsi",
-            "top": 409.25,
-            "bottom": 393.65,
+            "top": 404.85,
+            "bottom": 390.45,
             "text": "Sparse Hadamard single-pixel imaging"
           },
           {
             "page": 1,
             "kind": "detail",
             "source": "projects.shsi.role",
-            "top": 393.65,
-            "bottom": 378.15,
+            "top": 390.45,
+            "bottom": 376.15,
             "text": "Optics Express · 2025 · Paper · Code"
           },
           {
             "page": 1,
             "kind": "bullet",
             "source": "projects.shsi.bullets[0]",
-            "top": 378.15,
-            "bottom": 349.15,
-            "text": "Designed tunable, orthogonal sparse Hadamard patterns with two training-free modes and a noise model; more resilient to noise than conventional patterns in 20 and 30 dB SNR simulations, validated optically."
+            "top": 376.15,
+            "bottom": 349.55,
+            "text": "Designed tunable sparse Hadamard patterns that preserve orthogonality, two training-free operating modes and a sparsity-dependent noise model; validated in noise simulations and through-scattering optical experiments."
           },
           {
             "page": 1,
             "kind": "project",
             "source": "projects.loop",
-            "top": 344.15,
-            "bottom": 328.55,
+            "top": 344.55,
+            "bottom": 330.15,
             "text": "LDGI · Ghost imaging for optical phased-array line patterns"
           },
           {
             "page": 1,
             "kind": "detail",
             "source": "projects.loop.role",
-            "top": 328.55,
-            "bottom": 313.05,
+            "top": 330.15,
+            "bottom": 315.85,
             "text": "Optics Communications · 2025 · Paper · Code"
           },
           {
             "page": 1,
             "kind": "bullet",
             "source": "projects.loop.bullets[0]",
-            "top": 313.05,
-            "bottom": 284.05,
-            "text": "Developed loop differential ghost imaging, which corrects the noise asymmetry of line patterns from 1D optical phased arrays; orders-of-magnitude gains over traditional ghost imaging, validated with an SLM."
+            "top": 315.85,
+            "bottom": 276.95,
+            "text": "Developed loop differential ghost imaging for one-dimensional optical phased-array line modulation, with a noise-symmetry metric, numerical simulation and optical validation using spatial-light-modulator-generated patterns."
           },
           {
             "page": 1,
             "kind": "section",
             "source": "",
-            "top": 279.05,
-            "bottom": 248.05,
+            "top": 271.95,
+            "bottom": 240.95,
             "text": "Current Research"
           },
           {
             "page": 1,
             "kind": "body",
             "source": "narrative.current_summary",
-            "top": 248.05,
-            "bottom": 214.05,
-            "text": "Acquisition-aware single-pixel sensing on an optical bench (manuscript in preparation); question answering from measurements with a frozen vision–language model (exploratory)."
+            "top": 240.95,
+            "bottom": 209.35,
+            "text": "Time-domain diffuse optical tomography for 3D brain imaging; acquisition-aware single-pixel sensing on an optical bench; exploratory question answering from measurements with a frozen vision–language model."
           },
           {
             "page": 1,
             "kind": "section",
             "source": "",
-            "top": 214.05,
-            "bottom": 183.05,
+            "top": 209.35,
+            "bottom": 178.35,
             "text": "Open Source & Tools"
           },
           {
             "page": 1,
             "kind": "body",
             "source": "internship_technical[0]",
-            "top": 183.05,
-            "bottom": 155.05,
-            "text": "Open source · remote-gpu-trainer, an agent skill for Claude Code and Codex that runs, verifies and delivers GPU experiments (60+ GitHub stars)"
+            "top": 178.35,
+            "bottom": 152.75,
+            "text": "Open source · remote-gpu-trainer, an agent skill for Claude Code and Codex that runs, verifies and delivers GPU experiments"
           },
           {
             "page": 1,
             "kind": "body",
             "source": "internship_technical[1]",
-            "top": 155.05,
-            "bottom": 127.05,
-            "text": "Tools & lab · PyTorch, MATLAB, COMSOL; DMD/SLM illumination, single-pixel detection, optical alignment and system integration"
+            "top": 152.75,
+            "bottom": 127.15,
+            "text": "Tools & lab · PyTorch, MATLAB, COMSOL; DMD/SLM illumination, single-pixel detection, optical alignment and system integration"
           },
           {
             "page": 1,
             "kind": "body",
             "source": "internship_technical[2]",
-            "top": 127.05,
-            "bottom": 112.55,
-            "text": "Device modeling · Geometry optimization of electro-optic phased arrays for beam steering"
+            "top": 127.15,
+            "bottom": 113.85,
+            "text": "Device modeling · Geometry optimization of electro-optic phased arrays for beam steering"
           },
           {
             "page": 1,
             "kind": "section",
             "source": "",
-            "top": 112.55,
-            "bottom": 81.55,
+            "top": 113.85,
+            "bottom": 82.85,
             "text": "Award & Service"
           },
           {
             "page": 1,
             "kind": "body",
             "source": "awards[0]",
-            "top": 81.55,
-            "bottom": 66.05,
+            "top": 82.85,
+            "bottom": 68.55,
             "text": "2024 · Second Prize, National Post-Graduate Mathematical Contest in Modeling · Code"
           },
           {
             "page": 1,
             "kind": "body",
             "source": "service[0]",
-            "top": 66.05,
-            "bottom": 50.55,
+            "top": 68.55,
+            "bottom": 54.25,
             "text": "Reviewer · IEEE TIP, IEEE TCI, Optics Express, Optics Letters (13 verified reviews, 2025–2026)"
           }
         ]
@@ -1217,7 +1217,36 @@
     }
   ],
   "visual_qa": {
-    "status": "pending",
-    "method": "render every latest PDF page and inspect it; then record hashes in cv-review.json"
+    "status": "passed",
+    "reviewer": "Codex",
+    "reviewed_at": "2026-10-14T02:15:16.025375+02:00",
+    "timezone": "Europe/Rome",
+    "method": "Freshly rendered all four latest PDFs with pdftoppm -r 100 -png after the final internship-summary copy repair, then visually inspected all six pages: English academic 1–2, English internship 1, Chinese academic 1–2, Chinese internship 1. Both internship versions now name networks that infer directly from measurements. Existing font sizes, leading, section placement, page counts and content bounds are unchanged. Checked fonts and missing glyphs, line breaks and spacing, clipping and overlap, section transitions, Chinese photo clearance, and page numbers. Actual PDF text, nine publications in each academic version, photo counts and page counts passed through Poppler/pypdf. Both public PDFs rebuilt byte-identically. The frozen profile SHA-256 and mtime remained unchanged during this repair.",
+    "reviewed_pdf_sha256": {
+      "academic": "66fd2408bbbe109df99fd54e13084532a6c108b02b351ed1b21a9e9126208c94",
+      "internship": "9953abb9d027aae71cd7f8479e332eaa5a7fd0629afaeaf746d2d81cf1cfd2ef"
+    },
+    "reviewed_render_sha256": {
+      "academic-en-page-1": "b818e3434526a54b3a0f1fc6dd43fe7ea3feda57f1c308577208d725f7e1a85f",
+      "academic-en-page-2": "118483c04b2dbe3685f0e7227a80f48172576ddb1b7032d2c90b391c400e8e96",
+      "internship-en-page-1": "6a1d563cc1404a927cc3c813a83b048faf22e9bf27a646665fa35264d974a025"
+    },
+    "reviewed_pages": [
+      {
+        "id": "academic-en-page-1",
+        "render_sha256": "b818e3434526a54b3a0f1fc6dd43fe7ea3feda57f1c308577208d725f7e1a85f",
+        "pdf_sha256": "66fd2408bbbe109df99fd54e13084532a6c108b02b351ed1b21a9e9126208c94"
+      },
+      {
+        "id": "academic-en-page-2",
+        "render_sha256": "118483c04b2dbe3685f0e7227a80f48172576ddb1b7032d2c90b391c400e8e96",
+        "pdf_sha256": "66fd2408bbbe109df99fd54e13084532a6c108b02b351ed1b21a9e9126208c94"
+      },
+      {
+        "id": "internship-en-page-1",
+        "render_sha256": "6a1d563cc1404a927cc3c813a83b048faf22e9bf27a646665fa35264d974a025",
+        "pdf_sha256": "9953abb9d027aae71cd7f8479e332eaa5a7fd0629afaeaf746d2d81cf1cfd2ef"
+      }
+    ]
   }
 }

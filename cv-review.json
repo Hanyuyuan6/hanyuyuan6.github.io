@@ -1,29 +1,30 @@
 {
- "reviewed_on": "2026-10-13",
- "reviewer": "Claude (Opus 5.5)",
- "method": "pdftoppm at 100 dpi; all six pages (English academic 1-2, English internship 1, Chinese academic 1-2, Chinese internship 1) inspected at full page on 2026-10-13 after the full-text rewrite. The build fails on orphans, split number-unit pairs and line-initial CJK punctuation (typography_issues); all four variants pass, and every page bottom was measured against the 48 pt margin before rendering (academic 59.0/125.7, internship 50.5, Chinese academic 60.2/51.7, Chinese internship 49.2). Layout changes in this round: the planned Milan research is stated on the visiting-appointment line under Education (build_cv.py appointment_blocks, field 'plan'); Current Research lists only the two ongoing projects; the academic CV keeps Additional Experience and Award & Service on page 1 (page1_closing background, awards), so page 2 holds only publications and code. Inspected: no clipping, overlap, orphan, missing glyph or abnormal break; the Chinese current-research line still breaks after its first clause by design; the Chinese photo stays clear of every text line. Afterwards only the document date changed (profile 'updated' 2026-10-13) and the web-only short biography; all six pages re-rendered at 100 dpi are pixel-identical (same PNG SHA-256) to the inspected renders. Last change: the STSF-TPLS code line again names its content-adaptive lift and task-prioritized loss scheduling (English academic page 2 now 112.7 pt above the margin; Chinese page 2 unchanged in height); both changed pages (English academic 2, Chinese academic 2) were re-inspected at full page; the other four renders are pixel-identical.",
- "source_fingerprint": "d2d67e6e78d908a5df01856ec0a02b3edf5c859916763b974fa08cb15cd9c371",
- "pdf_sha256": {
-  "Yuyuan_Han_Academic_CV.pdf": "09c6cc2075cdf07f63049ac636bd88a3835241f658da5717add890f06537e227",
-  "Yuyuan_Han_Internship_Resume.pdf": "085fc87135735fd8bf8af6767b91f776e949dc7bfbfb6e3ebcc8fb3747a3e33e"
- },
- "html_visual_qa": "not separately reviewed; HTML CVs are unlinked companions of the PDFs",
- "reviewed_at": "2026-10-13T00:19:02.696302+00:00",
- "reviewed_pages": [
-  {
-   "id": "academic-en-page-1",
-   "render_sha256": "8760418da74e57b0a8d587d9637bae1878701e74b5053774572f2a9f0e7409a3",
-   "pdf_sha256": "09c6cc2075cdf07f63049ac636bd88a3835241f658da5717add890f06537e227"
+  "reviewed_on": "2026-10-14",
+  "reviewer": "Codex",
+  "method": "Freshly rendered all four latest PDFs with pdftoppm -r 100 -png after the final internship-summary copy repair, then visually inspected all six pages: English academic 1–2, English internship 1, Chinese academic 1–2, Chinese internship 1. Both internship versions now name networks that infer directly from measurements. Existing font sizes, leading, section placement, page counts and content bounds are unchanged. Checked fonts and missing glyphs, line breaks and spacing, clipping and overlap, section transitions, Chinese photo clearance, and page numbers. Actual PDF text, nine publications in each academic version, photo counts and page counts passed through Poppler/pypdf. Both public PDFs rebuilt byte-identically. The frozen profile SHA-256 and mtime remained unchanged during this repair.",
+  "source_fingerprint": "1a0eeff416d007e8524276ec56965cb7c5e4927fb3c9e255037bf829094917e3",
+  "pdf_sha256": {
+    "Yuyuan_Han_Academic_CV.pdf": "66fd2408bbbe109df99fd54e13084532a6c108b02b351ed1b21a9e9126208c94",
+    "Yuyuan_Han_Internship_Resume.pdf": "9953abb9d027aae71cd7f8479e332eaa5a7fd0629afaeaf746d2d81cf1cfd2ef"
   },
-  {
-   "id": "academic-en-page-2",
-   "render_sha256": "0498cf551640c5f253ee82897b881497cbbabea30b4d7219f6bdc14b641a9c9d",
-   "pdf_sha256": "09c6cc2075cdf07f63049ac636bd88a3835241f658da5717add890f06537e227"
-  },
-  {
-   "id": "internship-en-page-1",
-   "render_sha256": "9e984e0ffec51b56a5612a7ce87e71f6191ff74fa9b07e58f2a4bf4d6954d6ca",
-   "pdf_sha256": "085fc87135735fd8bf8af6767b91f776e949dc7bfbfb6e3ebcc8fb3747a3e33e"
-  }
- ]
+  "html_visual_qa": "Not separately reviewed; HTML CVs are unlinked companions of the reviewed PDFs.",
+  "reviewed_at": "2026-10-14T02:15:16.025375+02:00",
+  "timezone": "Europe/Rome",
+  "reviewed_pages": [
+    {
+      "id": "academic-en-page-1",
+      "render_sha256": "b818e3434526a54b3a0f1fc6dd43fe7ea3feda57f1c308577208d725f7e1a85f",
+      "pdf_sha256": "66fd2408bbbe109df99fd54e13084532a6c108b02b351ed1b21a9e9126208c94"
+    },
+    {
+      "id": "academic-en-page-2",
+      "render_sha256": "118483c04b2dbe3685f0e7227a80f48172576ddb1b7032d2c90b391c400e8e96",
+      "pdf_sha256": "66fd2408bbbe109df99fd54e13084532a6c108b02b351ed1b21a9e9126208c94"
+    },
+    {
+      "id": "internship-en-page-1",
+      "render_sha256": "6a1d563cc1404a927cc3c813a83b048faf22e9bf27a646665fa35264d974a025",
+      "pdf_sha256": "9953abb9d027aae71cd7f8479e332eaa5a7fd0629afaeaf746d2d81cf1cfd2ef"
+    }
+  ]
 }

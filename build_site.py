@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Build the public academic website from the shared, reviewed profile.
 
-Requires Pillow for derived images. This builder writes index.html, 404.html,
-style.css, robots.txt, sitemap.xml, icons, a social card, responsive previews
+Requires Pillow for derived images. This builder writes index.html, a Lift
+research page, 404.html, styles, scripts, robots.txt, sitemap.xml, icons, a social card, responsive previews
 and the reviewed full-size images, preserving separately generated CVs.
 """
 
@@ -13,6 +13,7 @@ import hashlib
 from datetime import date
 from html import escape
 import json
+import math
 from pathlib import Path, PurePosixPath
 import re
 import shutil
@@ -24,7 +25,6 @@ from PIL import Image, ImageDraw, ImageFont
 
 SOURCE_DIR = Path(__file__).resolve().parent
 SITE_URL = "https://hanyuyuan6.github.io/"
-FIGURE_HEIGHT = 200  # px; desktop height of research previews, the same value as --fig-h in style.css
 TOKENS = re.compile(r"@@([A-Z_]+)@@")
 THEME_KEYS = ("bg", "ink", "muted", "link", "hover", "line", "tint", "wash", "accent")
 # The mark: a Y whose two arms carry light into one gold pixel, the single detector a
@@ -440,18 +440,57 @@ def portrait_image(record: dict[str, Any], variants: list[dict[str, Any]], name:
         f'<a class="portrait-link" href="{e(record["path"])}" '
         f'aria-label="Open full-size portrait of {e(name)}">'
         f'<img src="{e(default["path"])}" srcset="{srcset(variants)}" '
-        'sizes="(max-width: 380px) 88px, (max-width: 640px) 112px, 144px" '
+        'sizes="(max-width: 650px) 88px, 120px" '
         f'alt="{e(record["alt"])}" width="{default["width"]}" height="{default["height"]}" '
         'loading="eager" fetchpriority="high" decoding="async"></a></figure>'
     )
 
 
 def highlights(project: dict[str, Any]) -> str:
-    """Key results as short chips, so the numbers can be scanned without the prose."""
+    """Keep the reviewed results together in the optional evidence layer."""
     items = [str(item).strip() for item in project.get("highlights", []) if str(item).strip()]
     if not items:
         return ""
     return '<ul class="highlights" aria-label="Key results">' + "".join(f"<li>{e(item)}</li>" for item in items) + "</ul>"
+
+
+def contribution_details(project: dict[str, Any], publication: dict[str, Any], person: dict[str, Any]) -> str:
+    """One disclosure label and one evidence layer for every selected study."""
+    points = project.get("detail_points", project.get("bullets", []))
+    if not isinstance(points, list) or any(not isinstance(point, str) for point in points):
+        raise ValueError("Selected research detail_points must be a list of strings")
+    items = "".join(f'<li>{e(point)}</li>' for point in points if point.strip())
+    conditions = project.get("conditions", [])
+    if isinstance(conditions, str):
+        conditions = [conditions]
+    if not isinstance(conditions, list) or any(not isinstance(item, str) for item in conditions):
+        raise ValueError("Selected research conditions must be text or a list of strings")
+    evidence = (f'<ul class="contribution-list">{items}</ul>' if items else "")
+    evidence += highlights(project)
+    evidence += "".join(f'<p class="evidence-condition">{e(item)}</p>' for item in conditions if item.strip())
+    return (
+        '<details class="work-details"><summary>Contribution &amp; evidence</summary>'
+        f'<div class="work-detail-content">{evidence}'
+        f'<p class="authors">{author_list(publication, person)}</p></div></details>'
+    )
+
+
+def research_questions(projects: list[dict[str, Any]]) -> str:
+    """Native links remain useful without JavaScript; emphasis adds orientation."""
+    topics = (
+        ("design", "Measurement design", "How should light be measured?", ("shsi",), "Sparse Hadamard"),
+        ("representation", "Representation", "How do measurements become task features?", ("lift",), "The Lift Spectrum"),
+        ("inference", "Inference paths", "Which computation fits the task?", ("lift", "loop"), "Lift · LDGI"),
+    )
+    present = {str(project["id"]) for project in projects}
+    if not {"lift", "shsi", "loop"}.issubset(present):
+        return ""
+    links = "".join(
+        f'<a href="#research-{works[0]}" data-research-question="{key}" data-related-works="{" ".join(works)}">'
+        f'<strong>{label}</strong><span>{question}</span><small>{titles}</small></a>'
+        for key, label, question, works, titles in topics
+    )
+    return f'<nav class="question-map" aria-label="Explore research by question">{links}</nav>'
 
 
 def selected_research(
@@ -477,31 +516,31 @@ def selected_research(
         figure = figures[publication_id]
         variants = previews[publication_id]
         default = next(v for v in variants if v["width"] == 640)
-        # Figures share one height and take their own width, so the three rows keep one rhythm.
         aspect = figure["width"] / figure["height"]
         figure_html = (
             '<figure class="research-figure">'
             f'<a class="figure-link" href="{e(figure["path"])}" '
             f'aria-label="Open {e(figure["figure"])} of {e(title)} at full size">'
             f'<img src="{e(default["path"])}" srcset="{srcset(variants)}" '
-            f'sizes="(max-width: 640px) calc(100vw - 32px), {round(FIGURE_HEIGHT * aspect)}px" '
+            'sizes="(max-width: 650px) 260px, 210px" '
             f'alt="{e(figure["alt"])}" width="{default["width"]}" height="{default["height"]}" '
-            f'loading="{"eager" if index == 1 else "lazy"}" decoding="async"></a>'
-            # The preview is the whole figure (owner, 2026-10-12: no partial thumbnails).
-            f'<figcaption class="figure-caption">{e(figure_number(figure))} · '
-            f'<a href="{e(figure["path"])}">Full size</a></figcaption></figure>'
+            f'loading="{"eager" if index == 1 else "lazy"}" decoding="async"></a></figure>'
         )
-        # Key-result chips run in a full-width row under the figure and text (owner, 2026-10-12:
-        # "这里空这么大一节"), so a long chip list no longer leaves a hole under a short figure.
+        resources = publication_links(publication, project)
+        context = str(project.get("context", "") or "").strip()
+        context_html = f'<p class="work-context">{e(context)}</p>' if context else ""
+        if project["id"] == "lift":
+            resources = resources.replace(
+                '</div>', '<a class="research-detail-link" href="research/lift.html">Explore the study</a></div>', 1
+            )
         entries.append(
             f'<article class="research-entry" id="research-{e(entry_id)}" style="--ar: {aspect:.4f}">'
             f'{figure_html}<div class="work-body">'
-            f'<h3>{link(title, publication["url"])}</h3>'
-            f'<p class="authors">{author_list(publication, person)}</p>'
+            f'<h3 class="work-finding">{e(str(project.get("summary", "")).strip())}</h3>'
+            f'<p class="paper-title">{link(title, publication["url"])}</p>'
             f'<p class="work-meta">{venue_line(publication, full=False)}</p>'
-            f'<p class="work-summary">{e(str(project.get("summary", "")).strip())}</p>'
-            f'{publication_links(publication, project)}</div>'
-            f'{highlights(project)}</article>'
+            f'{context_html}'
+            f'{resources}{contribution_details(project, publication, person)}</div></article>'
         )
     return "\n".join(entries), selected_ids
 
@@ -639,7 +678,7 @@ def service(rows: list[dict[str, Any]]) -> str:
 
 def write_support_files(profile: dict[str, Any], output_dir: Path, style_version: str, icon_version: str) -> None:
     updated = str(profile.get("updated", ""))
-    pages = ["", *(row["path"] for row in sequence(profile, "cvs"))]
+    pages = ["", "research/lift.html", *(row["path"] for row in sequence(profile, "cvs"))]
     urls = "".join(f"  <url><loc>{e(SITE_URL + path)}</loc><lastmod>{e(updated)}</lastmod></url>\n" for path in pages)
     (output_dir / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n'
@@ -660,6 +699,112 @@ def write_support_files(profile: dict[str, Any], output_dir: Path, style_version
         '  </main>\n</body>\n</html>\n',
         encoding="utf-8", newline="\n",
     )
+
+
+def condition_table(rows: list[dict[str, Any]]) -> str:
+    """Six reported margins on one fixed scale; filtering never recalculates a value."""
+    if len(rows) != 3 or len({str(row.get("name", "")) for row in rows}) != 3:
+        raise ValueError("The Lift comparison requires three distinct reported datasets")
+    groups = []
+    for row in rows:
+        name = str(row.get("name", "")).strip()
+        if not name:
+            raise ValueError("The Lift comparison needs dataset names")
+        results = []
+        for key, label in (("clean", "Clean"), ("noisy", "20 dB")):
+            value = row.get(key)
+            if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or not -25 <= value <= 25:
+                raise ValueError("Lift comparison values must be finite reported margins within the fixed −25…+25 scale")
+            number = ("−" if value < 0 else "+") + f"{abs(value):.1f}"
+            left = 50 + min(value, 0) * 2
+            width = abs(value) * 2
+            css = "reconstruction" if value < 0 else "image-free"
+            winner = "Reconstruction-first" if value < 0 else "Image-free"
+            results.append(
+                f'<tr class="result-row" data-condition="{key}" data-value="{value}">'
+                f'<th scope="row" class="test-condition">{label}</th>'
+                '<td class="plot-cell" aria-hidden="true"><span class="plot-zero"></span>'
+                f'<span class="bar {css}" style="left:{left:.1f}%;width:{width:.1f}%"></span></td>'
+                f'<td class="number {css}"><span aria-hidden="true">{number}</span>'
+                f'<span class="sr-only">{number} percentage points. {winner} is higher.</span></td></tr>'
+            )
+        groups.append(
+            f'<tbody data-dataset="{e(name)}"><tr class="dataset-heading">'
+            f'<th colspan="3" scope="rowgroup">{e(name)}</th></tr>{"".join(results)}</tbody>'
+        )
+    return (
+        '<table class="comparison-table" aria-label="Reported foreground mIoU differences, image-free minus reconstruction-first, in percentage points">'
+        '<colgroup><col class="condition-column"><col><col class="value-column"></colgroup>'
+        '<thead class="sr-only"><tr><th scope="col">Dataset and test condition</th>'
+        '<th scope="col">Fixed scale from minus 25 to plus 25</th><th scope="col">Difference, percentage points</th></tr></thead>'
+        f'{"".join(groups)}</table>'
+    )
+
+
+def synthetic_wave_path() -> str:
+    """A labelled teaching input for the pathway explanation, never an experiment."""
+    values = [0.51 + 0.21 * math.sin(i * 0.33) + 0.10 * math.cos(i * 0.91) for i in range(64)]
+    return " ".join(f'{"M" if i == 0 else "L"}{8 + i * 704 / 63:.2f} {92 - value * 73:.2f}' for i, value in enumerate(values))
+
+
+def write_lift_page(
+    profile: dict[str, Any], source_dir: Path, output_dir: Path,
+    figures: dict[str, dict[str, Any]], common: dict[str, str],
+) -> None:
+    """The approved evidence comparison, path explanation and original-figure guide."""
+    project = next(row for row in sequence(profile, "projects") if row["id"] == "lift")
+    publication = next(row for row in sequence(profile, "publications") if row["id"] == project["publication_id"])
+    comparison = project.get("condition_comparison")
+    if not isinstance(comparison, dict):
+        raise ValueError("The Lift detail page needs projects[lift].condition_comparison in profile.json")
+    rows = comparison.get("rows")
+    if not isinstance(rows, list) or any(not isinstance(row, dict) for row in rows):
+        raise ValueError("The Lift condition comparison rows must be a list of objects")
+    conditions = comparison.get("conditions", [])
+    if not isinstance(conditions, list) or not conditions or any(not isinstance(item, str) for item in conditions):
+        raise ValueError("The Lift condition comparison requires its reviewed comparison conditions")
+    figure = figures[project["publication_id"]]
+    script = (source_dir / "research" / "lift.js").read_text(encoding="utf-8")
+    points = project.get("detail_points", project.get("bullets", []))
+    if not isinstance(points, list) or any(not isinstance(point, str) for point in points):
+        raise ValueError("Lift detail_points must be a list of strings")
+    point_list = '<ul class="contribution-list">' + "".join(f'<li>{e(point)}</li>' for point in points if point.strip()) + '</ul>'
+    replacements = {
+        **common,
+        "LIFT_SHORT_TITLE": e(publication["title"].split(":", 1)[0]),
+        "LIFT_TITLE": e(publication["title"]),
+        "LIFT_SUMMARY": e(project["summary"]),
+        "LIFT_CONTEXT": e(project.get("context", "")),
+        "LIFT_VENUE": venue_line(publication, full=False),
+        "LIFT_AUTHORS": author_list(publication, profile["person"]),
+        "LIFT_PAPER_URL": e(url(publication["url"])),
+        "LIFT_CODE_URL": e(url(project["code_url"])),
+        "LIFT_CONTRIBUTIONS": point_list,
+        "LIFT_FIGURE": e("../" + str(figure["path"])),
+        "LIFT_FIGURE_ALT": e(figure["alt"]),
+        "LIFT_FIGURE_WIDTH": e(figure["width"]),
+        "LIFT_FIGURE_HEIGHT": e(figure["height"]),
+        "CONDITION_TABLE": condition_table(rows),
+        "DATASET_OPTIONS": "".join(
+            f'<label class="choice"><input type="radio" name="dataset" value="{e(row["name"])}"><span>{e(row["name"])}</span></label>'
+            for row in rows
+        ),
+        "EVIDENCE_SOURCE": e(url(comparison.get("source_url", ""))),
+        "COMPARISON_CONDITIONS": "".join(f'<p>{e(item)}</p>' for item in conditions),
+        "SYNTHETIC_WAVE": synthetic_wave_path(),
+        "LIFT_SCRIPT_VERSION": hashlib.sha256(script.encode("utf-8")).hexdigest()[:10],
+    }
+    template = (source_dir / "research" / "lift-template.html").read_text(encoding="utf-8")
+    missing = set(TOKENS.findall(template)) - replacements.keys()
+    if missing:
+        raise ValueError(f"Unknown Lift-page tokens: {sorted(missing)}")
+    document = TOKENS.sub(lambda match: replacements[match.group(1)], template)
+    if TOKENS.search(document):
+        raise ValueError("The Lift page contains an unresolved template token")
+    destination = output_dir / "research"
+    destination.mkdir(parents=True, exist_ok=True)
+    (destination / "lift.html").write_text(document, encoding="utf-8", newline="\n")
+    (destination / "lift.js").write_text(script, encoding="utf-8", newline="\n")
 
 
 def build(profile: dict[str, Any], output_dir: Path, *, source_dir: Path | None = None) -> Path:
@@ -691,6 +836,7 @@ def build(profile: dict[str, Any], output_dir: Path, *, source_dir: Path | None 
     palette = theme["palettes"][theme["selected"]]
     stylesheet = theme_css(theme) + (source_dir / "style.css").read_text(encoding="utf-8")
     style_version = hashlib.sha256(stylesheet.encode("utf-8")).hexdigest()[:10]
+    site_script = (source_dir / "site.js").read_text(encoding="utf-8")
     figure_records = json.loads((source_dir / "research-figures.json").read_text(encoding="utf-8"))
     figures = {record["id"]: record for record in figure_records["figures"]}
     if len(figures) != len(figure_records["figures"]):
@@ -748,11 +894,13 @@ def build(profile: dict[str, Any], output_dir: Path, *, source_dir: Path | None 
         "PRIMARY_PROFILES": profile_links(profiles, primary=True),
         "NEWS": news(sequence(profile, "news")),
         "SELECTED_RESEARCH": selected,
+        "RESEARCH_QUESTIONS": research_questions(projects),
         "DIRECTIONS": current_directions(sequence(profile, "directions")),
         "DIRECTION_PARAGRAPH": f'<p class="future-paragraph">{e(direction)}</p>' if direction else "",
         "PUBLICATIONS": all_publications(publications, selected_ids, person),
         "PUBLICATION_COUNT": e(len(publications)),
         "STYLE_VERSION": style_version,
+        "SITE_SCRIPT_VERSION": hashlib.sha256(site_script.encode("utf-8")).hexdigest()[:10],
         "ICON_VERSION": icon_version(theme["mark"]),
         "THEME_META": theme_meta(theme),
         "EDUCATION": education(sequence(profile, "education"), sequence(profile, "appointments")),
@@ -772,6 +920,8 @@ def build(profile: dict[str, Any], output_dir: Path, *, source_dir: Path | None 
     destination = output_dir / "index.html"
     destination.write_text(document, encoding="utf-8", newline="\n")
     (output_dir / "style.css").write_text(stylesheet, encoding="utf-8", newline="\n")
+    (output_dir / "site.js").write_text(site_script, encoding="utf-8", newline="\n")
+    write_lift_page(profile, source_dir, output_dir, figures, replacements)
     bib = "\n\n".join(bibtex(publication) for publication in publications)
     (output_dir / "publications.bib").write_text(bib + "\n", encoding="utf-8", newline="\n")
     for relative in assets:
