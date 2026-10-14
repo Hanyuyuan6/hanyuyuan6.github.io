@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  @@THEME_META@@
+  <title>@@LIFT_SHORT_TITLE@@ · @@NAME@@</title>
+  <meta name="description" content="@@LIFT_SUMMARY@@">
+  <link rel="canonical" href="https://hanyuyuan6.github.io/research/lift.html">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://hanyuyuan6.github.io/research/lift.html">
+  <meta property="og:title" content="@@LIFT_SHORT_TITLE@@ · @@NAME@@">
+  <meta property="og:description" content="@@LIFT_SUMMARY@@">
+  <meta property="og:image" content="https://hanyuyuan6.github.io/assets/research/lift.webp">
+  <meta property="og:image:width" content="@@LIFT_FIGURE_WIDTH@@">
+  <meta property="og:image:height" content="@@LIFT_FIGURE_HEIGHT@@">
+  <meta property="og:image:alt" content="@@LIFT_FIGURE_ALT@@">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../favicon.svg?v=@@ICON_VERSION@@" type="image/svg+xml">
+  <link rel="icon" href="../favicon.ico?v=@@ICON_VERSION@@" sizes="48x48">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png?v=@@ICON_VERSION@@">
+  <link rel="stylesheet" href="../style.css?v=@@STYLE_VERSION@@">
+  <script src="../site.js?v=@@SITE_SCRIPT_VERSION@@" defer></script>
+  <script src="lift.js?v=@@LIFT_SCRIPT_VERSION@@" defer></script>
+</head>
+<body class="lift-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="page-shell" id="top">
+    <header class="site-header">
+      <nav aria-label="Study navigation">
+        <a class="home-link" href="../#research-lift">@@NAME@@</a>
+        <a href="#comparison">Results</a>
+        <a href="#contribution">Contribution</a>
+        <a href="@@LIFT_PAPER_URL@@">Paper</a>
+        <a href="@@LIFT_CODE_URL@@">Code</a>
+      </nav>
+    </header>
+    <main id="main">
+      <header class="study-header">
+        <p class="study-kicker">Single-pixel segmentation · @@LIFT_VENUE@@</p>
+        <h1>@@LIFT_SHORT_TITLE@@</h1>
+        <p class="study-finding">@@LIFT_SUMMARY@@</p>
+        <p class="paper-title">@@LIFT_TITLE@@</p>
+        <p class="authors">@@LIFT_AUTHORS@@</p>
+        <div class="resource-links"><a href="@@LIFT_PAPER_URL@@">Read the paper</a><a href="@@LIFT_CODE_URL@@">Open the code</a></div>
+      </header>
+
+      <section class="section comparison-section" id="comparison" aria-labelledby="comparison-heading">
+        <div class="section-heading"><h2 id="comparison-heading">What changes when the measurements are noisy?</h2></div>
+        <p class="study-scope">Reported simulation · clean-trained models · 3.13% sampling</p>
+        <form class="comparison-controls" aria-label="Choose which reported comparisons to show">
+          <fieldset disabled><legend>Dataset</legend><div class="choice-options">
+            <label class="choice"><input type="radio" name="dataset" value="all" checked><span>All 3</span></label>
+            @@DATASET_OPTIONS@@
+          </div></fieldset>
+          <fieldset disabled><legend>Test condition</legend><div class="choice-options">
+            <label class="choice"><input type="radio" name="condition" value="both" checked><span>Both</span></label>
+            <label class="choice"><input type="radio" name="condition" value="clean"><span>Clean</span></label>
+            <label class="choice"><input type="radio" name="condition" value="noisy"><span>20 dB</span></label>
+          </div></fieldset>
+        </form>
+        <noscript><p class="no-script">All six reported comparisons are shown. Filtering requires JavaScript.</p></noscript>
+        <figure class="comparison-frame" aria-labelledby="chart-title" aria-describedby="chart-formula">
+          <figcaption id="chart-title" class="chart-title">Difference in foreground mIoU <span>(percentage points)</span></figcaption>
+          <p id="chart-formula" class="chart-formula">Image-free (STSF+TPLS) − strongest tested reconstruction-first baseline.</p>
+          <div class="chart-direction" aria-hidden="true"><div><span><strong>Reconstruction-first</strong>higher ←</span><span><strong>Image-free</strong>→ higher</span></div></div>
+          <div class="chart-axis" aria-hidden="true"><div><span>−25</span><span>0</span><span>+25</span></div><small>points</small></div>
+          @@CONDITION_TABLE@@
+          <div class="comparison-takeaway">
+            <div><strong>Clean measurements</strong><p>Reconstruction-first leads on all three datasets.</p></div>
+            <div><strong>20 dB measurement noise</strong><p>The ranking reverses on all three datasets.</p></div>
+          </div>
+        </figure>
+        <p id="selection-status" class="sr-only" role="status" aria-live="polite" aria-atomic="true">All three datasets · Clean and 20 dB · 6 reported comparisons.</p>
+        <div class="comparison-source"><p>Reported means · fixed axis: −25 to +25 points</p><a href="@@EVIDENCE_SOURCE@@">Source: § IV-D, Fig. 4</a></div>
+        <details class="study-details comparison-conditions"><summary>Comparison conditions</summary>
+          <div class="study-detail-content"><p>Foreground mean intersection-over-union (mIoU) measures segmentation overlap with background excluded. The chart shows differences in percentage points. STSF is the image-free network; TPLS is task-prioritized loss scheduling.</p>@@COMPARISON_CONDITIONS@@</div>
+        </details>
+      </section>
+
+      <section class="section study-contribution" id="contribution" aria-labelledby="contribution-heading">
+        <div class="section-heading"><h2 id="contribution-heading">Contribution &amp; evidence</h2></div>
+        @@LIFT_CONTRIBUTIONS@@
+        <p class="evidence-context">@@LIFT_CONTEXT@@</p>
+
+        <details class="study-details pathway-explorer"><summary>Explore the two inference paths</summary>
+          <div class="study-detail-content">
+            <p>Both paths start from the same one-dimensional optical measurements. Open a stage to see what information it passes on.</p>
+            <p class="teaching-note">Synthetic teaching illustration. The input below is generated for explanation. Its perturbation changes only the waveform; this page does not run the models or generate predictions.</p>
+            <div class="synthetic-control"><strong>One shared measurement source</strong><label><input id="synthetic-noise" type="checkbox" disabled> Add a synthetic perturbation</label></div>
+            <svg class="teaching-wave" viewBox="0 0 720 104" role="img" aria-labelledby="wave-title wave-description">
+              <title id="wave-title">Synthetic measurement sequence shared by both paths</title>
+              <desc id="wave-description">A teaching input in normalized arbitrary units. It is not measured experimental data.</desc>
+              <path d="M8 92H712" class="wave-axis"></path><path id="synthetic-wave" d="@@SYNTHETIC_WAVE@@" class="wave-line"></path>
+              <text x="8" y="103">measurement index</text><text x="712" y="103" text-anchor="end">normalized arbitrary units</text>
+            </svg>
+            <p class="small-note" id="synthetic-wave-status" role="status" aria-live="polite">Synthetic input without added perturbation.</p>
+            <div class="inference-paths">
+              <section class="inference-path" aria-labelledby="reconstruction-path-heading">
+                <h3 id="reconstruction-path-heading">Reconstruct → segment</h3>
+                <p class="small-note">An image is the intermediate representation.</p>
+                <details class="path-stage" name="lift-path-stage"><summary>Image reconstruction</summary><p>Receives the measurement sequence and measurement model. Passes an estimated two-dimensional image to the task network.</p></details>
+                <details class="path-stage" name="lift-path-stage"><summary>Image-to-task inference</summary><p>The segmentation head reads the reconstructed image. In this study, it is adapted to the images produced by the reconstruction method.</p></details>
+              </section>
+              <section class="inference-path direct-path" aria-labelledby="image-free-path-heading">
+                <h3 id="image-free-path-heading">Image-free segmentation</h3>
+                <p class="small-note">The task head reads features formed from measurements.</p>
+                <details class="path-stage" name="lift-path-stage" open><summary>Content-adaptive 1D-to-2D lift</summary><p>Cross-attention maps the encoded measurement sequence into two-dimensional task features. Their spatial organization is adapted to the measurement content.</p></details>
+                <details class="path-stage" name="lift-path-stage"><summary>Task representation</summary><p>The segmentation head receives spatial task features. Auxiliary reconstruction supplies training supervision; its reconstructed image is not the segmentation input.</p></details>
+                <details class="path-stage" name="lift-path-stage"><summary>Task-prioritized loss scheduling</summary><p>Auxiliary reconstruction helps establish structure early in training. The schedule then increases the priority of the segmentation task.</p></details>
+              </section>
+            </div>
+            <p class="small-note">The comparison above reports the paper’s simulation results. This pathway illustration explains the architecture.</p>
+          </div>
+        </details>
+
+        <details class="study-details figure-explorer"><summary>Explore the original architecture figure</summary>
+          <div class="study-detail-content">
+            <div class="figure-tools" role="group" aria-label="Locate a module in the figure">
+              <button type="button" data-figure-part="all" aria-pressed="true" disabled>Complete figure</button>
+              <button type="button" data-figure-part="acquisition" aria-pressed="false" disabled>Measurements</button>
+              <button type="button" data-figure-part="lift" aria-pressed="false" disabled>1D → 2D lift</button>
+              <button type="button" data-figure-part="tpls" aria-pressed="false" disabled>Training schedule</button>
+            </div>
+            <div class="figure-guide-grid">
+              <div class="figure-guide-index">
+                <div class="figure-mini"><img src="@@LIFT_FIGURE@@" width="@@LIFT_FIGURE_WIDTH@@" height="@@LIFT_FIGURE_HEIGHT@@" alt="Overview of the complete Lift architecture figure" loading="lazy" decoding="async"><div id="lift-figure-region" hidden></div></div>
+                <h3 id="lift-part-title">The complete architecture</h3>
+                <p id="lift-part-description">Measurements, the spatial representation and training appear together in the original figure.</p>
+                <a href="@@LIFT_FIGURE@@">Open the full-size original</a>
+              </div>
+              <div class="figure-guide-view">
+                <div id="lift-figure-viewport" class="figure-viewport" tabindex="0" aria-label="Original architecture figure; enlarged views can be scrolled horizontally and vertically"><img id="lift-detail-image" src="@@LIFT_FIGURE@@" width="@@LIFT_FIGURE_WIDTH@@" height="@@LIFT_FIGURE_HEIGHT@@" alt="@@LIFT_FIGURE_ALT@@" loading="lazy" decoding="async"></div>
+                <p id="lift-figure-status" class="small-note" role="status" aria-live="polite">Complete original figure. Select a module to locate it.</p>
+              </div>
+            </div>
+          </div>
+        </details>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <p>@@NAME@@ · <a href="../#research">Selected research</a></p>
+      <p>Original Fig. 1: <a href="@@LIFT_PAPER_URL@@">Han et al., 2026</a>. Rights remain with their respective holders.</p>
+      <a href="#top">Back to top</a>
+    </footer>
+  </div>
+</body>
+</html>

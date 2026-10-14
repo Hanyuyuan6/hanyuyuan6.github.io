@@ -28,9 +28,9 @@
       "publication_leading": 12.7,
       "compact": false,
       "page1_closing": [
-        "background",
         "awards"
-      ]
+      ],
+      "publication_gap": 7
     },
     {
       "id": "internship",
@@ -50,8 +50,8 @@
         "loop"
       ],
       "software_ids": [],
-      "body_size": 9.8,
-      "leading": 13.5,
+      "body_size": 9.3,
+      "leading": 12.3,
       "publication_size": 8.4,
       "publication_leading": 11.7,
       "compact": true
@@ -113,7 +113,7 @@
   ],
   "zh": {
     "field": "计算成像与鲁棒免成像感知",
-    "summary": "研究基于原始光学测量的鲁棒机器感知，涵盖成像与免成像两条路线：单像素照明图案设计、图像重建，以及直接从测量序列完成场景分割。",
+    "summary": "研究计算成像与鲁棒免成像感知，将光学测量设计、图像重建与直接推断联系起来，面向有限采样和噪声条件下的可靠感知。",
     "direction": "基于原始光学测量的鲁棒机器感知：结构光照明设计、单像素成像重建与免成像感知。",
     "location": "意大利米兰",
     "education": {
@@ -134,7 +134,7 @@
       "role": "访问博士研究生",
       "department": "物理系",
       "host_label": "合作导师",
-      "plan": "时域漫射光学"
+      "plan": "面向三维脑成像的时域漫射光学层析"
     },
     "projects": {
       "lift": {
@@ -142,8 +142,8 @@
         "status": "预印本",
         "role": "第一作者",
         "bullets": [
-          "以测量序列到空间任务表征的映射为免成像单像素分割的核心设计问题，设计 STSF 网络与 TPLS 训练调度。",
-          "仿真中，3.13% 采样率下前景 mIoU 比 SPIFS 高 3.2–9.9 个百分点；20 dB 信噪比下，较在无噪声数据上训练的最优“先重建再分割”基线高 3.1–21.7 个百分点（无噪声时该基线更优）。"
+          "设计内容自适应的一维到二维表征映射及任务优先损失调度，用于免成像单像素分割。",
+          "刻画与无噪声训练的先重建再分割基线之间的噪声依赖关系：在 3.13% 采样率和 20 dB 高斯测量噪声下，三个仿真数据集上的前景平均交并比提高 3.1–21.7 个百分点，并完成光学平台概念验证。"
         ]
       },
       "shsi": {
@@ -151,7 +151,7 @@
         "status": "已发表",
         "role": "第一作者",
         "bullets": [
-          "设计稀疏度可调且保持正交的 Hadamard 图案，提出两种无需训练的工作模式并建立噪声理论模型；在信噪比为 20 与 30 dB 的仿真中比传统 Hadamard 图案更抗噪，并经光学实验验证。"
+          "设计保持正交性且稀疏度可调的 Hadamard 图案、两种无需训练的运行模式及稀疏度相关噪声模型，通过噪声仿真与透过散射介质的光学实验验证。"
         ]
       },
       "loop": {
@@ -159,7 +159,7 @@
         "status": "已发表",
         "role": "第一作者",
         "bullets": [
-          "针对一维光学相控阵的线图案照明提出循环差分鬼成像，校正其造成的噪声空间不对称；重建质量较传统鬼成像算法提高数个数量级，并以空间光调制器生成的线图案完成光学验证。"
+          "面向一维光学相控阵线图案调制，提出循环差分鬼成像算法与噪声对称性指标，并通过数值仿真及空间光调制器产生的线图案进行光学验证。"
         ]
       }
     },
@@ -182,16 +182,16 @@
       "STSF-TPLS": "免成像单像素分割：内容自适应映射与任务优先损失调度；代码与预训练权重（PyTorch）。",
       "SHSI": "稀疏 Hadamard 图案生成、仿真与重建示例（MATLAB）。",
       "Comparison-of-SPI-DLs": "八种深度网络与关联鬼成像在同一 Hadamard 采集下的基准比较（PyTorch）。",
-      "remote-gpu-trainer": "面向 Claude Code 与 Codex 的开源智能体技能：运行、核验并交付 GPU 实验（60+ 星）。",
+      "remote-gpu-trainer": "面向 Claude Code 与 Codex 的开源智能体技能：运行、核验并交付 GPU 实验。",
       "LDGI": "面向一维光学相控阵线图案照明的循环差分鬼成像（MATLAB）。",
       "TGIs-Entry": "传统、差分与归一化鬼成像的参考实现（MATLAB）。"
     },
-    "internship_summary": "计算成像与鲁棒免成像感知方向博士研究生：单像素测量设计、图像重建，以及直接从测量序列分割场景。",
-    "current_summary": "考虑采集条件的单像素感知与光学平台实验（论文撰写中）；基于冻结视觉—语言模型的单像素测量问答（探索中）。",
+    "internship_summary": "计算成像与鲁棒免成像感知方向博士研究生，研究光学测量设计、图像重建与直接从测量中推断的网络。",
+    "current_summary": "面向三维脑成像的时域漫射光学层析；考虑采集条件的单像素感知与光学平台实验；基于冻结视觉—语言模型的测量问答（探索中）。",
     "internship_technical": [
       {
         "label": "开源",
-        "text": "remote-gpu-trainer：用于运行、核验与交付 GPU 实验的智能体技能（GitHub 60+ 星）",
+        "text": "remote-gpu-trainer：用于运行、核验与交付 GPU 实验的开源智能体技能",
         "url": "https://github.com/Hanyuyuan6/remote-gpu-trainer",
         "link_text": "remote-gpu-trainer"
       },
@@ -206,8 +206,8 @@
     ]
   },
   "translation_source_hashes": {
-    "lift": "4f2385a52c4dc707a5e4eef35be426cfb84e52bdbbce5dcd2a3e748c8266e52e",
-    "shsi": "eace6e2f69b30e043446b999845acf6aeae72534578bf33cd06160f6f4f1e6ad",
-    "loop": "2c84c8f6d80f5097a953f927268ea05ad959bb04c5f6f119c7cc0cd32c5a6f2d"
+    "lift": "397b58079796f5e21645a813e3786fcb2dabbfda41b3fe77ee2ebf3369663b04",
+    "shsi": "e162153b1ac1b49c82a48d0a9ae03d68aa46f5e8f61dedcdaaaaef382aa2c28b",
+    "loop": "c3f70d8adf8ae25217e7a3b4cf6883f2854ff0bcb748b1c4f51affaeda09fe61"
   }
 }

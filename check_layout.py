@@ -91,7 +91,7 @@ def main() -> int:
     parser.add_argument('--executable', help='Optional Chromium/headless-shell binary to use.')
     args = parser.parse_args()
     args.out.mkdir(parents=True, exist_ok=True)
-    pages = ['index.html', '404.html']
+    pages = ['index.html', '404.html', 'research/lift.html']
     failures, report = [], []
     with sync_playwright() as p:
         browser = p.chromium.launch(**({'executable_path': args.executable} if args.executable else {}))
@@ -122,6 +122,40 @@ def main() -> int:
                 expanded = page.evaluate("document.querySelectorAll('details').forEach(d => { d.open = true; }); document.documentElement.scrollWidth - window.innerWidth")
                 if expanded > 0:
                     failures.append(f'{tag}: horizontal overflow of {expanded} px with all details expanded')
+                if name == 'index.html':
+                    # A complete preview must remain compact; the click opens the original.
+                    for box in page.locator('.research-figure').evaluate_all('(els) => els.map(el => ({width:el.getBoundingClientRect().width,height:el.getBoundingClientRect().height}))'):
+                        if box['width'] > 280 or box['height'] > 180:
+                            failures.append(f'{tag}: oversized research preview: {box}')
+                    page.locator('.figure-link').first.click()
+                    page.locator('dialog[open] img').wait_for(state='visible')
+                    page.keyboard.press('Escape')
+                    if page.locator('dialog[open]').count():
+                        failures.append(f'{tag}: Escape did not close the complete-figure dialog')
+                    page.locator('[data-research-question="design"]').click()
+                    if not page.locator('#research-shsi').evaluate("el => el.classList.contains('is-related')"):
+                        failures.append(f'{tag}: research question navigation did not emphasize the related paper')
+                if name == 'research/lift.html':
+                    # Enumerate all 12 filter combinations, including the no-filter state.
+                    expected = json.loads((ROOT / 'profile.json').read_text(encoding='utf-8'))['projects'][0]['condition_comparison']['rows']
+                    for dataset in ['all', *[row['name'] for row in expected]]:
+                        for condition in ['both', 'clean', 'noisy']:
+                            page.locator(f'input[name="dataset"][value="{dataset}"]').check()
+                            page.locator(f'input[name="condition"][value="{condition}"]').check()
+                            rows = page.locator('.result-row:visible').evaluate_all("els => els.map(el => ({name:el.closest('tbody').dataset.dataset,condition:el.dataset.condition,value:Number(el.dataset.value)}))")
+                            wanted = [{'name':row['name'],'condition':key,'value':row[key]} for row in expected if dataset in ('all', row['name']) for key in ('clean','noisy') if condition in ('both',key)]
+                            if rows != wanted:
+                                failures.append(f'{tag}: filter {dataset}/{condition} shows {rows}, expected {wanted}')
+                    page.get_by_role('button', name='1D → 2D lift', exact=True).click()
+                    if page.locator('#lift-part-title').inner_text() != 'A content-adaptive spatial lift':
+                        failures.append(f'{tag}: figure module locator failed')
+                    page.get_by_role('button', name='Complete figure', exact=True).click()
+                    if page.locator('#lift-figure-viewport').evaluate('el => el.scrollLeft !== 0 || el.scrollTop !== 0'):
+                        failures.append(f'{tag}: complete-figure reset failed')
+                    path_before = page.locator('#synthetic-wave').get_attribute('d')
+                    page.locator('#synthetic-noise').check()
+                    if path_before == page.locator('#synthetic-wave').get_attribute('d'):
+                        failures.append(f'{tag}: teaching-wave control has no effect')
                 for gap in result['gaps']:
                     if gap['gap'] < MIN_GAP:
                         failures.append(f'{tag}: "{gap["heading"]}" sits {gap["gap"]} px below {gap["after"]!r} (minimum {MIN_GAP})')

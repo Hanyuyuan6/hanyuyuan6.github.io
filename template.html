@@ -20,6 +20,7 @@
   <link rel="icon" href="favicon.ico?v=@@ICON_VERSION@@" sizes="48x48">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=@@ICON_VERSION@@">
   <link rel="stylesheet" href="style.css?v=@@STYLE_VERSION@@">
+  <script src="site.js?v=@@SITE_SCRIPT_VERSION@@" defer></script>
   <script type="application/ld+json">
 @@STRUCTURED_DATA@@
   </script>
@@ -61,17 +62,20 @@
         </div>
       </section>
 
-      <section class="section news-section" id="news" aria-labelledby="news-heading">
-        <div class="section-heading"><h2 id="news-heading">News</h2></div>
-        <ul class="news-list">@@NEWS@@</ul>
-      </section>
-
       <section class="section research-section" id="research" aria-labelledby="research-heading">
         <div class="section-heading">
           <h2 id="research-heading">Selected research</h2>
           <a class="section-link" href="#publications">All publications</a>
         </div>
+        @@RESEARCH_QUESTIONS@@
         <div class="research-list">@@SELECTED_RESEARCH@@</div>
+      </section>
+
+      <section class="section news-section" id="news" aria-labelledby="news-heading">
+        <details class="news-disclosure">
+          <summary><h2 id="news-heading">News <span>Latest updates</span></h2></summary>
+          <ul class="news-list">@@NEWS@@</ul>
+        </details>
       </section>
 
       <section class="section directions-section" id="directions" aria-labelledby="directions-heading">
@@ -111,7 +115,7 @@
     <footer class="site-footer">
       <p>@@NAME@@ · Updated @@UPDATED@@</p>
       <details class="figure-credits"><summary>Figure credits</summary>
-        <p>Previews are cropped panels; select one to open the complete figure.</p>
+        <p>Previews show complete figures; select one to view it at full size.</p>
         <p>The Lift Spectrum, Fig. 1: <a href="https://arxiv.org/abs/2607.22077v2">Han et al., 2026</a>.</p>
         <p>Sparse Hadamard imaging, Fig. 9: <a href="https://doi.org/10.1364/OE.576533">Han et al., Optics Express, 2025</a>. © 2025 Optica Publishing Group.</p>
         <p>LDGI, Fig. 2: <a href="https://doi.org/10.1016/j.optcom.2025.131589">Han et al., Optics Communications, 2025</a>. © 2025 Elsevier B.V.</p>

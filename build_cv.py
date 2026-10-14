@@ -83,6 +83,12 @@ def esc(value: Any) -> str:
     return html.escape(clean_text(value), quote=True)
 
 
+def sentence_text(value: Any, zh: bool) -> str:
+    """Keep an English sentence's final two words together without changing its copy."""
+    text = esc(value)
+    return text if zh else re.sub(r' (?=\S+$)', '&nbsp;', text)
+
+
 def link(label: str, url: str) -> str:
     if not url.startswith(('https://', 'mailto:')):
         raise ValueError(f'Unsupported CV URL: {url!r}')
@@ -240,8 +246,12 @@ def appointment_blocks(profile: dict[str, Any], cfg: dict[str, Any], zh: bool, c
         host_label = a.get('host_label', 'Supervisor')
         colon = '：' if zh else ': '
         detail = f"{esc(a['department'])}{sep(zh)}{esc(host_label)}{colon}{esc(app['host'])}"
-        if a.get('plan'):  # the planned research belongs to the visit, so it is stated here, under Education
-            detail += sep(zh) + (f"计划研究：{esc(a['plan'])}" if zh else f"Planned research: {esc(a['plan'])}")
+        if a.get('plan'):
+            # The visit's research belongs under Education. Older records without
+            # a status remain planned; an explicit current status uses present-tense copy.
+            current = app.get('research_status', 'planned') == 'current'
+            label = ('研究方向：' if current else '计划研究：') if zh else ('Research focus: ' if current else 'Planned research: ')
+            detail += ('<br/>' if current and not zh else sep(zh)) + label + sentence_text(a['plan'], zh)
         out.append(Block('detail', detail, f'appointments[{i}].host', gap=5 if compact else 8))
     return out
 
@@ -270,7 +280,7 @@ def project_blocks(profile: dict[str, Any], cfg: dict[str, Any], variant: dict[s
         if role:
             out.append(Block('detail', role, f'projects.{pid}.role', gap=3))
         for i, bullet in enumerate(p['bullets']):
-            out.append(Block('bullet', esc(bullet), f'projects.{pid}.bullets[{i}]', gap=2))
+            out.append(Block('bullet', sentence_text(bullet, zh), f'projects.{pid}.bullets[{i}]', gap=2))
         out.append(Block('space', gap=5 if compact else 8))
     return out
 
@@ -311,19 +321,19 @@ def service_blocks(profile: dict[str, Any], zh: bool, compact: bool) -> list[Blo
     return out
 
 
-def linked_text(row: dict[str, Any]) -> str:
+def linked_text(row: dict[str, Any], zh: bool = False) -> str:
     """Escape a sentence and link its declared substring, if any."""
     text, target = row['text'], row.get('link_text')
     if not row.get('url') or not target or target not in text:
-        return esc(text)
+        return sentence_text(text, zh)
     before, after = text.split(target, 1)
-    return esc(before) + link(target, row['url']) + esc(after)
+    return esc(before) + link(target, row['url']) + sentence_text(after, zh)
 
 
 def technical_blocks(profile: dict[str, Any], cfg: dict[str, Any], zh: bool) -> list[Block]:
     """Tools grounded in the listed research, for industry résumés only."""
     rows = cfg['zh']['internship_technical'] if zh else profile['internship_technical']
-    return [Block('body', f"<b>{esc(row['label'])}</b>{sep(zh)}{linked_text(row)}", f'internship_technical[{i}]', gap=1) for i, row in enumerate(rows)]
+    return [Block('body', f"<b>{esc(row['label'])}</b>{sep(zh)}{linked_text(row, zh)}", f'internship_technical[{i}]', gap=1) for i, row in enumerate(rows)]
 
 
 def software_blocks(profile: dict[str, Any], cfg: dict[str, Any], variant: dict[str, Any]) -> list[Block]:
@@ -334,7 +344,7 @@ def software_blocks(profile: dict[str, Any], cfg: dict[str, Any], variant: dict[
         if software['name'] not in names:
             continue
         desc = cfg['zh']['software'][software['name']] if zh else software['description']
-        out.append(Block('body', f"<b>{link(software['name'], software['url'])}</b>{sep(zh)}{esc(desc)}", f'software[{i}]', gap=4))
+        out.append(Block('body', f"<b>{link(software['name'], software['url'])}</b>{sep(zh)}{sentence_text(desc, zh)}", f'software[{i}]', gap=4))
     return out
 
 
@@ -404,11 +414,11 @@ def model(profile: dict[str, Any], cfg: dict[str, Any], variant: dict[str, Any])
     preprints = [p for p in chosen if is_preprint(p)]
     page2.append(Block('subsection', '同行评议期刊论文' if zh else 'Peer-reviewed journal articles'))
     for i, pub in enumerate(journals):
-        page2.append(Block('publication', pub_reference(pub), f'publications.{pub["id"]}', gap=8, meta={'number': i + 1}))
+        page2.append(Block('publication', pub_reference(pub), f'publications.{pub["id"]}', gap=variant.get('publication_gap', 8), meta={'number': i + 1}))
     if preprints:
         page2.append(Block('subsection', '预印本' if zh else 'Preprints'))
         for i, pub in enumerate(preprints):
-            page2.append(Block('publication', pub_reference(pub), f'publications.{pub["id"]}', gap=8, meta={'number': len(journals) + i + 1}))
+            page2.append(Block('publication', pub_reference(pub), f'publications.{pub["id"]}', gap=variant.get('publication_gap', 8), meta={'number': len(journals) + i + 1}))
     page2.append(Block('section', '研究代码' if zh else 'Research Code'))
     page2 += software_blocks(profile, cfg, variant)
     for key in ['background', 'awards']:
