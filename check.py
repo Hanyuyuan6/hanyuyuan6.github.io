@@ -179,8 +179,8 @@ def validate(root):
     copy, narrative, person = profile['platform_copy'], profile['narrative'], profile['person']
     identity = f"I am a {person['position']} at {person['institution']}."
     require(narrative['bio'].startswith(narrative['short_bio']), 'Biography opens with the short bio')
-    require(copy['researchgate_bio'] == narrative['short_bio'], 'ResearchGate bio is the short bio (its own sentences, nothing appended)')
-    require(copy['long_bio'] == copy['orcid_bio'] == f"{identity} {narrative['bio']}", 'ORCID biography is the identity sentence plus the biography')
+    require(copy['researchgate_bio'] == narrative['short_bio'] + '\n\n' + narrative['welcome'] and len(copy['researchgate_bio']) <= 500, 'ResearchGate shares the short bio and collaboration invitation within its 500-character limit')
+    require(copy['long_bio'] == f"{identity} {narrative['bio']}" and copy['orcid_bio'] == copy['long_bio'] + '\n\n' + narrative['welcome'], 'ORCID biography shares the identity, biography and collaboration invitation')
     about = copy['linkedin_about'].split('\n\n')  # shared identity, finding, background, current work and aim, welcome
     require(len(about) == 5 and all(part.strip() for part in about) and about[0] == f"I am a PhD student at {person['institution']}. {narrative['short_bio']}" and 'need not be the most robust intermediate' in about[1] and 'trained on clean data' in about[1] and copy['long_bio'].endswith(' ' + about[3]) and about[4] == narrative['welcome'], 'LinkedIn shares the canonical identity, short bio, current direction and welcome; its finding has a dedicated paragraph')
     require(copy['github_bio'].startswith(narrative['hero']) and copy['linkedin_headline'].startswith(f"{person['position']} at {person['institution']}"), 'GitHub bio carries the hero line; LinkedIn headline opens with the PhD identity')
@@ -237,6 +237,8 @@ def validate(root):
         require(any(t == 'meta' and a.get('name') == 'viewport' for t, a in home.tags), 'Responsive viewport metadata')
         home_text = home_path.read_text(encoding='utf-8')
         home_plain = re.sub(r'<[^>]+>', '', home_text)
+        contact_block = home_text[home_text.find('id="contact"'):home_text.find('</main>')]
+        require(home_text.count(escape(narrative['welcome'], quote=True)) == 1 and escape(narrative['welcome'], quote=True) in contact_block, 'Contact presents the canonical collaboration invitation once')
         require(escape(profile['narrative']['bio'], quote=True) in home_text, 'Homepage contains approved research biography')
         description = profile['narrative'].get('meta_description', '')
         require(50 <= len(description) <= 160 and f'name="description" content="{escape(description, quote=True)}"' in home_text, 'Search description is present and fits a result snippet')
