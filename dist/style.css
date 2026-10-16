@@ -180,6 +180,7 @@ h2 { font-size: 20px; line-height: 1.4; font-weight: 600; letter-spacing: -.2px;
 .software-entry h3 { font-size: 14px; font-weight: 600; }
 .software-entry p { font-size: 13px; color: var(--muted); }
 .contact-email { font-size: 16px; overflow-wrap: anywhere; }
+.contact-section .welcome { max-width: 680px; margin: 0 0 14px; font-size: 14px; line-height: 1.7; color: var(--ink); }
 .academic-profiles ul { display: flex; flex-wrap: wrap; gap: 7px 20px; margin-top: 11px; padding: 0; list-style: none; font-size: 13px; }
 .academic-profiles a { display: inline-block; padding: 3px 0; }
 .site-footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; border-top: 1px solid var(--line); padding: 17px 0 30px; margin-top: 13px; color: var(--muted); font-size: 11px; }
