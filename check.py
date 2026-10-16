@@ -236,6 +236,7 @@ def validate(root):
         require(any(t == 'html' and a.get('lang') == 'en' for t, a in home.tags), 'Homepage language is English')
         require(any(t == 'meta' and a.get('name') == 'viewport' for t, a in home.tags), 'Responsive viewport metadata')
         home_text = home_path.read_text(encoding='utf-8')
+        home_plain = re.sub(r'<[^>]+>', '', home_text)
         require(escape(profile['narrative']['bio'], quote=True) in home_text, 'Homepage contains approved research biography')
         description = profile['narrative'].get('meta_description', '')
         require(50 <= len(description) <= 160 and f'name="description" content="{escape(description, quote=True)}"' in home_text, 'Search description is present and fits a result snippet')
@@ -285,7 +286,7 @@ def validate(root):
         require(len(re.findall(r'^@\w+\{', bib, flags=re.M)) == len(publications) and all(p['doi'] in bib for p in publications) and 'href="publications.bib"' in home_text, 'Complete BibTeX file is linked and lists every paper')
         order = [home_text.find(f'id="{anchor}"') for anchor in ('research', 'news', 'directions', 'publications', 'software', 'background', 'contact')]
         require(-1 not in order and order == sorted(order), 'Sections run Research, News, Directions, Publications, Code, Background, Contact')
-        require('Host:' not in home_text and all(f"Supervisor: {escape(row['host'], quote=True)}" in home_text for row in profile['appointments'] if row.get('host')), 'Visiting appointment names its supervisor')
+        require('Host:' not in home_plain and all(f"Supervisor: {escape(row['host'], quote=True)}" in home_plain for row in profile['appointments'] if row.get('host')), 'Visiting appointment names its supervisor')
         intro = home_text[home_text.find('class="intro"'):home_text.find('class="bio"')]
         education_block = home_text[home_text.find('<h3>Education</h3>'):home_text.find('<h3>Additional experience</h3>')]
         places = [education_block.find(f'<h4>{escape(name, quote=True)}</h4>') for name in (profile['education'][0]['institution'], profile['appointments'][0]['institution'], profile['education'][1]['institution'])]
@@ -314,7 +315,12 @@ def validate(root):
         require('ten deep' not in home_text.lower() and 'eight deep networks and correlation ghost imaging' in home_text.lower(), 'Comparison repository is described as in its README (eight deep networks plus correlation ghost imaging)')
         require(escape(profile['narrative']['short_bio'], quote=False) in home_text, 'Homepage carries the canonical short biography verbatim')
         require(not profile['narrative'].get('personal') or f'<p class="personal">{escape(profile["narrative"]["personal"], quote=True)}</p>' in home_text, 'Homepage shows the personal line when profile.json has one')
-        require(all(f"Advisor: {escape(row['advisor'], quote=True)}" in home_text for row in profile['education'] if row.get('advisor')), 'Homepage names the recorded advisor')
+        require(all(f"Advisor: {escape(row['advisor'], quote=True)}" in home_plain for row in profile['education'] if row.get('advisor')), 'Homepage names the recorded advisor')
+        for rows, name_key in ((profile['education'], 'advisor'), (profile['appointments'], 'host')):
+            for row in rows:
+                if row.get(name_key):
+                    url = row.get(name_key + '_url', '')
+                    require(url.startswith('https://') and any(t == 'a' and a.get('class') == 'mentor-link' and a.get('href') == url and a.get('aria-label') == f"{row[name_key]} — official homepage (opens in a new tab)" and a.get('target') == '_blank' for t, a in home.tags), f"Mentor name links to the recorded official homepage: {row[name_key]}")
         first_authored = [p for p in publications if p['id'] in {pr['publication_id'] for pr in profile['projects'] if pr['id'] in selected}]
         require(home_text.count('<strong class="self-author">Yuyuan Han</strong>') >= len(publications) and all(p['authors'][0] == 'Yuyuan Han' for p in first_authored), 'Author lists are visible with the researcher highlighted')
 

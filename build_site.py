@@ -590,6 +590,16 @@ def current_directions(directions: list[dict[str, Any]]) -> str:
     )
 
 
+def mentor_link(name: str, url: str = "") -> str:
+    if not url:
+        return e(name)
+    return (
+        f'<a class="mentor-link" href="{e(url)}" target="_blank" rel="noopener noreferrer" '
+        f'aria-label="{e(name)} — official homepage (opens in a new tab)">'
+        f'{e(name)}<span aria-hidden="true">↗</span></a>'
+    )
+
+
 def education(rows: list[dict[str, Any]], visits: list[dict[str, Any]]) -> str:
     """Degrees, newest first; a visiting period follows the PhD it belongs to, as on the CVs."""
     entries = []
@@ -601,7 +611,7 @@ def education(rows: list[dict[str, Any]], visits: list[dict[str, Any]]) -> str:
         entries.append(
             '<li><h4>' + e(row.get("institution", "")) + "</h4>"
             f'<p>{degree_line}</p>'
-            + (f'<p class="entry-note">Advisor: {e(advisor)}</p>' if advisor else "")
+            + (f'<p class="entry-note">Advisor: {mentor_link(advisor, row.get("advisor_url", ""))}</p>' if advisor else "")
             + (f'<p class="entry-dates">{e(dates)}</p>' if dates else "")
             + "</li>"
         )
@@ -620,7 +630,7 @@ def appointments(rows: list[dict[str, Any]]) -> str:
             f'<li><h4>{e(row.get("institution", ""))}</h4>'
             f'<p>{e(row.get("role", ""))}</p>'
             + (f'<p class="entry-note">{e(department)}</p>' if department else "")
-            + (f'<p class="entry-note">Supervisor: {e(host)}</p>' if host else "")
+            + (f'<p class="entry-note">Supervisor: {mentor_link(host, row.get("host_url", ""))}</p>' if host else "")
             + (f'<p class="entry-dates">{e(dates)}</p>' if dates else "")
             + "</li>"
         )
