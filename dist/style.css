@@ -165,6 +165,9 @@ h2 { font-size: 20px; line-height: 1.4; font-weight: 600; letter-spacing: -.2px;
 .background-list h4 { font-size: 14px; font-weight: 600; }
 .background-list p { font-size: 13px; margin-top: 2px; }
 .entry-note, .entry-dates { color: var(--muted); }
+.mentor-link { display: inline-flex; align-items: baseline; gap: 4px; min-height: 24px; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
+.mentor-link:hover, .mentor-link:focus-visible { color: var(--hover); text-decoration-color: currentColor; }
+.mentor-link span { font-size: .85em; text-decoration: none; }
 .research-background { font-size: 13px; }
 .research-background p + p { margin-top: 12px; }
 .awards-block { margin-top: 24px; }

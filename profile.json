@@ -62,6 +62,7 @@
       "degree": "PhD student",
       "field": "Electronic Science and Technology · Master’s-to-PhD track",
       "advisor": "Huaibin Zheng",
+      "advisor_url": "https://faculty.xjtu.edu.cn/huaibinzheng/zh_CN/index.htm",
       "start": "2022-09",
       "end": null,
       "display_dates": "2022–present",
@@ -84,6 +85,7 @@
       "role": "Visiting PhD student",
       "department": "Department of Physics",
       "host": "Antonio Pifferi",
+      "host_url": "https://www.fisi.polimi.it/en/staff/antonio.pifferi",
       "display_dates": "Oct 2026–present",
       "plan": "time-domain diffuse optical tomography for 3D brain imaging",
       "research_status": "current"

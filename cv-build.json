@@ -1,11 +1,11 @@
 {
   "schema_version": 2,
-  "built_at": "2026-10-14T00:13:34.201676+00:00",
-  "source_fingerprint": "1a0eeff416d007e8524276ec56965cb7c5e4927fb3c9e255037bf829094917e3",
+  "built_at": "2026-10-16T08:06:21.464730+00:00",
+  "source_fingerprint": "932a5704cd66e3000d54d6fe4a04ae3618dbec2fedcb5e5b46ff70cb014cebcd",
   "inputs": {
     "profile": {
       "path": "profile.json",
-      "sha256": "8ba051f4480218220a3eb8dd318988b909109a7eb2517613284cecec66380505"
+      "sha256": "cc9fbd589a36c780794e8796d4575029a623d00d0c8a7c2ae9b9757688770a60"
     },
     "template": {
       "path": "build_cv.py",
@@ -38,18 +38,6 @@
       "source": "vendored (SIL OFL 1.1)",
       "subfont_index": 0,
       "sha256": "126522ae1bb9cd92120287fc47dfc74ef981e73931d93e52c565fb7e09b2d74a"
-    },
-    "CVChinese": {
-      "filename": "STHeiti Light.ttc",
-      "source": "system font",
-      "subfont_index": 1,
-      "sha256": "a57b0316cc0544f682b8fb9855e14ade79ae77340ef6a01ba9210e25b4c5a5b7"
-    },
-    "CVChineseBold": {
-      "filename": "STHeiti Medium.ttc",
-      "source": "system font",
-      "subfont_index": 1,
-      "sha256": "f8fa4a63e2cf500e98e64d4c73260daaba049306cf85dec9e3729bc285b7d645"
     }
   },
   "outputs": [
@@ -75,7 +63,7 @@
       },
       "html": {
         "path": "Yuyuan_Han_Academic_CV.html",
-        "sha256": "ac10f26bb70fd9d523ee796ef43ba2186f61226cf78a61feb732496d0862c8a6",
+        "sha256": "a22f10eb4df151aa391065053e21e127a0df2ebe7efeaf5e52a78181f8a8461c",
         "bytes": 15813
       },
       "checks": {
@@ -816,7 +804,7 @@
       },
       "html": {
         "path": "Yuyuan_Han_Internship_Resume.html",
-        "sha256": "6971756116ebdeb072081619a59693ae86a2083ad2217ed2276d6d57d2dfa1bb",
+        "sha256": "24a2b25a0d5f7e15a98797a1f2f4fd448ed95cd419a601c74d3a852cc3aa2d21",
         "bytes": 9794
       },
       "checks": {
