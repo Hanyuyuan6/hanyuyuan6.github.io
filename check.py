@@ -179,7 +179,7 @@ def validate(root):
     copy, narrative, person = profile['platform_copy'], profile['narrative'], profile['person']
     identity = f"I am a {person['position']} at {person['institution']}."
     require(narrative['bio'].startswith(narrative['short_bio']), 'Biography opens with the short bio')
-    require(copy['researchgate_bio'] == narrative['short_bio'].split('. ')[0] + '.\n\n' + narrative['welcome'] and len(copy['researchgate_bio']) <= 500, 'ResearchGate shares the core research question and complete collaboration invitation within its 500-character limit')
+    require(copy['researchgate_bio'] == narrative['short_bio'] + '\n\n' + narrative['welcome'] and len(copy['researchgate_bio']) <= 500, 'ResearchGate shares the complete short bio and collaboration invitation within its 500-character limit')
     require(copy['long_bio'] == f"{identity} {narrative['bio']}" and copy['orcid_bio'] == copy['long_bio'] + '\n\n' + narrative['welcome'], 'ORCID biography shares the identity, biography and collaboration invitation')
     about = copy['linkedin_about'].split('\n\n')  # shared identity, finding, background, current work and aim, welcome
     require(len(about) == 5 and all(part.strip() for part in about) and about[0] == f"I am a PhD student at {person['institution']}. {narrative['short_bio']}" and 'need not be the most robust intermediate' in about[1] and 'trained on clean data' in about[1] and copy['long_bio'].endswith(' ' + about[3]) and about[4] == narrative['welcome'], 'LinkedIn shares the canonical identity, short bio, current direction and welcome; its finding has a dedicated paragraph')
