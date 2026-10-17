@@ -313,7 +313,7 @@ def validate(root):
                 require(1 <= len(chips) <= 4 and all(1 <= len(chip.split()) <= 16 and escape(chip, quote=False) in home_text for chip in chips), f"Selected work shows 1-4 concise contribution points (16 words max): {project['id']}")
                 require(len(project['summary'].split()) <= 22, f"Selected-work takeaway is one short sentence (22 words max): {project['id']}")
         require('one-dimensional optical phased-array line patterns' in home_text, 'LDGI homepage identifies its OPA illumination setting')
-        require(all(f"{row['count']} verified reviews" in home_text and all(escape(v, quote=False) in home_text for v in row['venues']) for row in profile.get('service', [])), 'Homepage lists verified peer review with its venues and count')
+        require(all(f"{row['count']} reviews" in home_text and all(escape(v, quote=False) in home_text for v in row['venues']) for row in profile.get('service', [])), 'Homepage lists peer review with its venues and count')
         require('ten deep' not in home_text.lower() and 'eight deep networks and correlation ghost imaging' in home_text.lower(), 'Comparison repository is described as in its README (eight deep networks plus correlation ghost imaging)')
         require(escape(profile['narrative']['short_bio'], quote=False) in home_text, 'Homepage carries the canonical short biography verbatim')
         require(not profile['narrative'].get('personal') or f'<p class="personal">{escape(profile["narrative"]["personal"], quote=True)}</p>' in home_text, 'Homepage shows the personal line when profile.json has one')

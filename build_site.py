@@ -680,7 +680,7 @@ def service(rows: list[dict[str, Any]]) -> str:
         return ""
     items = "".join(
         f'<li><span>{e(row["role"])} for {e(", ".join(row["venues"][:-1]))} and {e(row["venues"][-1])}</span>'
-        f'<span class="entry-dates">{e(row["count"])} verified reviews · {e(row["years"])}</span></li>'
+        f'<span class="entry-dates">{e(row["count"])} reviews · {e(row["years"])}</span></li>'
         for row in rows
     )
     return f'<div class="awards-block"><h3>Service</h3><ul>{items}</ul></div>'

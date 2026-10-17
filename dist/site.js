@@ -26,6 +26,9 @@
   let dialog;
   let image;
   let title;
+  let original;
+  let zoom;
+  let viewport;
   let previousFocus;
 
   function createFigureDialog() {
@@ -36,13 +39,36 @@
     header.className = 'figure-dialog-heading';
     title = document.createElement('p');
     title.id = 'figure-dialog-title';
+    const actions = document.createElement('div');
+    actions.className = 'figure-dialog-actions';
+    original = document.createElement('a');
+    original.textContent = 'Original ↗';
+    original.target = '_blank';
+    original.rel = 'noopener noreferrer';
+    original.setAttribute('aria-label', 'Open original figure in a new tab');
+    zoom = document.createElement('button');
+    zoom.type = 'button';
+    zoom.textContent = 'Zoom in';
+    zoom.setAttribute('aria-pressed', 'false');
+    zoom.addEventListener('click', () => {
+      const enlarged = dialog.classList.toggle('is-zoomed');
+      zoom.textContent = enlarged ? 'Fit figure' : 'Zoom in';
+      zoom.setAttribute('aria-pressed', String(enlarged));
+      viewport.scrollTo(0, 0);
+    });
     const close = document.createElement('button');
     close.type = 'button';
     close.textContent = 'Close ×';
     close.addEventListener('click', () => dialog.close());
     image = document.createElement('img');
-    header.append(title, close);
-    dialog.append(header, image);
+    viewport = document.createElement('div');
+    viewport.className = 'figure-dialog-view';
+    viewport.tabIndex = 0;
+    viewport.setAttribute('aria-label', 'Figure; scroll to explore when zoomed');
+    viewport.append(image);
+    actions.append(original, zoom, close);
+    header.append(title, actions);
+    dialog.append(header, viewport);
     dialog.addEventListener('close', () => previousFocus?.focus());
     dialog.addEventListener('click', event => {
       if (event.target !== dialog) return;
@@ -63,7 +89,12 @@
       title.textContent = 'Complete paper figure';
       image.alt = preview.alt;
       image.src = link.href;
+      original.href = link.href;
+      dialog.classList.remove('is-zoomed');
+      zoom.textContent = 'Zoom in';
+      zoom.setAttribute('aria-pressed', 'false');
       dialog.showModal();
+      viewport.scrollTo(0, 0);
     });
   });
 })();
