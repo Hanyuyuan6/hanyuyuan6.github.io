@@ -98,8 +98,8 @@
       "status": "Preprint",
       "summary": "Image-free sensing can be more robust to measurement noise than reconstructing an image first.",
       "bullets": [
-        "Developed a content-adaptive 1D-to-2D lift and task-prioritized loss scheduling for image-free single-pixel segmentation.",
-        "Mapped the noise-dependent crossover against clean-trained reconstruction-first baselines: 3.1–21.7 percentage-point gains in foreground mIoU at 3.13% sampling and 20 dB Gaussian measurement noise across three simulated datasets; optical-bench proof of concept."
+        "Image-free single-pixel segmentation can outperform reconstruction-first inference under measurement noise with clean-trained models; introduced a content-adaptive 1D-to-2D lift and task-prioritized loss scheduling.",
+        "3.1–21.7 percentage-point foreground mIoU gains at 3.13% sampling and 20 dB Gaussian measurement noise across three simulated datasets; optical-bench proof of concept."
       ],
       "role": "First author",
       "period": "2025–present",
@@ -149,7 +149,7 @@
       "status": "Published",
       "summary": "Tunable sparse Hadamard patterns preserve orthogonality and improve noise resilience, supported by a sparsity-dependent noise model.",
       "bullets": [
-        "Designed tunable sparse Hadamard patterns that preserve orthogonality, two training-free operating modes and a sparsity-dependent noise model; validated in noise simulations and through-scattering optical experiments."
+        "Tunable sparse Hadamard patterns retain orthogonality and improve noise resilience, with two training-free modes and a sparsity-dependent noise model tested in simulations and through-scattering optical experiments."
       ],
       "role": "First author",
       "period": "2024–2025",
@@ -169,7 +169,7 @@
       "status": "Published",
       "summary": "Loop differential ghost imaging corrects spatial noise asymmetry in ghost imaging with one-dimensional optical phased-array line patterns.",
       "bullets": [
-        "Developed loop differential ghost imaging for one-dimensional optical phased-array line modulation, with a noise-symmetry metric, numerical simulation and optical validation using spatial-light-modulator-generated patterns."
+        "Loop differential ghost imaging reduces spatial noise asymmetry for 1D optical phased-array line modulation; validated with a noise-symmetry metric, numerical simulations and spatial-light-modulator-generated line patterns."
       ],
       "role": "First author",
       "period": "2025",
@@ -479,7 +479,7 @@
     {
       "name": "LDGI",
       "url": "https://github.com/Hanyuyuan6/LDGI",
-      "description": "Loop differential ghost imaging for line-pattern illumination from 1D optical phased arrays (MATLAB)."
+      "description": "Loop differential ghost imaging designed for 1D optical phased-array line illumination (MATLAB)."
     },
     {
       "name": "TGIs-Entry",

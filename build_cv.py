@@ -314,9 +314,9 @@ def service_blocks(profile: dict[str, Any], zh: bool, compact: bool) -> list[Blo
         if compact:
             venues = [v.replace('IEEE Transactions on Image Processing', 'IEEE TIP').replace('IEEE Transactions on Computational Imaging', 'IEEE TCI') for v in venues]
         if zh:
-            text = f"<b>审稿人</b>{sep(zh)}{esc('、'.join(venues))}（{row['count']} 次经核验的审稿，{esc(row['years'])}）"
+            text = f"<b>审稿人</b>{sep(zh)}{esc('、'.join(venues))}（{row['count']} 次审稿，{esc(row['years'])}）"
         else:
-            text = f"<b>{esc(row['role'])}</b>{sep(zh)}{esc(', '.join(venues))} ({row['count']} verified reviews, {esc(row['years'])})"
+            text = f"<b>{esc(row['role'])}</b>{sep(zh)}{esc(', '.join(venues))} ({row['count']} reviews, {esc(row['years'])})"
         out.append(Block('body', text, f'service[{i}]', gap=2))
     return out
 

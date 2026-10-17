@@ -1,19 +1,19 @@
 {
   "schema_version": 2,
-  "built_at": "2026-10-16T14:23:36.664464+00:00",
-  "source_fingerprint": "bb97cb37aac224ff0c6ded13031a6175c665a221587f60c42721549037e4afe5",
+  "built_at": "2026-10-17T23:09:00.626853+00:00",
+  "source_fingerprint": "29071482cb5457f5a1355dd4cff296a0a53830c6897210f0500dbb4cbd0c07a5",
   "inputs": {
     "profile": {
       "path": "profile.json",
-      "sha256": "639aaa78f25d788165a76b27a826f8145e892af2207e1f7c25e50ae3ebbe7ea1"
+      "sha256": "cb4b73f4a9d73bd5616a1212416993ae0086dc47645bc9a3ae677fbbdd503829"
     },
     "template": {
       "path": "build_cv.py",
-      "sha256": "ebf25cba2a6a8005ff07f657d65a68ecffa492143010c5045032f0b89c320fd2"
+      "sha256": "515c8e9d9ab5edd79da4aa2b3cbbbeaf412571d7ac4482335ead2d6ee170b9d7"
     },
     "variants": {
       "path": "cv-variants.json",
-      "sha256": "0670caf9dd273eab45895ed794bcd882e2e5eb0f0e55b37655debc1f173ab630"
+      "sha256": "33cdfb337fc341f3b2549793e8908b37d2e5e395617921a32609aadea032b058"
     },
     "theme": {
       "path": "theme.json",
@@ -38,6 +38,18 @@
       "source": "vendored (SIL OFL 1.1)",
       "subfont_index": 0,
       "sha256": "126522ae1bb9cd92120287fc47dfc74ef981e73931d93e52c565fb7e09b2d74a"
+    },
+    "CVChinese": {
+      "filename": "STHeiti Light.ttc",
+      "source": "system font",
+      "subfont_index": 1,
+      "sha256": "a57b0316cc0544f682b8fb9855e14ade79ae77340ef6a01ba9210e25b4c5a5b7"
+    },
+    "CVChineseBold": {
+      "filename": "STHeiti Medium.ttc",
+      "source": "system font",
+      "subfont_index": 1,
+      "sha256": "f8fa4a63e2cf500e98e64d4c73260daaba049306cf85dec9e3729bc285b7d645"
     }
   },
   "outputs": [
@@ -58,17 +70,17 @@
       },
       "pdf": {
         "path": "Yuyuan_Han_Academic_CV.pdf",
-        "sha256": "66fd2408bbbe109df99fd54e13084532a6c108b02b351ed1b21a9e9126208c94",
-        "bytes": 59609
+        "sha256": "9c7306885fdca92dc90bb572ef685e10fb6c0ad7c78c690993c4eb6fccbe5d0e",
+        "bytes": 59580
       },
       "html": {
         "path": "Yuyuan_Han_Academic_CV.html",
-        "sha256": "4e136a9efbdf6fa50e2976010f6cbb34005da406ae90f91d9bdce98942365165",
-        "bytes": 15813
+        "sha256": "ccdb95ca628b3c3650072db5c50ff279d718909df67f314b2dc98ef5e03823ec",
+        "bytes": 15797
       },
       "checks": {
         "page_count": 2,
-        "extracted_characters": 5924,
+        "extracted_characters": 5908,
         "embedded_fonts": [
           "/AAAAAA+NotoSans-Bold",
           "/AAAAAA+NotoSans-Italic",
@@ -466,103 +478,103 @@
             "source": "projects.lift.bullets[0]",
             "top": 457.25,
             "bottom": 429.25,
-            "text": "Developed a content-adaptive 1D-to-2D lift and task-prioritized loss scheduling for image-free single-pixel segmentation."
+            "text": "Image-free single-pixel segmentation can outperform reconstruction-first inference under measurement noise with clean-trained models; introduced a content-adaptive 1D-to-2D lift and task-prioritized loss scheduling."
           },
           {
             "page": 1,
             "kind": "bullet",
             "source": "projects.lift.bullets[1]",
             "top": 429.25,
-            "bottom": 388.25,
-            "text": "Mapped the noise-dependent crossover against clean-trained reconstruction-first baselines: 3.1–21.7 percentage-point gains in foreground mIoU at 3.13% sampling and 20 dB Gaussian measurement noise across three simulated datasets; optical-bench proof of concept."
+            "bottom": 401.25,
+            "text": "3.1–21.7 percentage-point foreground mIoU gains at 3.13% sampling and 20 dB Gaussian measurement noise across three simulated datasets; optical-bench proof of concept."
           },
           {
             "page": 1,
             "kind": "project",
             "source": "projects.shsi",
-            "top": 380.25,
-            "bottom": 365.15,
+            "top": 393.25,
+            "bottom": 378.15,
             "text": "Sparse Hadamard single-pixel imaging"
           },
           {
             "page": 1,
             "kind": "detail",
             "source": "projects.shsi.role",
-            "top": 365.15,
-            "bottom": 350.15,
+            "top": 378.15,
+            "bottom": 363.15,
             "text": "Optics Express · 2025 · Paper · Code"
           },
           {
             "page": 1,
             "kind": "bullet",
             "source": "projects.shsi.bullets[0]",
-            "top": 350.15,
-            "bottom": 322.15,
-            "text": "Designed tunable sparse Hadamard patterns that preserve orthogonality, two training-free operating modes and a sparsity-dependent noise model; validated in noise simulations and through-scattering optical experiments."
+            "top": 363.15,
+            "bottom": 335.15,
+            "text": "Tunable sparse Hadamard patterns retain orthogonality and improve noise resilience, with two training-free modes and a sparsity-dependent noise model tested in simulations and through-scattering optical experiments."
           },
           {
             "page": 1,
             "kind": "project",
             "source": "projects.loop",
-            "top": 314.15,
-            "bottom": 299.05,
+            "top": 327.15,
+            "bottom": 312.05,
             "text": "LDGI · Ghost imaging for optical phased-array line patterns"
           },
           {
             "page": 1,
             "kind": "detail",
             "source": "projects.loop.role",
-            "top": 299.05,
-            "bottom": 284.05,
+            "top": 312.05,
+            "bottom": 297.05,
             "text": "Optics Communications · 2025 · Paper · Code"
           },
           {
             "page": 1,
             "kind": "bullet",
             "source": "projects.loop.bullets[0]",
-            "top": 284.05,
-            "bottom": 243.05,
-            "text": "Developed loop differential ghost imaging for one-dimensional optical phased-array line modulation, with a noise-symmetry metric, numerical simulation and optical validation using spatial-light-modulator-generated patterns."
+            "top": 297.05,
+            "bottom": 256.05,
+            "text": "Loop differential ghost imaging reduces spatial noise asymmetry for 1D optical phased-array line modulation; validated with a noise-symmetry metric, numerical simulations and spatial-light-modulator-generated line patterns."
           },
           {
             "page": 1,
             "kind": "section",
             "source": "",
-            "top": 235.05,
-            "bottom": 201.05,
+            "top": 248.05,
+            "bottom": 214.05,
             "text": "Current Research"
           },
           {
             "page": 1,
             "kind": "body",
             "source": "narrative.current_summary",
-            "top": 201.05,
-            "bottom": 168.05,
+            "top": 214.05,
+            "bottom": 181.05,
             "text": "Time-domain diffuse optical tomography for 3D brain imaging; acquisition-aware single-pixel sensing on an optical bench; exploratory question answering from measurements with a frozen vision–language model."
           },
           {
             "page": 1,
             "kind": "section",
             "source": "",
-            "top": 168.05,
-            "bottom": 134.05,
+            "top": 181.05,
+            "bottom": 147.05,
             "text": "Award & Service"
           },
           {
             "page": 1,
             "kind": "body",
             "source": "awards[0]",
-            "top": 134.05,
-            "bottom": 119.05,
+            "top": 147.05,
+            "bottom": 132.05,
             "text": "2024 · Second Prize, National Post-Graduate Mathematical Contest in Modeling · Code"
           },
           {
             "page": 1,
             "kind": "body",
             "source": "service[0]",
-            "top": 119.05,
-            "bottom": 91.05,
-            "text": "Reviewer · IEEE Transactions on Image Processing, IEEE Transactions on Computational Imaging, Optics Express, Optics Letters (13 verified reviews, 2025–2026)"
+            "top": 132.05,
+            "bottom": 104.05,
+            "text": "Reviewer · IEEE Transactions on Image Processing, IEEE Transactions on Computational Imaging, Optics Express, Optics Letters (13 reviews, 2025–2026)"
           },
           {
             "page": 2,
@@ -698,7 +710,7 @@
             "source": "software[3]",
             "top": 185.69,
             "bottom": 168.69,
-            "text": "LDGI · Loop differential ghost imaging for line-pattern illumination from 1D optical phased arrays (MATLAB)."
+            "text": "LDGI · Loop differential ghost imaging designed for 1D optical phased-array line illumination (MATLAB)."
           },
           {
             "page": 2,
@@ -799,17 +811,17 @@
       },
       "pdf": {
         "path": "Yuyuan_Han_Internship_Resume.pdf",
-        "sha256": "9953abb9d027aae71cd7f8479e332eaa5a7fd0629afaeaf746d2d81cf1cfd2ef",
-        "bytes": 35821
+        "sha256": "5d7798e406222f4278461ae6071b42437611ea5524689560bb04362057be16f5",
+        "bytes": 35819
       },
       "html": {
         "path": "Yuyuan_Han_Internship_Resume.html",
-        "sha256": "88ff69abe4cd069471a6b758b6ac00c0fa1965b76384db60a9472e01e60d7066",
-        "bytes": 9794
+        "sha256": "2050896869d39cccfd0e4a8d2b525b4467d7e016ed19f36854fd3fee181a42be",
+        "bytes": 9783
       },
       "checks": {
         "page_count": 1,
-        "extracted_characters": 2766,
+        "extracted_characters": 2755,
         "embedded_fonts": [
           "/AAAAAA+NotoSans-Bold",
           "/AAAAAA+NotoSans-Regular"
@@ -949,7 +961,7 @@
       },
       "layout": {
         "page_count": 1,
-        "lowest_content_y": 54.25,
+        "lowest_content_y": 66.55,
         "positions": [
           {
             "page": 1,
@@ -1045,135 +1057,135 @@
             "source": "projects.lift.bullets[0]",
             "top": 475.35,
             "bottom": 448.75,
-            "text": "Developed a content-adaptive 1D-to-2D lift and task-prioritized loss scheduling for image-free single-pixel segmentation."
+            "text": "Image-free single-pixel segmentation can outperform reconstruction-first inference under measurement noise with clean-trained models; introduced a content-adaptive 1D-to-2D lift and task-prioritized loss scheduling."
           },
           {
             "page": 1,
             "kind": "bullet",
             "source": "projects.lift.bullets[1]",
             "top": 448.75,
-            "bottom": 409.85,
-            "text": "Mapped the noise-dependent crossover against clean-trained reconstruction-first baselines: 3.1–21.7 percentage-point gains in foreground mIoU at 3.13% sampling and 20 dB Gaussian measurement noise across three simulated datasets; optical-bench proof of concept."
+            "bottom": 422.15,
+            "text": "3.1–21.7 percentage-point foreground mIoU gains at 3.13% sampling and 20 dB Gaussian measurement noise across three simulated datasets; optical-bench proof of concept."
           },
           {
             "page": 1,
             "kind": "project",
             "source": "projects.shsi",
-            "top": 404.85,
-            "bottom": 390.45,
+            "top": 417.15,
+            "bottom": 402.75,
             "text": "Sparse Hadamard single-pixel imaging"
           },
           {
             "page": 1,
             "kind": "detail",
             "source": "projects.shsi.role",
-            "top": 390.45,
-            "bottom": 376.15,
+            "top": 402.75,
+            "bottom": 388.45,
             "text": "Optics Express · 2025 · Paper · Code"
           },
           {
             "page": 1,
             "kind": "bullet",
             "source": "projects.shsi.bullets[0]",
-            "top": 376.15,
-            "bottom": 349.55,
-            "text": "Designed tunable sparse Hadamard patterns that preserve orthogonality, two training-free operating modes and a sparsity-dependent noise model; validated in noise simulations and through-scattering optical experiments."
+            "top": 388.45,
+            "bottom": 361.85,
+            "text": "Tunable sparse Hadamard patterns retain orthogonality and improve noise resilience, with two training-free modes and a sparsity-dependent noise model tested in simulations and through-scattering optical experiments."
           },
           {
             "page": 1,
             "kind": "project",
             "source": "projects.loop",
-            "top": 344.55,
-            "bottom": 330.15,
+            "top": 356.85,
+            "bottom": 342.45,
             "text": "LDGI · Ghost imaging for optical phased-array line patterns"
           },
           {
             "page": 1,
             "kind": "detail",
             "source": "projects.loop.role",
-            "top": 330.15,
-            "bottom": 315.85,
+            "top": 342.45,
+            "bottom": 328.15,
             "text": "Optics Communications · 2025 · Paper · Code"
           },
           {
             "page": 1,
             "kind": "bullet",
             "source": "projects.loop.bullets[0]",
-            "top": 315.85,
-            "bottom": 276.95,
-            "text": "Developed loop differential ghost imaging for one-dimensional optical phased-array line modulation, with a noise-symmetry metric, numerical simulation and optical validation using spatial-light-modulator-generated patterns."
+            "top": 328.15,
+            "bottom": 289.25,
+            "text": "Loop differential ghost imaging reduces spatial noise asymmetry for 1D optical phased-array line modulation; validated with a noise-symmetry metric, numerical simulations and spatial-light-modulator-generated line patterns."
           },
           {
             "page": 1,
             "kind": "section",
             "source": "",
-            "top": 271.95,
-            "bottom": 240.95,
+            "top": 284.25,
+            "bottom": 253.25,
             "text": "Current Research"
           },
           {
             "page": 1,
             "kind": "body",
             "source": "narrative.current_summary",
-            "top": 240.95,
-            "bottom": 209.35,
+            "top": 253.25,
+            "bottom": 221.65,
             "text": "Time-domain diffuse optical tomography for 3D brain imaging; acquisition-aware single-pixel sensing on an optical bench; exploratory question answering from measurements with a frozen vision–language model."
           },
           {
             "page": 1,
             "kind": "section",
             "source": "",
-            "top": 209.35,
-            "bottom": 178.35,
+            "top": 221.65,
+            "bottom": 190.65,
             "text": "Open Source & Tools"
           },
           {
             "page": 1,
             "kind": "body",
             "source": "internship_technical[0]",
-            "top": 178.35,
-            "bottom": 152.75,
+            "top": 190.65,
+            "bottom": 165.05,
             "text": "Open source · remote-gpu-trainer, an agent skill for Claude Code and Codex that runs, verifies and delivers GPU experiments"
           },
           {
             "page": 1,
             "kind": "body",
             "source": "internship_technical[1]",
-            "top": 152.75,
-            "bottom": 127.15,
+            "top": 165.05,
+            "bottom": 139.45,
             "text": "Tools & lab · PyTorch, MATLAB, COMSOL; DMD/SLM illumination, single-pixel detection, optical alignment and system integration"
           },
           {
             "page": 1,
             "kind": "body",
             "source": "internship_technical[2]",
-            "top": 127.15,
-            "bottom": 113.85,
+            "top": 139.45,
+            "bottom": 126.15,
             "text": "Device modeling · Geometry optimization of electro-optic phased arrays for beam steering"
           },
           {
             "page": 1,
             "kind": "section",
             "source": "",
-            "top": 113.85,
-            "bottom": 82.85,
+            "top": 126.15,
+            "bottom": 95.15,
             "text": "Award & Service"
           },
           {
             "page": 1,
             "kind": "body",
             "source": "awards[0]",
-            "top": 82.85,
-            "bottom": 68.55,
+            "top": 95.15,
+            "bottom": 80.85,
             "text": "2024 · Second Prize, National Post-Graduate Mathematical Contest in Modeling · Code"
           },
           {
             "page": 1,
             "kind": "body",
             "source": "service[0]",
-            "top": 68.55,
-            "bottom": 54.25,
-            "text": "Reviewer · IEEE TIP, IEEE TCI, Optics Express, Optics Letters (13 verified reviews, 2025–2026)"
+            "top": 80.85,
+            "bottom": 66.55,
+            "text": "Reviewer · IEEE TIP, IEEE TCI, Optics Express, Optics Letters (13 reviews, 2025–2026)"
           }
         ]
       },
@@ -1206,35 +1218,12 @@
   ],
   "visual_qa": {
     "status": "passed",
-    "reviewer": "Codex",
-    "reviewed_at": "2026-10-14T02:15:16.025375+02:00",
+    "method": "Rendered all four final PDFs with pdftoppm -r 135 -png and visually inspected all six pages after the final Chinese Lift wording and LDGI description refinement. All three selected works lead with findings; Lift retains clean-training/noisy-testing conditions, content-adaptive 1D-to-2D lift, task-prioritized loss scheduling, 3.13% sampling, 20 dB Gaussian measurement noise, three simulated datasets and optical-bench proof of concept. Checked hierarchy, spacing, line wrapping, glyphs, clipping, overlap, portrait clearance and page footers. Original font sizes, leading, bounds and 2/1/2/1 page counts are preserved. Refreshed all six 100-dpi .qa/cv overview thumbnails from these same PDFs.",
+    "reviewed_at": "2026-10-18T01:09:49+02:00",
     "timezone": "Europe/Rome",
-    "method": "Freshly rendered all four latest PDFs with pdftoppm -r 100 -png after the final internship-summary copy repair, then visually inspected all six pages: English academic 1–2, English internship 1, Chinese academic 1–2, Chinese internship 1. Both internship versions now name networks that infer directly from measurements. Existing font sizes, leading, section placement, page counts and content bounds are unchanged. Checked fonts and missing glyphs, line breaks and spacing, clipping and overlap, section transitions, Chinese photo clearance, and page numbers. Actual PDF text, nine publications in each academic version, photo counts and page counts passed through Poppler/pypdf. Both public PDFs rebuilt byte-identically. The frozen profile SHA-256 and mtime remained unchanged during this repair.",
     "reviewed_pdf_sha256": {
-      "academic": "66fd2408bbbe109df99fd54e13084532a6c108b02b351ed1b21a9e9126208c94",
-      "internship": "9953abb9d027aae71cd7f8479e332eaa5a7fd0629afaeaf746d2d81cf1cfd2ef"
-    },
-    "reviewed_render_sha256": {
-      "academic-en-page-1": "b818e3434526a54b3a0f1fc6dd43fe7ea3feda57f1c308577208d725f7e1a85f",
-      "academic-en-page-2": "118483c04b2dbe3685f0e7227a80f48172576ddb1b7032d2c90b391c400e8e96",
-      "internship-en-page-1": "6a1d563cc1404a927cc3c813a83b048faf22e9bf27a646665fa35264d974a025"
-    },
-    "reviewed_pages": [
-      {
-        "id": "academic-en-page-1",
-        "render_sha256": "b818e3434526a54b3a0f1fc6dd43fe7ea3feda57f1c308577208d725f7e1a85f",
-        "pdf_sha256": "66fd2408bbbe109df99fd54e13084532a6c108b02b351ed1b21a9e9126208c94"
-      },
-      {
-        "id": "academic-en-page-2",
-        "render_sha256": "118483c04b2dbe3685f0e7227a80f48172576ddb1b7032d2c90b391c400e8e96",
-        "pdf_sha256": "66fd2408bbbe109df99fd54e13084532a6c108b02b351ed1b21a9e9126208c94"
-      },
-      {
-        "id": "internship-en-page-1",
-        "render_sha256": "6a1d563cc1404a927cc3c813a83b048faf22e9bf27a646665fa35264d974a025",
-        "pdf_sha256": "9953abb9d027aae71cd7f8479e332eaa5a7fd0629afaeaf746d2d81cf1cfd2ef"
-      }
-    ]
+      "Yuyuan_Han_Academic_CV.pdf": "9c7306885fdca92dc90bb572ef685e10fb6c0ad7c78c690993c4eb6fccbe5d0e",
+      "Yuyuan_Han_Internship_Resume.pdf": "5d7798e406222f4278461ae6071b42437611ea5524689560bb04362057be16f5"
+    }
   }
 }

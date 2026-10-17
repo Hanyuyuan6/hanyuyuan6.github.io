@@ -1,30 +1,30 @@
 {
-  "reviewed_on": "2026-10-14",
+  "reviewed_on": "2026-10-18",
   "reviewer": "Codex",
-  "method": "Freshly rendered all four latest PDFs with pdftoppm -r 100 -png after the final internship-summary copy repair, then visually inspected all six pages: English academic 1–2, English internship 1, Chinese academic 1–2, Chinese internship 1. Both internship versions now name networks that infer directly from measurements. Existing font sizes, leading, section placement, page counts and content bounds are unchanged. Checked fonts and missing glyphs, line breaks and spacing, clipping and overlap, section transitions, Chinese photo clearance, and page numbers. Actual PDF text, nine publications in each academic version, photo counts and page counts passed through Poppler/pypdf. Both public PDFs rebuilt byte-identically. The frozen profile SHA-256 and mtime remained unchanged during this repair.",
-  "source_fingerprint": "1a0eeff416d007e8524276ec56965cb7c5e4927fb3c9e255037bf829094917e3",
+  "method": "Rendered all four final PDFs with pdftoppm -r 135 -png and visually inspected all six pages after the final Chinese Lift wording and LDGI description refinement. All three selected works lead with findings; Lift retains clean-training/noisy-testing conditions, content-adaptive 1D-to-2D lift, task-prioritized loss scheduling, 3.13% sampling, 20 dB Gaussian measurement noise, three simulated datasets and optical-bench proof of concept. Checked hierarchy, spacing, line wrapping, glyphs, clipping, overlap, portrait clearance and page footers. Original font sizes, leading, bounds and 2/1/2/1 page counts are preserved. Refreshed all six 100-dpi .qa/cv overview thumbnails from these same PDFs.",
+  "source_fingerprint": "29071482cb5457f5a1355dd4cff296a0a53830c6897210f0500dbb4cbd0c07a5",
   "pdf_sha256": {
-    "Yuyuan_Han_Academic_CV.pdf": "66fd2408bbbe109df99fd54e13084532a6c108b02b351ed1b21a9e9126208c94",
-    "Yuyuan_Han_Internship_Resume.pdf": "9953abb9d027aae71cd7f8479e332eaa5a7fd0629afaeaf746d2d81cf1cfd2ef"
+    "Yuyuan_Han_Academic_CV.pdf": "9c7306885fdca92dc90bb572ef685e10fb6c0ad7c78c690993c4eb6fccbe5d0e",
+    "Yuyuan_Han_Internship_Resume.pdf": "5d7798e406222f4278461ae6071b42437611ea5524689560bb04362057be16f5"
   },
   "html_visual_qa": "Not separately reviewed; HTML CVs are unlinked companions of the reviewed PDFs.",
-  "reviewed_at": "2026-10-14T02:15:16.025375+02:00",
+  "reviewed_at": "2026-10-18T01:09:49+02:00",
   "timezone": "Europe/Rome",
   "reviewed_pages": [
     {
       "id": "academic-en-page-1",
-      "render_sha256": "b818e3434526a54b3a0f1fc6dd43fe7ea3feda57f1c308577208d725f7e1a85f",
-      "pdf_sha256": "66fd2408bbbe109df99fd54e13084532a6c108b02b351ed1b21a9e9126208c94"
+      "render_sha256": "2419f4b6e64fe8b7d5910cbcb10a91e25a4e7796aecaf0c8ffdb23a634d058cc",
+      "pdf_sha256": "9c7306885fdca92dc90bb572ef685e10fb6c0ad7c78c690993c4eb6fccbe5d0e"
     },
     {
       "id": "academic-en-page-2",
-      "render_sha256": "118483c04b2dbe3685f0e7227a80f48172576ddb1b7032d2c90b391c400e8e96",
-      "pdf_sha256": "66fd2408bbbe109df99fd54e13084532a6c108b02b351ed1b21a9e9126208c94"
+      "render_sha256": "58ac6a493cc7fe4625ceded10754f326a0f61273701ab766c808b28e6a358f4c",
+      "pdf_sha256": "9c7306885fdca92dc90bb572ef685e10fb6c0ad7c78c690993c4eb6fccbe5d0e"
     },
     {
       "id": "internship-en-page-1",
-      "render_sha256": "6a1d563cc1404a927cc3c813a83b048faf22e9bf27a646665fa35264d974a025",
-      "pdf_sha256": "9953abb9d027aae71cd7f8479e332eaa5a7fd0629afaeaf746d2d81cf1cfd2ef"
+      "render_sha256": "cd88553ab5fc9112739be73ba3faa5fccfad0f5377ea43b278f83cdd00bb3333",
+      "pdf_sha256": "5d7798e406222f4278461ae6071b42437611ea5524689560bb04362057be16f5"
     }
   ]
 }
