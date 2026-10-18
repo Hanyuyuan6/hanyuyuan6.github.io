@@ -656,8 +656,10 @@ def profile_links(rows: list[dict[str, Any]], *, primary: bool = False) -> str:
 
 def cv_links(rows: list[dict[str, Any]]) -> str:
     return "\n".join(
-        f'<a class="cv-link" href="{e(url(row["path"], local=True))}">'
+        f'<span class="cv-option"><a class="cv-link" href="{e(url(row["path"], local=True))}">'
         f'{e(row.get("label", "CV"))}<span class="file-type">PDF</span></a>'
+        f'<a class="cv-online" href="{e(str(PurePosixPath(url(row["path"], local=True)).with_suffix(".html")))}" '
+        f'aria-label="Read {e(row.get("label", "CV"))} online">Read online</a></span>'
         for row in rows
     )
 

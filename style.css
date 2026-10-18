@@ -43,6 +43,9 @@ h1 { font-size: 33px; line-height: 1.23; font-weight: 600; letter-spacing: -.7px
 .cv-links, .primary-profiles { display: flex; flex-wrap: wrap; gap: 7px 16px; }
 .cv-links { flex-basis: 100%; }
 .cv-link { white-space: nowrap; padding: 3px 0; }
+.cv-option { display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 3px 9px; }
+.cv-online { font-size: 11px; color: var(--muted); padding: 3px 0; }
+.cv-online:hover, .cv-online:focus-visible { color: var(--accent); }
 .file-type { margin-left: 4px; color: var(--muted); font-size: 10px; }
 .primary-profiles { list-style: none; padding: 0; }
 .primary-profiles a { display: inline-block; padding: 3px 0; }

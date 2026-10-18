@@ -178,16 +178,17 @@ def validate(root):
     # Platform texts are compositions of the narrative, so a hand edit to one of them is drift.
     copy, narrative, person = profile['platform_copy'], profile['narrative'], profile['person']
     identity = f"I am a {person['position']} at {person['institution']}."
-    require(narrative['bio'].startswith(narrative['short_bio']), 'Biography opens with the short bio')
+    opening = narrative['bio'].split('. ', 1)[0] + '.'
+    require(narrative['short_bio'] == narrative['hero'] + ' ' + opening and narrative['hero'] not in narrative['bio'], 'Standalone short bio carries the hero and shared opening; homepage bio does not repeat the hero')
     require(copy['researchgate_bio'] == narrative['short_bio'] + '\n\n' + narrative['welcome'] and len(copy['researchgate_bio']) <= 500, 'ResearchGate shares the complete short bio and collaboration invitation within its 500-character limit')
-    require(copy['long_bio'] == f"{identity} {narrative['bio']}" and copy['orcid_bio'] == copy['long_bio'] + '\n\n' + narrative['welcome'], 'ORCID biography shares the identity, biography and collaboration invitation')
-    about = copy['linkedin_about'].split('\n\n')  # shared identity, finding, background, current work and aim, welcome
-    require(len(about) == 5 and all(part.strip() for part in about) and about[0] == f"I am a PhD student at {person['institution']}. {narrative['short_bio']}" and 'need not be the most robust intermediate' in about[1] and 'trained on clean data' in about[1] and copy['long_bio'].endswith(' ' + about[3]) and about[4] == narrative['welcome'], 'LinkedIn shares the canonical identity, short bio, current direction and welcome; its finding has a dedicated paragraph')
+    require(copy['long_bio'] == f"{identity} {narrative['hero']} {narrative['bio']}" and copy['orcid_bio'] == copy['long_bio'] + '\n\n' + narrative['welcome'], 'ORCID biography shares the identity, hero, biography and collaboration invitation')
+    about = copy['linkedin_about'].split('\n\n')  # insight, identity and evidence, current work and aim, background, welcome
+    require(len(about) == 5 and all(part.strip() for part in about) and about[0] == narrative['hero'] and about[1].startswith(f"{identity} {opening} ") and 'single-pixel segmentation' in about[1] and 'trained on clean data' in about[1] and narrative['bio'] == f"{opening} {about[2]}" and about[4] == narrative['welcome'], 'LinkedIn leads with the shared insight, retains the identity and evidence conditions, and shares the current direction and invitation')
     require(copy['github_bio'].startswith(narrative['hero']) and copy['linkedin_headline'].startswith(f"{person['position']} at {person['institution']}"), 'GitHub bio carries the hero line; LinkedIn headline opens with the PhD identity')
     # Identity lines name the PhD only; the visit is listed under Education (owner, 2026-10-12).
     visit, visit_zh = profile['appointments'][0], json.loads((root / 'cv-variants.json').read_text(encoding='utf-8'))['zh']['appointment']
     identity_lines = [identity, narrative['meta_description'], copy['linkedin_headline'], copy['linkedin_headline_zh'], copy['github_company'], copy['github_bio'],
-                      copy['long_bio'].split('. ')[0], copy['linkedin_about_zh'].split('。')[0]]
+                      copy['long_bio'].split('. ')[0], copy['linkedin_about_zh'].split('\n\n')[1].split('。')[0]]
     require(not any(visit['institution'] in line or visit_zh['institution'] in line or 'isiting' in line or '访问' in line for line in identity_lines), 'Identity lines name the PhD only, not the visit')
     require(not any(key in person for key in ('visiting_role', 'visiting_institution')) and not any('experience_polimi' in key for key in copy), 'The visit is recorded once, as an appointment listed under Education')
 
@@ -315,7 +316,8 @@ def validate(root):
         require('one-dimensional optical phased-array line patterns' in home_text, 'LDGI homepage identifies its OPA illumination setting')
         require(all(f"{row['count']} reviews" in home_text and all(escape(v, quote=False) in home_text for v in row['venues']) for row in profile.get('service', [])), 'Homepage lists peer review with its venues and count')
         require('ten deep' not in home_text.lower() and 'eight deep networks and correlation ghost imaging' in home_text.lower(), 'Comparison repository is described as in its README (eight deep networks plus correlation ghost imaging)')
-        require(escape(profile['narrative']['short_bio'], quote=False) in home_text, 'Homepage carries the canonical short biography verbatim')
+        hero = escape(profile['narrative']['hero'], quote=True)
+        require(f'<p class="research-question">{hero}</p>' in home_text and home_text.count(hero) == 1, 'Homepage presents the canonical insight once, separate from its biography')
         require(not profile['narrative'].get('personal') or f'<p class="personal">{escape(profile["narrative"]["personal"], quote=True)}</p>' in home_text, 'Homepage shows the personal line when profile.json has one')
         require(all(f"Advisor: {escape(row['advisor'], quote=True)}" in home_plain for row in profile['education'] if row.get('advisor')), 'Homepage names the recorded advisor')
         for rows, name_key in ((profile['education'], 'advisor'), (profile['appointments'], 'host')):

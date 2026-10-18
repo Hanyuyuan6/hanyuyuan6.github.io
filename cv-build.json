@@ -1,15 +1,15 @@
 {
   "schema_version": 2,
-  "built_at": "2026-10-17T23:09:00.626853+00:00",
-  "source_fingerprint": "29071482cb5457f5a1355dd4cff296a0a53830c6897210f0500dbb4cbd0c07a5",
+  "built_at": "2026-10-18T14:05:50.249407+00:00",
+  "source_fingerprint": "48a1fc580e6b300ecb36d6c3074363e252540900cf7fe7db0b0a42f26abd7b47",
   "inputs": {
     "profile": {
       "path": "profile.json",
-      "sha256": "cb4b73f4a9d73bd5616a1212416993ae0086dc47645bc9a3ae677fbbdd503829"
+      "sha256": "bee46d262a5ab6c1e10d46000df799b56cfbc19eb1661d81508dbff57f7347f9"
     },
     "template": {
       "path": "build_cv.py",
-      "sha256": "515c8e9d9ab5edd79da4aa2b3cbbbeaf412571d7ac4482335ead2d6ee170b9d7"
+      "sha256": "a0915b1d493d3f96ce3dda0023af2eada96c12208728b5a8b0a1791eba30dec2"
     },
     "variants": {
       "path": "cv-variants.json",
@@ -59,10 +59,10 @@
       "destination": "public",
       "metadata": {
         "Author": "Yuyuan Han",
-        "CreationDate": "D:20261014000000+00'00'",
+        "CreationDate": "D:20261018000000+00'00'",
         "Creator": "Yuyuan Han",
         "Keywords": "Computational Imaging, Single-Pixel Imaging, Image-Free Sensing, Optical Tomography, Inverse Problems",
-        "ModDate": "D:20261014000000+00'00'",
+        "ModDate": "D:20261018000000+00'00'",
         "Producer": "",
         "Subject": "Computational imaging & robust image-free sensing",
         "Title": "Yuyuan Han | Academic CV",
@@ -70,13 +70,13 @@
       },
       "pdf": {
         "path": "Yuyuan_Han_Academic_CV.pdf",
-        "sha256": "9c7306885fdca92dc90bb572ef685e10fb6c0ad7c78c690993c4eb6fccbe5d0e",
+        "sha256": "7f99f275999224408eb2910a7b01308c990f746ee970bfbff24c58191c186c25",
         "bytes": 59580
       },
       "html": {
         "path": "Yuyuan_Han_Academic_CV.html",
-        "sha256": "ccdb95ca628b3c3650072db5c50ff279d718909df67f314b2dc98ef5e03823ec",
-        "bytes": 15797
+        "sha256": "7bdc3f0534d945a99789db3f8069c5b0569876ea985571258d4981ecbda3969d",
+        "bytes": 16609
       },
       "checks": {
         "page_count": 2,
@@ -574,7 +574,7 @@
             "source": "service[0]",
             "top": 132.05,
             "bottom": 104.05,
-            "text": "Reviewer · IEEE Transactions on Image Processing, IEEE Transactions on Computational Imaging, Optics Express, Optics Letters (13 reviews, 2025–2026)"
+            "text": "Reviewer · IEEE Transactions on Image Processing, IEEE Transactions on Computational Imaging, Optics Express, Optics Letters (14 reviews, 2025–2026)"
           },
           {
             "page": 2,
@@ -800,10 +800,10 @@
       "destination": "public",
       "metadata": {
         "Author": "Yuyuan Han",
-        "CreationDate": "D:20261014000000+00'00'",
+        "CreationDate": "D:20261018000000+00'00'",
         "Creator": "Yuyuan Han",
         "Keywords": "Computational Imaging, Single-Pixel Imaging, Image-Free Sensing, Optical Tomography, Inverse Problems",
-        "ModDate": "D:20261014000000+00'00'",
+        "ModDate": "D:20261018000000+00'00'",
         "Producer": "",
         "Subject": "Computational imaging & robust image-free sensing",
         "Title": "Yuyuan Han | Research Internship Résumé",
@@ -811,13 +811,13 @@
       },
       "pdf": {
         "path": "Yuyuan_Han_Internship_Resume.pdf",
-        "sha256": "5d7798e406222f4278461ae6071b42437611ea5524689560bb04362057be16f5",
-        "bytes": 35819
+        "sha256": "9bbf9577d51bfd23ae73f5b85c13f3f1fa5ad20b6711f7e6330ba9f32edd97e2",
+        "bytes": 35818
       },
       "html": {
         "path": "Yuyuan_Han_Internship_Resume.html",
-        "sha256": "2050896869d39cccfd0e4a8d2b525b4467d7e016ed19f36854fd3fee181a42be",
-        "bytes": 9783
+        "sha256": "2d9a32b6ae578b9ffd8273d5c9dffb51f577c0503143dcc6c8d7fd714cb70511",
+        "bytes": 10601
       },
       "checks": {
         "page_count": 1,
@@ -1185,7 +1185,7 @@
             "source": "service[0]",
             "top": 80.85,
             "bottom": 66.55,
-            "text": "Reviewer · IEEE TIP, IEEE TCI, Optics Express, Optics Letters (13 reviews, 2025–2026)"
+            "text": "Reviewer · IEEE TIP, IEEE TCI, Optics Express, Optics Letters (14 reviews, 2025–2026)"
           }
         ]
       },
@@ -1218,12 +1218,12 @@
   ],
   "visual_qa": {
     "status": "passed",
-    "method": "Rendered all four final PDFs with pdftoppm -r 135 -png and visually inspected all six pages after the final Chinese Lift wording and LDGI description refinement. All three selected works lead with findings; Lift retains clean-training/noisy-testing conditions, content-adaptive 1D-to-2D lift, task-prioritized loss scheduling, 3.13% sampling, 20 dB Gaussian measurement noise, three simulated datasets and optical-bench proof of concept. Checked hierarchy, spacing, line wrapping, glyphs, clipping, overlap, portrait clearance and page footers. Original font sizes, leading, bounds and 2/1/2/1 page counts are preserved. Refreshed all six 100-dpi .qa/cv overview thumbnails from these same PDFs.",
-    "reviewed_at": "2026-10-18T01:09:49+02:00",
+    "method": "Rebuilt all four PDFs with profile.updated 2026-10-18 and service count 14. Poppler 135-dpi RGB comparisons show the four first pages differ only in the final review-count digit (13 to 14); both academic second pages are pixel-identical to their previously reviewed versions. Visually inspected all four changed first pages, including the service lines, spacing and footer clearance; reused the prior full visual review for the identical second pages. Extracted PDF text differs only by 13-to-14 service counts. Refreshed all six standard 100-dpi overview thumbnails. HTML toolbar/source checks cover localized homepage links, sibling PDF download links and print suppression; HTML/browser and mobile-PDF UI validation belongs to the main task.",
+    "reviewed_at": "2026-10-18T16:07:12+02:00",
     "timezone": "Europe/Rome",
     "reviewed_pdf_sha256": {
-      "Yuyuan_Han_Academic_CV.pdf": "9c7306885fdca92dc90bb572ef685e10fb6c0ad7c78c690993c4eb6fccbe5d0e",
-      "Yuyuan_Han_Internship_Resume.pdf": "5d7798e406222f4278461ae6071b42437611ea5524689560bb04362057be16f5"
+      "Yuyuan_Han_Academic_CV.pdf": "7f99f275999224408eb2910a7b01308c990f746ee970bfbff24c58191c186c25",
+      "Yuyuan_Han_Internship_Resume.pdf": "9bbf9577d51bfd23ae73f5b85c13f3f1fa5ad20b6711f7e6330ba9f32edd97e2"
     }
   }
 }

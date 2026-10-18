@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated": "2026-10-14",
+  "updated": "2026-10-18",
   "publication_verification_date": "2026-10-11",
   "person": {
     "name": "Yuyuan Han",
@@ -13,9 +13,9 @@
     "institution": "Xi'an Jiaotong University"
   },
   "narrative": {
-    "hero": "How optical measurements shape what machines can infer.",
+    "hero": "An image is not always the most robust route to inference.",
     "field": "Computational imaging & robust image-free sensing",
-    "bio": "I study how optical measurements shape what machines can infer, and how to make that inference reliable with limited, noisy data. I connect measurement design, reconstruction and direct inference to understand what makes perception robust. My work on image-free sensing shows that an image need not be the most robust intermediate. I am now applying this measurement-to-inference perspective to time-domain diffuse optical tomography for 3D brain imaging. My long-term aim is to help robots interpret the physical world from raw measurements and physical models.",
+    "bio": "I study reliable sensing under limited sampling and measurement noise, connecting optical measurement design, image reconstruction and direct inference from single-pixel measurements. I now work on time-domain diffuse optical tomography for brain imaging, inferring 3D distributions of optical properties from photon time-of-flight measurements. My long-term aim is to help robots interpret the physical world from raw measurements and physical models.",
     "direction": "",
     "welcome": "I welcome research collaborations and internships that combine measurements and physical models to help machines learn and reason reliably, with applications in scientific discovery and embodied systems.",
     "personal": "Outside the lab: basketball, fitness and travel.",
@@ -23,8 +23,8 @@
     "long_term": "",
     "internship_summary": "PhD student working on computational imaging and robust image-free sensing, from optical measurement design and reconstruction to networks that infer directly from measurements.",
     "current_summary": "Time-domain diffuse optical tomography for 3D brain imaging; acquisition-aware single-pixel sensing on an optical bench; exploratory question answering from measurements with a frozen vision–language model.",
-    "meta_description": "Yuyuan Han studies how optical measurements shape reliable machine inference through computational imaging, image-free sensing and 3D optical brain imaging.",
-    "short_bio": "I study how optical measurements shape what machines can infer, and how to make that inference reliable with limited, noisy data. I connect measurement design, reconstruction and direct inference to understand what makes perception robust."
+    "meta_description": "Yuyuan Han studies reliable inference from optical measurements: computational imaging, image-free sensing and time-domain optical brain imaging.",
+    "short_bio": "An image is not always the most robust route to inference. I study reliable sensing under limited sampling and measurement noise, connecting optical measurement design, image reconstruction and direct inference from single-pixel measurements."
   },
   "profiles": [
     {
@@ -537,10 +537,10 @@
     }
   ],
   "platform_copy": {
-    "github_bio": "How optical measurements shape what machines can infer. Computational imaging · Image-free sensing · 3D optical brain imaging.",
+    "github_bio": "An image is not always the most robust route to inference. Computational imaging · Image-free sensing · Optical tomography.",
     "linkedin_headline": "PhD student at Xi'an Jiaotong University | Computational imaging & robust image-free sensing",
-    "researchgate_bio": "I study how optical measurements shape what machines can infer, and how to make that inference reliable with limited, noisy data. I connect measurement design, reconstruction and direct inference to understand what makes perception robust.\n\nI welcome research collaborations and internships that combine measurements and physical models to help machines learn and reason reliably, with applications in scientific discovery and embodied systems.",
-    "long_bio": "I am a PhD student at Xi'an Jiaotong University. I study how optical measurements shape what machines can infer, and how to make that inference reliable with limited, noisy data. I connect measurement design, reconstruction and direct inference to understand what makes perception robust. My work on image-free sensing shows that an image need not be the most robust intermediate. I am now applying this measurement-to-inference perspective to time-domain diffuse optical tomography for 3D brain imaging. My long-term aim is to help robots interpret the physical world from raw measurements and physical models.",
+    "researchgate_bio": "An image is not always the most robust route to inference. I study reliable sensing under limited sampling and measurement noise, connecting optical measurement design, image reconstruction and direct inference from single-pixel measurements.\n\nI welcome research collaborations and internships that combine measurements and physical models to help machines learn and reason reliably, with applications in scientific discovery and embodied systems.",
+    "long_bio": "I am a PhD student at Xi'an Jiaotong University. An image is not always the most robust route to inference. I study reliable sensing under limited sampling and measurement noise, connecting optical measurement design, image reconstruction and direct inference from single-pixel measurements. I now work on time-domain diffuse optical tomography for brain imaging, inferring 3D distributions of optical properties from photon time-of-flight measurements. My long-term aim is to help robots interpret the physical world from raw measurements and physical models.",
     "keywords": [
       "Computational Imaging",
       "Single-Pixel Imaging",
@@ -548,9 +548,9 @@
       "Optical Tomography",
       "Inverse Problems"
     ],
-    "orcid_bio": "I am a PhD student at Xi'an Jiaotong University. I study how optical measurements shape what machines can infer, and how to make that inference reliable with limited, noisy data. I connect measurement design, reconstruction and direct inference to understand what makes perception robust. My work on image-free sensing shows that an image need not be the most robust intermediate. I am now applying this measurement-to-inference perspective to time-domain diffuse optical tomography for 3D brain imaging. My long-term aim is to help robots interpret the physical world from raw measurements and physical models.\n\nI welcome research collaborations and internships that combine measurements and physical models to help machines learn and reason reliably, with applications in scientific discovery and embodied systems.",
-    "linkedin_about": "I am a PhD student at Xi'an Jiaotong University. I study how optical measurements shape what machines can infer, and how to make that inference reliable with limited, noisy data. I connect measurement design, reconstruction and direct inference to understand what makes perception robust.\n\nMy work examines how measurement structure and task representation affect robustness. In single-pixel sensing, it shows that an image need not be the most robust intermediate: when models are trained on clean data, direct segmentation can withstand measurement noise better than reconstructing an image first.\n\nMy background also includes electro-optic device modeling and optical-system integration. I develop open-source tools for research experiments and review for computational imaging and optics journals.\n\nI am now applying this measurement-to-inference perspective to time-domain diffuse optical tomography for 3D brain imaging. My long-term aim is to help robots interpret the physical world from raw measurements and physical models.\n\nI welcome research collaborations and internships that combine measurements and physical models to help machines learn and reason reliably, with applications in scientific discovery and embodied systems.",
-    "linkedin_about_zh": "我是西安交通大学博士研究生。我研究光学测量如何塑造机器的推断能力，以及如何从有限、受噪声影响的测量中获得可靠推断。我的工作将测量设计、图像重建与直接推断联系起来，探究感知鲁棒性的来源。\n\n我关注测量结构和任务表征如何影响鲁棒性。在单像素感知中，我的研究表明，图像未必是最稳健的中间表征：当模型以无噪声数据训练时，直接分割可以比先重建图像再分割更好地抵御测量噪声。\n\n我也具备电光器件建模与光学系统集成经验，开发服务科研实验的开源工具，并担任计算成像与光学期刊审稿人。\n\n目前，我正把从测量到推断的研究思路应用于面向脑部三维成像的时域漫射光学层析成像。长期希望让机器人结合原始测量与物理模型理解物理世界。\n\n欢迎交流研究合作与科研实习机会，共同探索如何结合测量数据与物理模型，让机器更可靠地学习和推理，服务科学发现与具身智能。",
+    "orcid_bio": "I am a PhD student at Xi'an Jiaotong University. An image is not always the most robust route to inference. I study reliable sensing under limited sampling and measurement noise, connecting optical measurement design, image reconstruction and direct inference from single-pixel measurements. I now work on time-domain diffuse optical tomography for brain imaging, inferring 3D distributions of optical properties from photon time-of-flight measurements. My long-term aim is to help robots interpret the physical world from raw measurements and physical models.\n\nI welcome research collaborations and internships that combine measurements and physical models to help machines learn and reason reliably, with applications in scientific discovery and embodied systems.",
+    "linkedin_about": "An image is not always the most robust route to inference.\n\nI am a PhD student at Xi'an Jiaotong University. I study reliable sensing under limited sampling and measurement noise, connecting optical measurement design, image reconstruction and direct inference from single-pixel measurements. In single-pixel segmentation, my work shows when inference directly from measurements is more robust than reconstructing images first, with all models trained on clean data.\n\nI now work on time-domain diffuse optical tomography for brain imaging, inferring 3D distributions of optical properties from photon time-of-flight measurements. My long-term aim is to help robots interpret the physical world from raw measurements and physical models.\n\nMy background includes electro-optic device modeling and optical-system integration. I develop open-source tools for research experiments and review for computational imaging and optics journals.\n\nI welcome research collaborations and internships that combine measurements and physical models to help machines learn and reason reliably, with applications in scientific discovery and embodied systems.",
+    "linkedin_about_zh": "先重建图像，未必是最稳健的推断路径。\n\n我是西安交通大学博士研究生。我研究如何在有限采样与测量噪声下实现可靠感知，将光学测量设计、图像重建与单像素测量的直接推断联系起来。在单像素分割中，我的工作揭示了直接推断何时比先重建图像更抗噪；比较中的模型均以无噪声数据训练。\n\n目前，我正开展面向脑部成像的时域漫射光学层析研究，从光子飞行时间测量中推断光学性质的三维分布。长期希望让机器人结合原始测量与物理模型，理解周围的物理世界。\n\n我也具备电光器件建模与光学系统集成经验，开发服务科研实验的开源工具，并担任计算成像与光学期刊审稿人。\n\n欢迎交流研究合作与科研实习机会，共同探索如何结合测量数据与物理模型，让机器更可靠地学习和推理，服务科学发现与具身智能。",
     "linkedin_featured_lift": "When measurement noise favors image-free sensing: a content-adaptive 1D-to-2D lift and task-prioritized training. Clean-trained models; simulation and optical-bench evidence.",
     "linkedin_featured_site_title": "Yuyuan Han · Computational imaging & robust image-free sensing",
     "linkedin_featured_site": "Research, publications and CV in computational imaging and robust image-free sensing.",
@@ -655,9 +655,9 @@
         "Optics Express",
         "Optics Letters"
       ],
-      "count": 13,
+      "count": 14,
       "years": "2025–2026",
-      "source": "ORCID peer-review records verified by Optica Publishing Group and Web of Science (read 2026-10-12)"
+      "source": "ORCID public peer-review API and profile, 14 records from Optica Publishing Group and Web of Science (read 2026-10-18)"
     }
   ]
 }
