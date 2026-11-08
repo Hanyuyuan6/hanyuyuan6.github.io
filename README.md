@@ -9,13 +9,14 @@ Source for <https://hanyuyuan6.github.io/>: a static, research-first homepage pl
 | `profile.json` | Single source of truth: identity, news, selected research, publications, education, code, awards |
 | `template.html`, `style.css` | Homepage markup and styles |
 | `theme.json` | The one colour source: five light palettes (`selected` picks one) and the automatic dark palette, used by the site, icons, social card and CVs |
-| `build_site.py` | Builds `dist/`: homepage, 404 page, sitemap, robots.txt, YH monogram icons, social card, `publications.bib` and responsive figure previews |
-| `build_cv.py`, `cv-variants.json` | Builds the CVs (same content model, variant-specific selection) |
+| `build_site.py` | Builds `dist/`: homepage, 404 page, sitemap, robots.txt, YH monogram icons, the type-only link-preview card, `publications.bib` and responsive figure previews |
+| `build_cv.py`, `cv-variants.json` | Builds the CVs (same content model, variant-specific selection) and each English CV's link-preview card |
 | `research-figures.json` | Reviewed paper figures: source, hash and alt text (previews show the whole figure) |
 | `fonts/` | Noto Sans 2.015 (SIL Open Font License 1.1, see `fonts/OFL.txt`) for reproducible PDFs |
 | `check.py` | Content, link, image, metadata and allowlist checks on the built site and PDFs |
 | `check_layout.py` | Renders the site in Chromium at 1440/1024/390 px (and 1440 px dark) and checks spacing, overflow, image sharpness and BibTeX-toggle alignment |
-| `watch_profiles.py` | Weekly job: compares ORCID and GitHub with `profile.json` (works, biography, keywords, links, emails, affiliations, reviews) and opens one issue on drift, with a paste-ready checklist for platforms without an API |
+| `watch_profiles.py` | Weekly job: compares ORCID and GitHub with `profile.json` (works, biography, keywords, links, emails, affiliations, review journals and years) and opens one issue on drift, with a paste-ready checklist for platforms without an API |
+| `sync_platforms.py`, `platforms-synced.json` | After a change: lists, platform by platform, every field that differs from the values last read back, with the full new text; `--done` records the values once every platform is read back |
 | `public-files.json` | Explicit allowlist of every published file |
 
 ## Build and check
@@ -38,9 +39,11 @@ When a CV's content changes, `check.py` stops until the new pages have been look
 
 ## Common updates
 
-1. **New paper.** Add one record to `profile.json` → `publications` with the full ordered author list, venue, volume/issue/pages, year, DOI and link; mark arXiv versions `Preprint`. Optionally add a News item. Rebuild, review the CV pages, commit.
-2. **New selected work.** Add a project to `projects`, list it in `selected_project_ids`, and add its figure to `research-figures.json` with a SHA-256 hash; whole-figure previews are generated automatically (crops are refused by `check.py`).
-3. **End of the visiting period.** Update `person`, `appointments` and `directions` together, then rebuild.
+1. **New paper.** Add one record to `profile.json` → `publications` with the full ordered author list, venue, volume/issue/pages, year, DOI and link; mark arXiv versions `Preprint`. Optionally add a News item. Rebuild, review the CV pages, commit. ORCID (through Crossref) and Google Scholar are set to add new papers automatically (checked 2026-11-08); check that the paper appears on both, and add it by hand if not. The weekly watch reports any ORCID DOI missing from `profile.json`. Then run `python sync_platforms.py` for the platforms that need a hand edit (ResearchGate, OpenReview, Web of Science).
+2. **New selected work.** Add a project to `projects`, list it in `selected_project_ids`, and add its figure to `research-figures.json` with a SHA-256 hash; whole-figure previews are generated automatically (crops are refused by `check.py`). If it should replace the paper card in LinkedIn Featured, update its title, link and description (`platform_copy.linkedin_featured_lift_*`) and run `python sync_platforms.py`.
+3. **End of the visiting period.** Update `person`, `appointments` and `directions` together, then rebuild and run `python sync_platforms.py`, which lists the affiliation and education entries to change on each platform.
 4. **Change the colours.** Set `selected` in `theme.json` to `harbor`, `paper`, `classic`, `graphite` or `ivory` (or `dark` to `null` to drop dark mode), run `python build.py --public-only`, review the CV pages and commit. `check.py` holds every palette to WCAG AA contrast.
+
+**After any change**, `python sync_platforms.py` lists what each platform still needs, with the text to paste and how to read it back; after reading every platform back, `python sync_platforms.py --done` records the values. Peer review is listed by journal and years, never by count, so another review needs no edit; the weekly watch flags a new journal or year.
 
 Private application materials, credentials and Chinese CV outputs never belong in this repository; the checker rejects any file that is not in `public-files.json`.

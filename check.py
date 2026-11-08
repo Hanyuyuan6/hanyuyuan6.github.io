@@ -258,6 +258,10 @@ def validate(root):
         for page in [root / 'dist' / 'index.html', root / 'dist' / '404.html', *sorted((root / 'dist' / 'cv').glob('*.html'))]:
             hrefs = re.findall(r'<link rel="(?:icon|apple-touch-icon)" href="([^"]+)"', page.read_text(encoding='utf-8')) if page.is_file() else []
             require(version is not None and all(any(h.endswith(f'{name}?v={version}') for h in hrefs) for name in ('favicon.svg', 'favicon.ico', 'apple-touch-icon.png')), f'Page declares the current icon set: {page.relative_to(root / "dist")}')
+        for page in sorted((root / 'dist' / 'cv').glob('*.html')):
+            card = page.with_name(page.stem + '-card.png')
+            require(f'<meta property="og:image" content="{SITE_URL}cv/{card.name}">' in page.read_text(encoding='utf-8') and card.is_file() and png_dimensions(card.read_bytes()) == (1200, 630),
+                    f'Shared CV link previews its own 1200×630 card: {page.name}')
         theme = json.loads((root / 'theme.json').read_text(encoding='utf-8'))
         palette = theme['palettes'][theme['selected']]
         favicon = (root / 'dist' / 'favicon.svg').read_text(encoding='utf-8') if (root / 'dist' / 'favicon.svg').is_file() else ''
@@ -314,7 +318,10 @@ def validate(root):
                 require(1 <= len(chips) <= 4 and all(1 <= len(chip.split()) <= 16 and escape(chip, quote=False) in home_text for chip in chips), f"Selected work shows 1-4 concise contribution points (16 words max): {project['id']}")
                 require(len(project['summary'].split()) <= 22, f"Selected-work takeaway is one short sentence (22 words max): {project['id']}")
         require('one-dimensional optical phased-array line patterns' in home_text, 'LDGI homepage identifies its OPA illumination setting')
-        require(all(f"{row['count']} reviews" in home_text and all(escape(v, quote=False) in home_text for v in row['venues']) for row in profile.get('service', [])), 'Homepage lists peer review with its venues and count')
+        cv_pages = sorted((root / 'dist' / 'cv').glob('*.html'))
+        require(all(all(escape(v, quote=False) in home_text for v in row['venues']) and row['years'] in home_text and len(row.get('issns', [])) == len(row['venues']) for row in profile.get('service', []))
+                and not any(re.search(r'\d+\s*(?:reviews\b|次审稿)', page.read_text(encoding='utf-8')) for page in [home_path, *cv_pages]),
+                'Peer review lists journals and years, without a count that goes stale')
         require('ten deep' not in home_text.lower() and 'eight deep networks and correlation ghost imaging' in home_text.lower(), 'Comparison repository is described as in its README (eight deep networks plus correlation ghost imaging)')
         hero = escape(profile['narrative']['hero'], quote=True)
         require(f'<p class="research-question">{hero}</p>' in home_text and home_text.count(hero) == 1, 'Homepage presents the canonical insight once, separate from its biography')

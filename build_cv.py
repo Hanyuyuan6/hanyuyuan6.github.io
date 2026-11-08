@@ -36,7 +36,7 @@ from PIL import Image
 import pdfplumber
 from pypdf import PdfReader
 
-from build_site import icon_links, icon_version, load_theme
+from build_site import SITE_URL, icon_links, icon_version, load_theme, text_card
 
 
 HERE = Path(__file__).resolve().parent
@@ -313,10 +313,11 @@ def service_blocks(profile: dict[str, Any], zh: bool, compact: bool) -> list[Blo
         venues = row['venues']
         if compact:
             venues = [v.replace('IEEE Transactions on Image Processing', 'IEEE TIP').replace('IEEE Transactions on Computational Imaging', 'IEEE TCI') for v in venues]
+        # Journals and years only: a count goes stale with every review.
         if zh:
-            text = f"<b>审稿人</b>{sep(zh)}{esc('、'.join(venues))}（{row['count']} 次审稿，{esc(row['years'])}）"
+            text = f"<b>审稿人</b>{sep(zh)}{esc('、'.join(venues))}（{esc(row['years'])}）"
         else:
-            text = f"<b>{esc(row['role'])}</b>{sep(zh)}{esc(', '.join(venues))} ({row['count']} reviews, {esc(row['years'])})"
+            text = f"<b>{esc(row['role'])}</b>{sep(zh)}{esc(', '.join(venues))} ({esc(row['years'])})"
         out.append(Block('body', text, f'service[{i}]', gap=2))
     return out
 
@@ -654,6 +655,18 @@ class CVTemplate:
         return {'page_count': len(pages), 'lowest_content_y': min(p['bottom'] for p in self.positions), 'positions': self.positions}
 
 
+def card_path(html_path: Path) -> Path:
+    return html_path.with_name(html_path.stem + '-card.png')
+
+
+def write_card(profile: dict[str, Any], variant: dict[str, Any], html_path: Path) -> None:
+    """The CV's link-preview card, in the homepage card's template and the site palette."""
+    person, theme = profile['person'], load_theme(HERE)
+    length = {1: 'One-page PDF', 2: 'Two-page PDF'}[variant['pages']]
+    footer = f"{person['position']} · {person['institution']}   ·   {length}".replace("'", '’')
+    text_card(card_path(html_path), person['name'], variant['label'], footer, HERE, theme['palettes'][theme['selected']])
+
+
 def render_html(profile: dict[str, Any], config: dict[str, Any], variant: dict[str, Any], pages: list[list[Block]], path: Path, source_fingerprint: str) -> None:
     zh = variant['language'].startswith('zh')
     person = profile['person']
@@ -695,6 +708,15 @@ def render_html(profile: dict[str, Any], config: dict[str, Any], variant: dict[s
     body_class = variant['id'] + (' internship' if variant['compact'] and variant['id'] != 'internship' else '')
     # Public HTML CVs sit in dist/cv/ and show the site's mark in the browser tab.
     icons = icon_links('../', icon_version(load_theme(HERE)['mark'])) if variant['destination'] == 'public' else ''
+    if variant['destination'] == 'public':
+        # A shared link (LinkedIn Featured, messages) previews the CV's own card, not page 1 cropped.
+        page_url, card = f'{SITE_URL}cv/{path.name}', card_path(path)
+        summary = f"{variant['label']} · {person['position']}, {person['institution']} · {fieldname}"
+        icons += (f'<meta property="og:type" content="website"><meta property="og:url" content="{esc(page_url)}">'
+                  f'<meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(summary)}">'
+                  f'<meta property="og:image" content="{esc(SITE_URL + "cv/" + card.name)}"><meta property="og:image:width" content="1200">'
+                  f'<meta property="og:image:height" content="630"><meta property="og:image:alt" content="{esc(person["name"] + ": " + variant["label"])}">'
+                  '<meta name="twitter:card" content="summary_large_image">')
     content = f'<!doctype html>\n<html lang="{esc(variant["language"])}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta name="source-fingerprint" content="{source_fingerprint}"><title>{esc(title)}</title>{icons}<style>{css}</style></head><body class="{esc(body_class)}">{toolbar}{"".join(bodies)}</body></html>\n'
     content = content.replace(f' color="{LINK_COLOR}"', '')
     path.write_text(content, encoding='utf-8', newline='\n')
@@ -936,6 +958,8 @@ def build(profile_path: Path, output_dir: Path, private_dir: Path | None, *, pub
         html_path = dest / (variant['filename'] + '.html')
         geometry = CVTemplate(profile, config, variant, pdf_path).build(pages)
         render_html(profile, config, variant, pages, html_path, fingerprint)
+        if variant['destination'] == 'public':
+            write_card(profile, variant, html_path)
         checks = validate_pdf(pdf_path, pages, variant['pages'], geometry['positions'], profile)
         manifest['outputs'].append({'variant': variant['id'], 'language': variant['language'], 'destination': variant['destination'], 'metadata': metadata_report(pdf_path), 'pdf': {'path': pdf_path.name, 'sha256': sha256(pdf_path), 'bytes': pdf_path.stat().st_size}, 'html': {'path': html_path.name, 'sha256': sha256(html_path), 'bytes': html_path.stat().st_size}, 'checks': checks, 'layout': geometry, 'sources': sorted({b.source for p in pages for b in p if b.source})})
     if write_manifest:
