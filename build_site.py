@@ -12,6 +12,7 @@ import argparse
 import hashlib
 from datetime import date
 from html import escape
+import inspect
 import json
 import math
 from pathlib import Path, PurePosixPath
@@ -426,12 +427,19 @@ def text_card(path: Path, title: str, subtitle: str, footer: str, source_dir: Pa
     card.save(path, optimize=True)
 
 
-def social_card(profile: dict[str, Any], source_dir: Path, output_dir: Path, palette: dict[str, str]) -> None:
-    """The homepage's og:image: name, field and one identity line (the PhD only)."""
+def card_version(title: str, subtitle: str, footer: str, palette: dict[str, str]) -> str:
+    """Changes with a card's text, colours or layout code. LinkedIn caches a preview image by
+    its URL, so the og:image URL carries this version and a new card is fetched anew."""
+    payload = json.dumps([title, subtitle, footer, palette, inspect.getsource(text_card)], ensure_ascii=False, sort_keys=True)
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()[:10]
+
+
+def social_card(profile: dict[str, Any], source_dir: Path, output_dir: Path, palette: dict[str, str]) -> str:
+    """The homepage's og:image: name, field and one identity line (the PhD only). Returns its version."""
     person = profile["person"]
-    footer = f'{person["position"]} · {person["institution"]}   ·   {urlsplit(person["homepage"]).netloc}'
-    text_card(output_dir / "social-card.png", person["name"], profile["narrative"]["field"],
-              footer.replace("'", "’"), source_dir, palette)
+    footer = f'{person["position"]} · {person["institution"]}   ·   {urlsplit(person["homepage"]).netloc}'.replace("'", "’")
+    text_card(output_dir / "social-card.png", person["name"], profile["narrative"]["field"], footer, source_dir, palette)
+    return card_version(person["name"], profile["narrative"]["field"], footer, palette)
 
 
 def portrait_image(record: dict[str, Any], variants: list[dict[str, Any]], name: str) -> str:
@@ -864,6 +872,7 @@ def build(profile: dict[str, Any], output_dir: Path, *, source_dir: Path | None 
     output_dir.mkdir(parents=True, exist_ok=True)
     derived = derive_images(figure_records, source_dir, output_dir)
     selected, selected_ids = selected_research(projects, publications, person, figures, derived["figures"])
+    social_version = social_card(profile, source_dir, output_dir, palette)
     roles = [str(person.get("position", "") or "").strip(), str(person.get("institution", "") or "").strip()]
     institution = "".join(f"<p>{e(role)}</p>" for role in roles if role)
     name_zh = str(person.get("name_zh", "") or "").strip()
@@ -890,6 +899,7 @@ def build(profile: dict[str, Any], output_dir: Path, *, source_dir: Path | None 
     replacements = {
         "TITLE": e(title),
         "DESCRIPTION": e(description),
+        "SOCIAL_IMAGE": e(f"{SITE_URL}social-card.png?v={social_version}"),
         "SOCIAL_ALT": e(f'{person["name"]}: {narrative.get("field", "")}'),
         "STRUCTURED_DATA": structured_json,
         "NAME": e(person["name"]),
@@ -942,7 +952,6 @@ def build(profile: dict[str, Any], output_dir: Path, *, source_dir: Path | None 
         destination_asset.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(source_dir / relative, destination_asset)
     write_icons(output_dir, theme["mark"])
-    social_card(profile, source_dir, output_dir, palette)
     write_support_files(profile, output_dir, style_version, replacements["ICON_VERSION"])
     return destination
 

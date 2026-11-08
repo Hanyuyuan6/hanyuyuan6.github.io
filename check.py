@@ -246,7 +246,7 @@ def validate(root):
         metas = {a.get('property') or a.get('name'): a.get('content', '') for t, a in home.tags if t == 'meta'}
         page_title = f"{profile['person']['name']} · {profile['narrative']['field']}"
         require(f'<title>{escape(page_title, quote=True)}</title>' in home_text and metas.get('og:title') == page_title, 'Page and link-preview titles state the current field')
-        require(metas.get('og:image') == SITE_URL + 'social-card.png' and metas.get('twitter:card') == 'summary_large_image', 'Link previews use the social card')
+        require(re.fullmatch(re.escape(SITE_URL) + r'social-card\.png\?v=[0-9a-f]{10}', metas.get('og:image', '')) and metas.get('twitter:card') == 'summary_large_image', 'Link previews use the social card, at a URL that changes with the card')
         card = root / 'dist' / 'social-card.png'
         require(card.is_file() and png_dimensions(card.read_bytes()) == (1200, 630), 'Social card is a 1200×630 PNG')
         icons = {a.get('href') for t, a in home.tags if t == 'link' and 'icon' in (a.get('rel') or '')}
@@ -260,7 +260,7 @@ def validate(root):
             require(version is not None and all(any(h.endswith(f'{name}?v={version}') for h in hrefs) for name in ('favicon.svg', 'favicon.ico', 'apple-touch-icon.png')), f'Page declares the current icon set: {page.relative_to(root / "dist")}')
         for page in sorted((root / 'dist' / 'cv').glob('*.html')):
             card = page.with_name(page.stem + '-card.png')
-            require(f'<meta property="og:image" content="{SITE_URL}cv/{card.name}">' in page.read_text(encoding='utf-8') and card.is_file() and png_dimensions(card.read_bytes()) == (1200, 630),
+            require(re.search(re.escape(f'<meta property="og:image" content="{SITE_URL}cv/{card.name}?v=') + r'[0-9a-f]{10}">', page.read_text(encoding='utf-8')) and card.is_file() and png_dimensions(card.read_bytes()) == (1200, 630),
                     f'Shared CV link previews its own 1200×630 card: {page.name}')
         theme = json.loads((root / 'theme.json').read_text(encoding='utf-8'))
         palette = theme['palettes'][theme['selected']]
