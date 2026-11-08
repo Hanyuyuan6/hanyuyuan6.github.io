@@ -393,44 +393,45 @@ def write_icons(output_dir: Path, mark: dict[str, str]) -> None:
     mark_icon(180, mark, radius=0).convert("RGB").save(output_dir / "apple-touch-icon.png", optimize=True)
 
 
-def social_card(profile: dict[str, Any], portrait_path: Path, source_dir: Path, output_dir: Path, palette: dict[str, str]) -> None:
-    """A 1200×630 link-preview card (og:image) in the site's own type and colours."""
-    person, narrative = profile["person"], profile["narrative"]
+def text_card(path: Path, title: str, subtitle: str, footer: str, source_dir: Path, palette: dict[str, str]) -> None:
+    """A 1200×630 type-only link-preview card: name, a subtitle of at most two lines, a footer.
+
+    No portrait: LinkedIn already shows the profile photo beside a link preview, and a
+    portrait cropped to 1.91:1 loses the top of the head. Large type stays legible at the
+    237×124 px LinkedIn Featured thumbnail.
+    """
     fonts = source_dir / "fonts"
-    bold = ImageFont.truetype(str(fonts / "NotoSans-Bold.ttf"), 64)
-    regular = ImageFont.truetype(str(fonts / "NotoSans-Regular.ttf"), 28)
-    small = ImageFont.truetype(str(fonts / "NotoSans-Regular.ttf"), 24)
+    heading = ImageFont.truetype(str(fonts / "NotoSans-Bold.ttf"), 112)
+    body = ImageFont.truetype(str(fonts / "NotoSans-Regular.ttf"), 54)
+    small = ImageFont.truetype(str(fonts / "NotoSans-Regular.ttf"), 30)
     card = Image.new("RGB", (1200, 630), palette["bg"])
-    # Round portrait inside a thin accent ring, drawn at 4x and reduced for clean edges.
-    photo, ring, scale = 300, 4, 4
-    with Image.open(portrait_path) as portrait:
-        face = portrait.convert("RGB").resize((photo * scale, photo * scale), Image.LANCZOS)
-    disc = Image.new("L", (photo * scale, photo * scale), 0)
-    ImageDraw.Draw(disc).ellipse((0, 0, photo * scale - 1, photo * scale - 1), fill=255)
-    halo = Image.new("L", ((photo + 2 * ring) * scale,) * 2, 0)
-    ImageDraw.Draw(halo).ellipse((0, 0, (photo + 2 * ring) * scale - 1, (photo + 2 * ring) * scale - 1), fill=255)
-    card.paste(Image.new("RGB", ((photo + 2 * ring),) * 2, palette["accent"]), (84 - ring, 165 - ring), halo.resize(((photo + 2 * ring),) * 2, Image.BOX))
-    card.paste(face.resize((photo, photo), Image.BOX), (84, 165), disc.resize((photo, photo), Image.BOX))
     draw = ImageDraw.Draw(card)
-    x, right = 432, 1116
-    # The field line takes the largest size (28 px down to 22 px) that fits the margin.
-    for size in range(28, 21, -1):
-        regular = ImageFont.truetype(str(fonts / "NotoSans-Regular.ttf"), size)
-        if x + draw.textlength(narrative["field"], font=regular) <= right:
-            break
-    # One identity line (owner, 2026-10-12: the PhD is enough); the block stays centred on the photo.
-    lines = [
-        (person["name"], bold, palette["ink"], 190),
-        (narrative["field"], regular, palette["link"], 284),
-        (f'{person["position"]} · {person["institution"]}', small, palette["muted"], 340),
-        (person["homepage"].replace("https://", "").rstrip("/"), small, palette["link"], 408),
-    ]
-    for text, font, colour, y in lines:
-        if x + draw.textlength(text, font=font) > right:
-            raise ValueError(f"Social card text overflows its 84 px margin: {text!r}")
-        draw.text((x, y), text, font=font, fill=colour)
-    draw.line((x, 394, x + 96, 394), fill=palette["accent"], width=2)
-    card.save(output_dir / "social-card.png", optimize=True)
+    x, width = 110, 980  # equal 110 px side margins
+    lines = [subtitle]
+    if draw.textlength(subtitle, font=body) > width:
+        head, _, tail = subtitle.partition(" & ")
+        lines = [head + " &", tail] if tail else subtitle.rsplit(" ", 1)
+    # Offsets from the title's top; the whole block is centred vertically.
+    rows = [(title, heading, palette["ink"], 0)]
+    rows += [(line, body, palette["link"], 150 + 64 * i) for i, line in enumerate(lines)]
+    rows.append((footer, small, palette["muted"], 150 + 64 * len(lines) + 44))
+    for text, font, _, _ in rows:
+        if draw.textlength(text, font=font) > width:
+            raise ValueError(f"Card text overflows its 110 px margins: {text!r}")
+    bottom = rows[-1][3] + small.getbbox(footer)[3]
+    top = (630 - (bottom + 40)) // 2 + 40
+    draw.rectangle((x, top - 40, x + 95, top - 35), fill=palette["accent"])
+    for text, font, colour, offset in rows:
+        draw.text((x, top + offset), text, font=font, fill=colour)
+    card.save(path, optimize=True)
+
+
+def social_card(profile: dict[str, Any], source_dir: Path, output_dir: Path, palette: dict[str, str]) -> None:
+    """The homepage's og:image: name, field and one identity line (the PhD only)."""
+    person = profile["person"]
+    footer = f'{person["position"]} · {person["institution"]}   ·   {urlsplit(person["homepage"]).netloc}'
+    text_card(output_dir / "social-card.png", person["name"], profile["narrative"]["field"],
+              footer.replace("'", "’"), source_dir, palette)
 
 
 def portrait_image(record: dict[str, Any], variants: list[dict[str, Any]], name: str) -> str:
@@ -682,7 +683,7 @@ def service(rows: list[dict[str, Any]]) -> str:
         return ""
     items = "".join(
         f'<li><span>{e(row["role"])} for {e(", ".join(row["venues"][:-1]))} and {e(row["venues"][-1])}</span>'
-        f'<span class="entry-dates">{e(row["count"])} reviews · {e(row["years"])}</span></li>'
+        f'<span class="entry-dates">{e(row["years"])}</span></li>'
         for row in rows
     )
     return f'<div class="awards-block"><h3>Service</h3><ul>{items}</ul></div>'
@@ -941,7 +942,7 @@ def build(profile: dict[str, Any], output_dir: Path, *, source_dir: Path | None 
         destination_asset.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(source_dir / relative, destination_asset)
     write_icons(output_dir, theme["mark"])
-    social_card(profile, source_dir / portrait["path"], source_dir, output_dir, palette)
+    social_card(profile, source_dir, output_dir, palette)
     write_support_files(profile, output_dir, style_version, replacements["ICON_VERSION"])
     return destination
 

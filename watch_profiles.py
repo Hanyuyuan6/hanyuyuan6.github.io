@@ -5,9 +5,9 @@ profile.json is the single source of truth. This script reads what public APIs e
 ORCID (works, biography, keywords, links, public emails, other names, affiliations,
 peer reviews) and GitHub (profile fields, the profile README and each listed repository's
 About line), and reports every
-field that no longer matches. Platforms without a public API (Google Scholar, LinkedIn,
-ResearchGate, OpenReview, Web of Science) are listed as a checklist with the exact
-values to paste. It never edits a platform. Without GITHUB_TOKEN it only prints.
+field that no longer matches. The issue holds only those public values; for platforms
+without a public API, sync_platforms.py lists the values locally. It never edits a
+platform. Without GITHUB_TOKEN it only prints.
 """
 from __future__ import annotations
 
@@ -73,16 +73,28 @@ def check_orcid(profile: dict, drift: list[str]) -> None:
         drift.append(f'ORCID lists DOIs the site lacks: {sorted(works - known)}.')
     if known - works:
         drift.append(f'The site lists DOIs ORCID lacks: {sorted(known - works)}.')
-    reviews = sum(len(g.get('peer-review-group', [])) and sum(len(pg.get('peer-review-summary', [])) for pg in g['peer-review-group'])
-                  for g in record['activities-summary']['peer-reviews'].get('group', []))
-    claimed = sum(row.get('count', 0) for row in profile.get('service', []))
-    if claimed and reviews < claimed:
-        drift.append(f'ORCID shows {reviews} verified reviews; the site claims {claimed}.')
+    # Pages name journals and years, not a count: another review needs no edit, a new
+    # journal or a new year does. Journals are matched by the ISSN ORCID records.
+    reviewed, years = set(), set()
+    for group in record['activities-summary']['peer-reviews'].get('group', []):
+        for review in (s for pg in group.get('peer-review-group', []) for s in pg.get('peer-review-summary', [])):
+            reviewed.add(review.get('review-group-id', '').removeprefix('issn:'))
+            year = ((review.get('completion-date') or {}).get('year') or {}).get('value')
+            years |= {int(year)} if year else set()
+    listed = {issn for row in profile.get('service', []) for issn in row.get('issns', [])}
+    if reviewed - listed:
+        drift.append(f'ORCID shows reviews for journals the site does not list (ISSN {sorted(reviewed - listed)}): add them to `service`.')
+    if listed - reviewed:
+        drift.append(f'The site lists journals with no verified ORCID review (ISSN {sorted(listed - reviewed)}).')
+    span = f'{min(years)}–{max(years)}' if len(years) > 1 else str(min(years)) if years else ''
+    stated = [row.get('years') for row in profile.get('service', [])]
+    if span and span not in stated:
+        drift.append(f'ORCID reviews span {span}; `service.years` says {stated}.')
     summaries = record['activities-summary']
     def organisations(kind: str) -> set[str]:
         return {s['organization']['name'] for group in summaries[kind].get('affiliation-group', [])
                 for item in group['summaries'] for s in item.values()}
-    # The visit is part of the PhD, so it is listed under Education (owner, 2026-10-12).
+    # The visit is part of the PhD, so it is listed under Education.
     educations, invited = organisations('educations'), organisations('invited-positions')
     for name in [row['institution'] for row in profile['education']] + [row['institution'] for row in profile['appointments']]:
         if name not in educations:
@@ -113,18 +125,6 @@ def check_github(profile: dict, drift: list[str]) -> None:
             drift.append(f'GitHub {match[2]} About is "{about}"; expected "{expected}".')
 
 
-def manual_checklist(profile: dict) -> list[str]:
-    copy, person = profile['platform_copy'], profile['person']
-    affiliation = f'{person["position"]}, {person["institution"]}'
-    return [
-        f'- Google Scholar: affiliation "{affiliation}"; interests {copy["keywords"]}; homepage {person["homepage"]}.',
-        f'- LinkedIn: headline "{copy["linkedin_headline"]}" (Chinese profile: "{copy["linkedin_headline_zh"]}"); About = `platform_copy.linkedin_about` (and `_zh`); Politecnico di Milano under Education only (department and supervisor), translated on the English profile, and the top card naming {person["institution"]} only; skills lead with {copy["keywords"]}; featured links use `linkedin_featured_*`.',
-        f'- ResearchGate: About = `platform_copy.researchgate_bio`; current activity "{copy["researchgate_activity"]}"; skills include {copy["keywords"]}.',
-        f'- OpenReview: expertise {copy["openreview_expertise"]}; emails include {person.get("institutional_email")}.',
-        '- Web of Science: primary organization Xi\'an Jiaotong University; 8 Core Collection works.',
-    ]
-
-
 def main() -> int:
     profile = json.loads((ROOT / 'profile.json').read_text(encoding='utf-8'))
     drift: list[str] = []
@@ -138,7 +138,7 @@ def main() -> int:
     if not drift or not token or not repo:
         return 0
     body = ('These public fields no longer match `profile.json`:\n\n' + '\n'.join(f'- {item}' for item in drift)
-            + '\n\nPlatforms without a public API, to check by hand with the same values:\n\n' + '\n'.join(manual_checklist(profile))
+            + '\n\nFor platforms without a public API, run `python sync_platforms.py` locally.'
             + '\n\nFix the platform (or update `profile.json` if the platform is right), then close this issue.')
     api = f'https://api.github.com/repos/{repo}/issues'
     auth = {'Authorization': f'Bearer {token}', 'X-GitHub-Api-Version': '2022-11-28'}

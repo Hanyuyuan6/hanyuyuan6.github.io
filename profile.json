@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated": "2026-10-18",
+  "updated": "2026-11-08",
   "publication_verification_date": "2026-10-11",
   "person": {
     "name": "Yuyuan Han",
@@ -65,9 +65,7 @@
       "advisor_url": "https://faculty.xjtu.edu.cn/huaibinzheng/zh_CN/index.htm",
       "start": "2022-09",
       "end": null,
-      "display_dates": "2022–present",
-      "note": "Continuous graduate study from 2022; transferred to the PhD program in 2024.",
-      "phd_start_year": 2024
+      "display_dates": "2022–present"
     },
     {
       "institution": "Northwest University",
@@ -552,7 +550,11 @@
     "linkedin_about": "An image is not always the most robust route to inference.\n\nI am a PhD student at Xi'an Jiaotong University. I study reliable sensing under limited sampling and measurement noise, connecting optical measurement design, image reconstruction and direct inference from single-pixel measurements. In single-pixel segmentation, my work shows when inference directly from measurements is more robust than reconstructing images first, with all models trained on clean data.\n\nI now work on time-domain diffuse optical tomography for brain imaging, inferring 3D distributions of optical properties from photon time-of-flight measurements. My long-term aim is to help robots interpret the physical world from raw measurements and physical models.\n\nMy background includes electro-optic device modeling and optical-system integration. I develop open-source tools for research experiments and review for computational imaging and optics journals.\n\nI welcome research collaborations and internships that combine measurements and physical models to help machines learn and reason reliably, with applications in scientific discovery and embodied systems.",
     "linkedin_about_zh": "先重建图像，未必是最稳健的推断路径。\n\n我是西安交通大学博士研究生。我研究如何在有限采样与测量噪声下实现可靠感知，将光学测量设计、图像重建与单像素测量的直接推断联系起来。在单像素分割中，我的工作揭示了直接推断何时比先重建图像更抗噪；比较中的模型均以无噪声数据训练。\n\n目前，我正开展面向脑部成像的时域漫射光学层析研究，从光子飞行时间测量中推断光学性质的三维分布。长期希望让机器人结合原始测量与物理模型，理解周围的物理世界。\n\n我也具备电光器件建模与光学系统集成经验，开发服务科研实验的开源工具，并担任计算成像与光学期刊审稿人。\n\n欢迎交流研究合作与科研实习机会，共同探索如何结合测量数据与物理模型，让机器更可靠地学习和推理，服务科学发现与具身智能。",
     "linkedin_featured_lift": "When measurement noise favors image-free sensing: a content-adaptive 1D-to-2D lift and task-prioritized training. Clean-trained models; simulation and optical-bench evidence.",
-    "linkedin_featured_site_title": "Yuyuan Han · Computational imaging & robust image-free sensing",
+    "linkedin_featured_site_title": "Academic homepage",
+    "linkedin_featured_lift_title": "The Lift Spectrum (2026)",
+    "linkedin_featured_lift_url": "https://arxiv.org/abs/2607.22077v2",
+    "linkedin_featured_resume_title": "Internship résumé (PDF)",
+    "linkedin_featured_resume_url": "https://hanyuyuan6.github.io/cv/Yuyuan_Han_Internship_Resume.pdf",
     "linkedin_featured_site": "Research, publications and CV in computational imaging and robust image-free sensing.",
     "linkedin_featured_resume": "One-page résumé (PDF): optical measurement design for single-pixel imaging and networks that operate directly on the measurements.",
     "researchgate_activity": "Current research: time-domain diffuse optical tomography for 3D brain imaging.",
@@ -655,9 +657,14 @@
         "Optics Express",
         "Optics Letters"
       ],
-      "count": 14,
+      "issns": [
+        "1941-0042",
+        "2333-9403",
+        "1094-4087",
+        "0146-9592"
+      ],
       "years": "2025–2026",
-      "source": "ORCID public peer-review API and profile, 14 records from Optica Publishing Group and Web of Science (read 2026-10-18)"
+      "source": "ORCID public peer-review API: 15 records from Optica Publishing Group and Web of Science, matched by ISSN to the journals above (read 2026-11-08). Pages list journals and years, not a count."
     }
   ]
 }
