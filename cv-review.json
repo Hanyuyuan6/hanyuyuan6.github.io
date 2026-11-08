@@ -1,7 +1,7 @@
 {
   "reviewed_on": "2026-11-08",
   "method": "Rebuilt all four PDFs with profile.updated 2026-11-08 after the review count was removed (journals and years only). Poppler 100-dpi RGB comparisons with the previously reviewed public PDFs show changes confined to the service line (now ending \"(2025–2026)\") and the footer date (Oct 2026 to Nov 2026); every other pixel is identical. All six pages were viewed in full (three of the English CVs, three of the Chinese variants kept outside this repository), including the service lines, wrapping, spacing and footer clearance.",
-  "source_fingerprint": "5fe2d01390570779fa7ff99c85d4dc9d446e6dd53b239d9744db7e8fd8df394c",
+  "source_fingerprint": "e1456e3736214362b51117fb325c0399e7e8bafc7424720a0433e06e1b5347c1",
   "pdf_sha256": {
     "Yuyuan_Han_Academic_CV.pdf": "1cbc5d05a54f8ef97acb6eed19eacca07a33cd8667e0198b9448f9f594e1be29",
     "Yuyuan_Han_Internship_Resume.pdf": "d35d64a186a2e224b16b1c33ac8c3dc944b7989a6052901506f076902f0551d8"

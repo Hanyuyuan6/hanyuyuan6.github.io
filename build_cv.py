@@ -36,7 +36,7 @@ from PIL import Image
 import pdfplumber
 from pypdf import PdfReader
 
-from build_site import SITE_URL, icon_links, icon_version, load_theme, text_card
+from build_site import SITE_URL, card_version, icon_links, icon_version, load_theme, text_card
 
 
 HERE = Path(__file__).resolve().parent
@@ -659,12 +659,17 @@ def card_path(html_path: Path) -> Path:
     return html_path.with_name(html_path.stem + '-card.png')
 
 
-def write_card(profile: dict[str, Any], variant: dict[str, Any], html_path: Path) -> None:
-    """The CV's link-preview card, in the homepage card's template and the site palette."""
+def card_spec(profile: dict[str, Any], variant: dict[str, Any]) -> tuple[str, str, str, dict[str, str]]:
+    """Title, subtitle, footer and palette of the CV's link-preview card (the homepage card's template)."""
     person, theme = profile['person'], load_theme(HERE)
     length = {1: 'One-page PDF', 2: 'Two-page PDF'}[variant['pages']]
     footer = f"{person['position']} · {person['institution']}   ·   {length}".replace("'", '’')
-    text_card(card_path(html_path), person['name'], variant['label'], footer, HERE, theme['palettes'][theme['selected']])
+    return person['name'], variant['label'], footer, theme['palettes'][theme['selected']]
+
+
+def write_card(profile: dict[str, Any], variant: dict[str, Any], html_path: Path) -> None:
+    title, subtitle, footer, palette = card_spec(profile, variant)
+    text_card(card_path(html_path), title, subtitle, footer, HERE, palette)
 
 
 def render_html(profile: dict[str, Any], config: dict[str, Any], variant: dict[str, Any], pages: list[list[Block]], path: Path, source_fingerprint: str) -> None:
@@ -714,7 +719,7 @@ def render_html(profile: dict[str, Any], config: dict[str, Any], variant: dict[s
         summary = f"{variant['label']} · {person['position']}, {person['institution']} · {fieldname}"
         icons += (f'<meta property="og:type" content="website"><meta property="og:url" content="{esc(page_url)}">'
                   f'<meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(summary)}">'
-                  f'<meta property="og:image" content="{esc(SITE_URL + "cv/" + card.name)}"><meta property="og:image:width" content="1200">'
+                  f'<meta property="og:image" content="{esc(SITE_URL + "cv/" + card.name + "?v=" + card_version(*card_spec(profile, variant)))}"><meta property="og:image:width" content="1200">'
                   f'<meta property="og:image:height" content="630"><meta property="og:image:alt" content="{esc(person["name"] + ": " + variant["label"])}">'
                   '<meta name="twitter:card" content="summary_large_image">')
     content = f'<!doctype html>\n<html lang="{esc(variant["language"])}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta name="source-fingerprint" content="{source_fingerprint}"><title>{esc(title)}</title>{icons}<style>{css}</style></head><body class="{esc(body_class)}">{toolbar}{"".join(bodies)}</body></html>\n'
