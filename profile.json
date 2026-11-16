@@ -488,7 +488,7 @@
       "name": "remote-gpu-trainer",
       "url": "https://github.com/Hanyuyuan6/remote-gpu-trainer",
       "description": "Open-source agent skill for Claude Code and Codex that runs, verifies and delivers GPU experiments.",
-      "github_about": "An Agent Skill for the DL experiment lifecycle: RUN (a GPU you own or rent) → VERIFY the number is real → DELIVER reproducible, single-source figures and tables."
+      "github_about": "An Agent Skill for Claude Code, Codex and other coding agents: train on rented GPUs without losing checkpoints or paying for idle machines."
     }
   ],
   "skills": [

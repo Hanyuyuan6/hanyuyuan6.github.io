@@ -1,11 +1,11 @@
 {
   "schema_version": 2,
-  "built_at": "2026-11-08T21:11:56.543263+00:00",
-  "source_fingerprint": "e1456e3736214362b51117fb325c0399e7e8bafc7424720a0433e06e1b5347c1",
+  "built_at": "2026-11-16T15:16:19.840184+00:00",
+  "source_fingerprint": "9becc39fb323c504746f019bc5c948fbaca056645f5095cf9c4e7c06569efcb4",
   "inputs": {
     "profile": {
       "path": "profile.json",
-      "sha256": "a274611484613b02f9a428442748d6aeb9b4e95a5393fc6dcc3b44b3e50355d7"
+      "sha256": "36cd9b28830e5440cfc6584dae954af732db2642cf813b877952e52927c032a3"
     },
     "template": {
       "path": "build_cv.py",
@@ -75,7 +75,7 @@
       },
       "html": {
         "path": "Yuyuan_Han_Academic_CV.html",
-        "sha256": "e20acabdc53ea9b1e684d691f872c0ac27a23fec844357b100252756cde5e7f4",
+        "sha256": "eaaa232fd72df919f1b8a8b8782a4715d06b180f23ca341f27943b1897acd685",
         "bytes": 17280
       },
       "checks": {
@@ -816,7 +816,7 @@
       },
       "html": {
         "path": "Yuyuan_Han_Internship_Resume.html",
-        "sha256": "ded985888126019370f6b5ad829ccb77e62311212346b108a67a04d4b9601057",
+        "sha256": "f140e9c878079fa782c34cfd94b9445e863768d0d2bacd2a75799e48c4691a19",
         "bytes": 11335
       },
       "checks": {
