@@ -21,6 +21,60 @@ DASH_RANGE = re.compile(r'\b\d{4} - (?:\d{4}|present)\b')
 # Retired wording that contradicted the imaging work or the evidence.
 RETIRED_TERMS = ('physics-aware', 'not images', 'near-constant accuracy', 'where conventional approaches struggle')
 TEXT_SUFFIXES = {'.html', '.txt', '.xml', '.json', '.webmanifest', '.bib', '.svg', '.md'}
+# Public files carry only public facts: no dated or numbered decision notes, no Chinese in code
+# comments, no AI tool or model names outside the product phrase below, no note-like fields that
+# no script reads. Findings name a rule and file:line only.
+PRIVACY_TEXT = {'.py', '.js', '.mjs', '.ts', '.sh', '.yml', '.yaml', '.toml', '.json', '.md', '.html', '.txt', '.css', '.cff', '.tex', '.bib'}
+PRIVACY_COMMENTED = {'.py', '.js', '.mjs', '.ts', '.sh', '.yml', '.yaml', '.toml'}
+OWNER_NOTE = re.compile(r'(?i)\b(?:owner|user)\b[,:]?\s*(?:\d{4}-\d{2}-\d{2}|\d{1,2}-\d{1,2}\b)'
+                        '|\u672c\u4eba(?:\u51b3\u5b9a|\u8981\u6c42|\u539f\u8bdd)|\u7528\u6237(?:\u539f\u8bdd|\u51b3\u5b9a|\u88c1\u5b9a|\u8981\u6c42)|owner[R]ulings')
+CJK_COMMENT = re.compile(r'(?:#|//)[^\n]*[\u4e00-\u9fff]')
+OWNER_ROUND = re.compile(r'(?i)\((?:owner|user)\s*[,:)]')
+# Tool and model names are kept as SHA-256 prefixes so the list itself stays out of public files;
+# a versioned name such as name-5 is also tried as name-# and as name.
+AI_TOOL_HASHES = frozenset({'09cf980b5ff304ac', '57de4cf40144bdf7', '60965168ce762e94', '81edf7be392adcf1',
+                            'c857d09db23e6822', 'c9ad8f2cc1294afa', 'e12ce8285efc67c6', 'e4f9c522e1c89280'})
+WORD = re.compile(r'[a-z][a-z0-9]*(?:-\d+)?')
+# The CVs name the tools remote-gpu-trainer serves; only that product phrase passes. It is
+# written with escapes so that no tool name appears verbatim in this file.
+AI_PRODUCT_MENTION = re.compile('\x43laude Code(?: and| \u4e0e|,) \x43odex')
+NOTE_FIELD = re.compile(r'"(_?(?:note|notes|internal|todo|comment|comments|private|memo|reviewer))"\s*:\s*"[^"]+"', re.I)
+
+
+def ai_tool_named(line):
+    """True if the line names an AI tool or model outside the product phrase."""
+    for word in WORD.findall(AI_PRODUCT_MENTION.sub('', line).lower()):
+        for candidate in (word, re.sub(r'-\d+$', '-#', word), word.split('-')[0]):
+            if hashlib.sha256(candidate.encode()).hexdigest()[:16] in AI_TOOL_HASHES:
+                return True
+    return False
+
+
+def private_notes(root):
+    """Rule and file:line of every private-looking line in the public files (never the text)."""
+    hits, notes, code = [], [], []
+    for path in sorted(root.rglob('*')):
+        relative = path.relative_to(root)
+        if (any(part in ('.git', '__pycache__', '.qa', '.venv') for part in relative.parts) or not path.is_file()
+                or path.suffix.lower() not in PRIVACY_TEXT or path.stat().st_size > 2 * 1024 * 1024):
+            continue
+        suffix, text = path.suffix.lower(), path.read_text(encoding='utf-8', errors='ignore')
+        if suffix in {'.py', '.js', '.mjs', '.ts'} and path.name != 'check.py':
+            code.append(text)
+        for number, line in enumerate(text.splitlines(), 1):
+            where = f'{relative.as_posix()}:{number}'
+            if OWNER_NOTE.search(line) or OWNER_ROUND.search(line):
+                hits.append(f'private_owner_note {where}')
+            if suffix in PRIVACY_COMMENTED and CJK_COMMENT.search(line):
+                hits.append(f'private_cjk_code_comment {where}')
+            if ai_tool_named(line):
+                hits.append(f'private_ai_tool_name {where}')
+            if suffix == '.json':
+                notes += [(match.group(1), where) for match in NOTE_FIELD.finditer(line)]
+    code_text = '\n'.join(code)
+    hits += [f'private_unrendered_note_field {where}' for key, where in notes
+             if not re.search(r'["\']' + re.escape(key) + r'["\']|\.' + re.escape(key) + r'\b', code_text)]
+    return hits
 
 
 def sha(path):
@@ -465,6 +519,8 @@ def validate(root):
     public_text += [root / 'profile.json', root / 'cv-variants.json']
     stale = sorted(str(path.relative_to(root)) for path in public_text if any(term in path.read_text(encoding='utf-8', errors='ignore').lower() for term in RETIRED_TERMS))
     require(not stale, f'No retired positioning terms in public files: {stale}')
+    private = private_notes(root)
+    require(not private, f'Public files carry no private notes (rule file:line): {private}')
 
     zh_field = json.loads((root / 'cv-variants.json').read_text(encoding='utf-8'))['zh']['field']
     from pypdf import PdfReader
